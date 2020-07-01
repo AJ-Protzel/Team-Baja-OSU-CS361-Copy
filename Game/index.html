@@ -1,0 +1,31 @@
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>2048 Game by Team Bajas</title>
+    
+    <base href="public/">
+
+    <link rel="stylesheet" href="style.css"> <!--Calls CSS file-->
+  </head>
+
+  <body>
+    <h1>2048</h1>
+
+    <p id="score"></p>
+
+    <div id="size-bloc">
+      <p id="size-title">Size : </p>
+      <input id="size" type="number" value="4">
+      <input id="change-size" type="button" value="OK">
+      <div class="clear"></div>
+    </div>
+
+    <div id="canvas-block"> <!--Sets size of board-->
+      <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+    <script src="script.js"></script> <!--Calls scripts file-->
+  </body>
+</html>
