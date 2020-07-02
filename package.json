@@ -2,7 +2,7 @@
   "name": "team-baja-osu-cs361",
   "version": "1.0.0",
   "description": "CS 361 - 2048 Game",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
