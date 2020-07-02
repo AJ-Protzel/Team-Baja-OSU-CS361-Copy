@@ -1,3 +1,5 @@
+/*code adapted from https://github.com/amadevBox/2048*/
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var sizeInput = document.getElementById('size');
