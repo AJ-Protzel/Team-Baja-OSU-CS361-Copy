@@ -1,45 +1,57 @@
 /* code adapted from https://github.com/amadevBox/2048 */
-body{
+
+body
+{
     background-color: darkkhaki;
 }
 
-p{
+p
+{
     color: antiquewhite;
     font-size: 20px;
 }
 
-h1{
+h1
+{
     text-align: center;
 }
 
-#score{
+#score
+{
     text-align: center;
 }
 
-.clear{
+.clear
+{
     clear: both;
 }
-#size-bloc{
+
+#size-bloc
+{
     margin-left: -122px;
     padding-left: 50%;
 }
 
-#size-title{
+#size-title
+{
     float: left;
     margin-top: 0px;
 }
 
-#size{
+#size
+{
     width: 50px;
     margin-left: 10px;
     border-radius: 3px;
 }
 
-#canvas{
+#canvas
+{
     background-color: burlywood;
 }
 
-#canvas-block{
+#canvas-block
+{
     margin-left: -250px;
     padding-left: 50%;
 }

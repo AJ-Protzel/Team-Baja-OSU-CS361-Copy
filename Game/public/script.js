@@ -14,33 +14,40 @@ var fontSize;
 var loss = false;
 startGame();
 
-changeSize.onclick = function () {
+changeSize.onclick = function()
+{
     boardSize = sizeInput.value;
     width = canvas.width / boardSize - 6;
     canvasClean();
     startGame();
 }
 
-function cell(row, coll) {
+function cell(row, coll)
+{
   this.value = 0;
   this.x = coll * width + 5 * (coll + 1);
   this.y = row * width + 5 * (row + 1);
 }
 
-function createCells() {
+function createCells()
+{
   var i, j;
-  for(i = 0; i < boardSize; i++) {
+  for(i = 0; i < boardSize; i++)
+  {
     cells[i] = [];
-    for(j = 0; j < boardSize; j++) {
+    for(j = 0; j < boardSize; j++)
+    {
       cells[i][j] = new cell(i, j);
     }
   }
 }
 
-function drawCell(cell) {
+function drawCell(cell)
+{
   ctx.beginPath();
   ctx.rect(cell.x, cell.y, width, width);
-  switch (cell.value){
+  switch (cell.value)
+  {
     case 0 : ctx.fillStyle = '#A9A9A9'; break;
     case 2 : ctx.fillStyle = '#D2691E'; break;
     case 4 : ctx.fillStyle = '#FF7F50'; break;
@@ -56,8 +63,10 @@ function drawCell(cell) {
     case 4096 : ctx.fillStyle = '#ffbf00'; break;
     default : ctx.fillStyle = '#ff0080';
   }
+
   ctx.fill();
-  if (cell.value) {
+  if (cell.value)
+  {
     fontSize = width / 2;
     ctx.font = fontSize + 'px Arial';
     ctx.fillStyle = 'white';
@@ -66,22 +75,32 @@ function drawCell(cell) {
   }
 }
 
-function canvasClean() {
+function canvasClean()
+{
   ctx.clearRect(0, 0, 500, 500);
 }
 
-document.onkeydown = function (event) {
-  if (!loss) {
-    if (event.keyCode === 38 || event.keyCode === 87) {
+document.onkeydown = function(event)
+{
+  if (!loss)
+  {
+    if (event.keyCode === 38 || event.keyCode === 87)
+    {
       moveUp();
       addUp(); 
-    } else if (event.keyCode === 39 || event.keyCode === 68) {
+    }
+    else if (event.keyCode === 39 || event.keyCode === 68)
+    {
       moveRight();
       addRight();
-    } else if (event.keyCode === 40 || event.keyCode === 83) {
+    }
+    else if (event.keyCode === 40 || event.keyCode === 83)
+    {
       moveDown(); 
       addDown();
-    } else if (event.keyCode === 37 || event.keyCode === 65) {
+    }
+    else if (event.keyCode === 37 || event.keyCode === 65)
+    {
       moveLeft(); 
       addLeft();
     }
@@ -89,7 +108,8 @@ document.onkeydown = function (event) {
   }
 }
 
-function startGame() {
+function startGame()
+{
   createCells();
   drawAllCells();
   pasteNewCell();
@@ -97,7 +117,7 @@ function startGame() {
   scoreLabel.innerHTML = 'Score : ' + score;
 }
 
-resetBoard.onclick = function () 
+resetBoard.onclick = function() 
 {
   canvasClean();
   createCells();
@@ -108,42 +128,55 @@ resetBoard.onclick = function ()
   scoreLabel.innerHTML = 'Score : ' + score;
 }
 
-function finishGame() {
+function finishGame()
+{
   canvas.style.opacity = '0.5';
   loss = true;
 }
 
-function drawAllCells() {
+function drawAllCells()
+{
   var i, j;
-  for(i = 0; i < boardSize; i++) {
-    for(j = 0; j < boardSize; j++) {
+  for(i = 0; i < boardSize; i++)
+  {
+    for(j = 0; j < boardSize; j++)
+    {
       drawCell(cells[i][j]);
     }
   }
 }
 
-function pasteNewCell() {
+function pasteNewCell()
+{
   var countFree = 0;
   var i, j;
-  for(i = 0; i < boardSize; i++) {
-    for(j = 0; j < boardSize; j++) {
-      if(!cells[i][j].value) {
+  for(i = 0; i < boardSize; i++)
+  {
+    for(j = 0; j < boardSize; j++)
+    {
+      if(!cells[i][j].value)
+      {
         countFree++;
       }
     }
   }
-  if(!countFree) {
+  if(!countFree)
+  {
     finishGame();
     return;
   }
-  while(true) {
+  while(true)
+  {
     var row = Math.floor(Math.random() * boardSize);
     var coll = Math.floor(Math.random() * boardSize);
-    if(!cells[row][coll].value) {
-      if(Math.ceil(Math.random()*99 > 79)){ // adds 20% chance to start with 4
+    if(!cells[row][coll].value)
+    {
+      if(Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
+      { 
         cells[row][coll].value = 4;
       }
-      else{
+      else
+      {
         cells[row][coll].value = 2;
       }
       drawAllCells();
