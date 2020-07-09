@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Bshah11/Team-Baja-OSU-CS361#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongodb": "^3.5.9"
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.22"
   }
 }
