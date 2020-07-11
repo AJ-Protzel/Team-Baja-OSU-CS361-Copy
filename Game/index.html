@@ -29,11 +29,16 @@
 
         <input id="change-size" type="button" value="OK">
         <input id="reset-board" type="button" value="New Game">
+        <input id="high-scores" type="button" value="High Scores">
+        <input id="settings" type="button" value="settings">
         <div class="clear"></div>
     </div>
 
     <div id="canvas-block"> <!--Sets size of board-->
       <canvas id="canvas" width="500" height="500"></canvas>
+      <div hidden id='settings_form'>SETTINGS</div>
+      <div hidden id='high_score_form'>SCORES</div>
+    
     </div>
     <script src="script.js"></script> <!--Calls scripts file-->
   </body>
