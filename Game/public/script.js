@@ -2,7 +2,7 @@
 
 var canvas = document.getElementById('canvas');
 var setting_form = document.getElementById('settings_form');
-var score_form = document.getElementById('high_score_form')
+var score_form = document.getElementById('high_score_form');
 var ctx = canvas.getContext('2d');
 var main_options = document.getElementById('size-bloc');
 var sizeInput = document.getElementById('size');
