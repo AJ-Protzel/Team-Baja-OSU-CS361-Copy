@@ -4,6 +4,7 @@ var canvas = document.getElementById('canvas');
 var setting_form = document.getElementById('settings_form');
 var score_form = document.getElementById('high_score_form')
 var ctx = canvas.getContext('2d');
+var main_options = document.getElementById('size-bloc');
 var sizeInput = document.getElementById('size');
 var changeSize = document.getElementById('change-size');
 var scoreLabel = document.getElementById('score');
@@ -24,8 +25,9 @@ highScore.addEventListener('click',  function() {showHighscore(event)});
 
 function showSettings(event){
   console.log("inside settings function");
-  canvas.hidden = true
-  setting_form.hidden = false
+  canvas.hidden = true;
+  setting_form.hidden = false;
+  main_options.hidden = true;
   var x = document.createElement("BUTTON");
   var t = document.createTextNode("Save");
   x.appendChild(t);
@@ -66,13 +68,15 @@ function showSettings(event){
 
   back.onclick = function(){
     setting_form.innerHTML = '';
-    setting_form.hidden = true
+    setting_form.hidden = true;
     canvas.hidden = false;
+    main_options.hidden = false;
   };
 }
 
 function showHighscore(event){
   console.log("inside settings function");
+  main_options.hidden = true
   canvas.hidden = true
   score_form.hidden = false
   var x = document.createElement("BUTTON");
@@ -80,10 +84,14 @@ function showHighscore(event){
   x.appendChild(t);
   score_form.appendChild(x);
   var back = score_form.firstElementChild;
+
+
+
   back.onclick = function(){
     score_form.innerHTML = '';
-    score_form.hidden = true
+    score_form.hidden = true;
     canvas.hidden = false;
+    main_options.hidden = false;
   };
 }
 
