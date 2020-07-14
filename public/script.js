@@ -5,7 +5,6 @@ var ctx = canvas.getContext('2d');
 var sizeInput = document.getElementById('size');
 var changeSize = document.getElementById('change-size');
 var scoreLabel = document.getElementById('score');
-var resetBoard = document.getElementById('reset-board');
 var score = 0;
 var boardSize = 4;
 var width = canvas.width / boardSize - 6;
@@ -15,14 +14,6 @@ var loss = false;
 var movementMade = true;
 var countFree;
 startGame();
-
-changeSize.onclick = function()
-{
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    startGame();
-}
 
 function cell(row, coll)
 {
@@ -119,24 +110,24 @@ document.onkeydown = function(event)
 
 function startGame()
 {
+    canvas.style.opacity = '1.0';
     loss = false;
-  createCells();
-  drawAllCells();
-  pasteNewCell();
-  pasteNewCell();
-  scoreLabel.innerHTML = 'Score : ' + score;
-}
-
-resetBoard.onclick = function() 
-{
-  canvasClean();
-  createCells();
+    boardSize = sizeInput.value;
+    width = canvas.width / boardSize - 6;
+    canvasClean();
+    createCells();
   drawAllCells();
   pasteNewCell();
   pasteNewCell();
   score = 0;
   scoreLabel.innerHTML = 'Score : ' + score;
 }
+
+changeSize.onclick = function()
+{
+    startGame();
+}
+
 
 function finishGame()
 {

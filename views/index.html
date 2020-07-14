@@ -27,66 +27,66 @@
               <option value="10">10</option>
           </select>
 
-          <input id="change-size" type="button" value="OK">
-          <input id="reset-board" type="button" value="New Game">
+          <input id="change-size" type="button" value="Start New Game">
+          <!--<input id="reset-board" type="button" value="New Game">-->
           <div class="clear"></div>
       </div>
 
-      <div id="canvas-block">
-          <!--Sets size of board-->
+    <div id="canvas-block">
+        <!--Sets size of board-->
           <canvas id="canvas" width="500" height="500"></canvas>
 
           <!--
 
-                    <div class="grid-row">
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-                <div class="grid-cell"></div>
-            </div>
-        <script>
-            for(var i=0; i < document.getElementById('size'); i++)
-            {
-            document.write('<div class="grid-row">');
-            for(var j = 0; j < document.getElementById('size'); j++ )
-            {
-            document.write('<div class="grid-cell"></div>');
-            }
-            document.write('</div>');
-            }
-        </script>
-      </div>
-
-      <p>
-          <button onclick="myMove()">Click Me</button>
-          <input id="testMove" type="button" value="testMove">
-      </p>
-      <div class="grid-row">
-          <div id ="grid-cell"></div>
-      </div>
-
+                  <div class="grid-row">
+              <div class="grid-cell"></div>
+              <div class="grid-cell"></div>
+              <div class="grid-cell"></div>
+          </div>
       <script>
-          function myMove() 
+          for(var i=0; i < document.getElementById('size'); i++)
           {
-            var elem = document.getElementById("grid-cell");
-            var pos = 0;
-            var id = setInterval(frame, 10);
-              
-          function frame() 
+          document.write('<div class="grid-row">');
+          for(var j = 0; j < document.getElementById('size'); j++ )
           {
-            if (pos == 450) 
-            {
-                clearInterval(id);
-            } 
-            else 
-            {
-              pos+=10;
-              elem.style.left = pos + 'px';
-              }
+          document.write('<div class="grid-cell"></div>');
+          }
+          document.write('</div>');
+          }
+      </script>
+    </div>
+
+    <p>
+        <button onclick="myMove()">Click Me</button>
+        <input id="testMove" type="button" value="testMove">
+    </p>
+    <div class="grid-row">
+        <div id ="grid-cell"></div>
+    </div>
+
+    <script>
+        function myMove()
+        {
+          var elem = document.getElementById("grid-cell");
+          var pos = 0;
+          var id = setInterval(frame, 10);
+
+        function frame()
+        {
+          if (pos == 450)
+          {
+              clearInterval(id);
+          }
+          else
+          {
+            pos+=10;
+            elem.style.left = pos + 'px';
             }
           }
-      </script>-->
+        }
+    </script>-->
 
-      <script src="/script.js"></script> <!--Calls scripts file-->
+          <script src="/script.js"></script> <!--Calls scripts file-->
 
-  </body>
+</body>
 </html>
