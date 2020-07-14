@@ -2,11 +2,11 @@
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var sizeInput = document.getElementById('size');
-var changeSize = document.getElementById('change-size');
-var scoreLabel = document.getElementById('score');
+var sizeInput = document.getElementById('size'); // button
+var changeSize = document.getElementById('change-size'); // button
+var scoreLabel = document.getElementById('score-container'); // display
 var score = 0;
-var boardSize = 4;
+var boardSize = 4; // default
 var width = canvas.width / boardSize - 6;
 var cells = [];
 var fontSize;
@@ -15,6 +15,7 @@ var movementMade = true;
 var countFree;
 startGame();
 
+// sets new cell as 0 (false)
 function cell(row, coll)
 {
   this.value = 0;
@@ -22,6 +23,7 @@ function cell(row, coll)
   this.y = row * width + 5 * (row + 1);
 }
 
+// adds new 0 cells to board
 function createCells()
 {
   var i, j;
@@ -35,6 +37,7 @@ function createCells()
   }
 }
 
+// sets colors to cells based on number
 function drawCell(cell)
 {
   ctx.beginPath();
@@ -61,7 +64,7 @@ function drawCell(cell)
   ctx.fill();
   if (cell.value)
   {
-    fontSize = width / 2;
+    fontSize = width / 2.5;
     ctx.font = fontSize + 'px Arial';
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
@@ -69,14 +72,16 @@ function drawCell(cell)
   }
 }
 
+// removes cells colors
 function canvasClean()
 {
   ctx.clearRect(0, 0, 500, 500);
 }
 
+// button inputs listener
 document.onkeydown = function(event)
 {
-  if (!loss)
+  if (!loss) // if board is full but there is a move option, allow input
   {
     movementMade = false;
     if (event.keyCode === 38 || event.keyCode === 87)
@@ -99,23 +104,26 @@ document.onkeydown = function(event)
       moveLeft(); 
       addLeft();
     }
-    scoreLabel.innerHTML = 'Score : ' + score;
-    countFreeCells();
+
+    scoreLabel.innerHTML = 'Score : ' + score; // add score after move
+
+    countFreeCells(); // check if board is full, return t/f
     if(countFree == 0)
     {
-        checkGameLoss();
-	}
+      checkGameLoss(); // end game if returned lose == true
+	  }
   }
 }
 
+// start new game / reset bgame and board
 function startGame()
 {
-    canvas.style.opacity = '1.0';
-    loss = false;
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    createCells();
+  canvas.style.opacity = '1.0';
+  loss = false;
+  boardSize = sizeInput.value;
+  width = canvas.width / boardSize - 6;
+  canvasClean();
+  createCells();
   drawAllCells();
   pasteNewCell();
   pasteNewCell();
@@ -123,18 +131,20 @@ function startGame()
   scoreLabel.innerHTML = 'Score : ' + score;
 }
 
+// Start New Game button press
 changeSize.onclick = function()
 {
-    startGame();
+  startGame();
 }
 
-
+// end game 
 function finishGame()
 {
   canvas.style.opacity = '0.5';
   loss = true;
 }
 
+// puts numbers and colored squares
 function drawAllCells()
 {
   var i, j;
@@ -147,6 +157,7 @@ function drawAllCells()
   }
 }
 
+// returns t/f if board if full
 function countFreeCells()
 {
     countFree = 0;
@@ -163,6 +174,7 @@ function countFreeCells()
   }
 }
 
+// if board is not full, paste new 2 or 4 cell
 function pasteNewCell()
 {
   countFreeCells();
@@ -192,6 +204,7 @@ function pasteNewCell()
   }
 }
 
+// shift all cells to right
 function moveRight()
 {
   var rowY, colX;
@@ -222,6 +235,7 @@ function moveRight()
   }
 }
 
+// check cells to right, add if ==
 function addRight()
 {
   var rowY, colX;
@@ -419,66 +433,66 @@ function addDown()
   }
 }
 
+// checks if move if possible on full board
 function checkGameLoss()
 {
-    loss = true;
+  loss = true;
 
-    //function addUp()
-      var rowY, colX, cur;
-      for(colX = 0; colX < boardSize; colX++)
+  // Up
+  var rowY, colX, cur;
+  for(colX = 0; colX < boardSize; colX++)
+  {
+    for(rowY = 1; rowY < boardSize; rowY++)
+    {
+      cur = rowY;
+      if (cells[cur][colX].value == cells[cur - 1][colX].value)
       {
-        for(rowY = 1; rowY < boardSize; rowY++)
-        {
-            cur = rowY;
-            if (cells[cur][colX].value == cells[cur - 1][colX].value)
-            {
-                loss = false;
-            } 
-        }
-      }
-
-    //function addDown()
-      for(colX = 0; colX < boardSize; colX++)
-      {
-        for(rowY = boardSize - 2; rowY >= 0; rowY--)
-        {
-            cur = rowY;
-            if (cells[cur][colX].value == cells[cur + 1][colX].value)
-            {
-              loss = false;     
-            } 
-        }
+        loss = false;
       } 
-      
-    //function addLeft() 
-      for(rowY = 0; rowY < boardSize; rowY++) 
+    }
+  }
+
+  // Down
+  for(colX = 0; colX < boardSize; colX++)
+    {
+    for(rowY = boardSize - 2; rowY >= 0; rowY--)
+    {
+      cur = rowY;
+      if (cells[cur][colX].value == cells[cur + 1][colX].value)
       {
-        for(colX = 1; colX < boardSize; colX++) 
-        {
-            cur = colX;
-            if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
-            {
-              loss = false; 
-            }
-        }
+        loss = false;     
+      } 
+    }
+  } 
+
+  // Left
+  for(rowY = 0; rowY < boardSize; rowY++) 
+    {
+    for(colX = 1; colX < boardSize; colX++) 
+    {
+      cur = colX;
+      if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
+      {
+        loss = false; 
       }
+    }
+  }
 
-    //function addRight()
-
-      for(rowY = 0; rowY < boardSize; ++rowY)
+  // Right
+  for(rowY = 0; rowY < boardSize; ++rowY)
+    {
+    for(colX = boardSize - 2; colX >= 0; --colX)
+    {
+      cur = colX;
+      if(cells[rowY][cur].value == cells[rowY][cur + 1].value)
       {
-        for(colX = boardSize - 2; colX >= 0; --colX)
-        {
-            cur = colX;
-            if(cells[rowY][cur].value == cells[rowY][cur + 1].value)
-            {
-              loss = false;    
-            }
-        }
+        loss = false;    
       }
+    }
+  }
 
-      if(loss)
-      {
-       finishGame();
-	  }
+  if(loss)
+  {
+    finishGame();
+  }
 }
