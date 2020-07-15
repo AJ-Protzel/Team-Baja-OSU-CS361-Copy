@@ -27,10 +27,10 @@ function cell(row, coll)
 function createCells()
 {
   var i, j;
-  for(i = 0; i < boardSize; i++)
+  for (i = 0; i < boardSize; i++)
   {
     cells[i] = [];
-    for(j = 0; j < boardSize; j++)
+    for (j = 0; j < boardSize; j++)
     {
       cells[i][j] = new cell(i, j);
     }
@@ -108,7 +108,7 @@ document.onkeydown = function(event)
     scoreLabel.innerHTML = 'Score : ' + score; // add score after move
 
     countFreeCells(); // check if board is full, return t/f
-    if(countFree == 0)
+    if (countFree == 0)
     {
       checkGameLoss(); // end game if returned lose == true
 	  }
@@ -148,9 +148,9 @@ function finishGame()
 function drawAllCells()
 {
   var i, j;
-  for(i = 0; i < boardSize; i++)
+  for (i = 0; i < boardSize; i++)
   {
-    for(j = 0; j < boardSize; j++)
+    for (j = 0; j < boardSize; j++)
     {
       drawCell(cells[i][j]);
     }
@@ -162,11 +162,11 @@ function countFreeCells()
 {
     countFree = 0;
     var i, j;
-  for(i = 0; i < boardSize; i++)
+  for (i = 0; i < boardSize; i++)
   {
-    for(j = 0; j < boardSize; j++)
+    for (j = 0; j < boardSize; j++)
     {
-      if(!cells[i][j].value)
+      if (!cells[i][j].value)
       {
         countFree++;
       }
@@ -179,7 +179,7 @@ function pasteNewCell()
 {
   countFreeCells();
   
-  if(!countFree)
+  if (!countFree)
   {
     finishGame();
     return;
@@ -188,9 +188,9 @@ function pasteNewCell()
   {
     var row = Math.floor(Math.random() * boardSize);
     var coll = Math.floor(Math.random() * boardSize);
-    if(!cells[row][coll].value)
+    if (!cells[row][coll].value)
     {
-      if(Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
+      if (Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
       { 
         cells[row][coll].value = 4;
       }
@@ -209,16 +209,16 @@ function moveRight()
 {
   var rowY, colX;
   var cur;
-  for(rowY = 0; rowY < boardSize; ++rowY)
+  for (rowY = 0; rowY < boardSize; ++rowY)
   {
-    for(colX = boardSize - 2; colX >= 0; --colX)
+    for (colX = boardSize - 2; colX >= 0; --colX)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = colX;
         while(cur + 1 < boardSize)
         {
-          if(!cells[rowY][cur + 1].value)
+          if (!cells[rowY][cur + 1].value)
           {
             cells[rowY][cur + 1].value = cells[rowY][cur].value;
             cells[rowY][cur].value = 0;
@@ -240,14 +240,14 @@ function addRight()
 {
   var rowY, colX;
   var cur;
-  for(rowY = 0; rowY < boardSize; ++rowY)
+  for (rowY = 0; rowY < boardSize; ++rowY)
   {
-    for(colX = boardSize - 2; colX >= 0; --colX)
+    for (colX = boardSize - 2; colX >= 0; --colX)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = colX;
-        if(cells[rowY][cur].value == cells[rowY][cur + 1].value)
+        if (cells[rowY][cur].value == cells[rowY][cur + 1].value)
         {
           cells[rowY][cur + 1].value *= 2;
           score +=  cells[rowY][cur + 1].value;
@@ -258,7 +258,7 @@ function addRight()
     }
   }
   moveRight();
-  if(movementMade)
+  if (movementMade)
   {
     pasteNewCell();
   }
@@ -268,11 +268,11 @@ function moveLeft()
 {
   var rowY, colX;
   var cur;
-  for(rowY = 0; rowY < boardSize; rowY++)
+  for (rowY = 0; rowY < boardSize; rowY++)
   {
-    for(colX = 1; colX < boardSize; colX++)
+    for (colX = 1; colX < boardSize; colX++)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = colX;
         while (cur - 1 >= 0){
@@ -297,11 +297,11 @@ function addLeft()
 {
   var rowY, colX;
   var cur;
-  for(rowY = 0; rowY < boardSize; rowY++) 
+  for (rowY = 0; rowY < boardSize; rowY++) 
   {
-    for(colX = 1; colX < boardSize; colX++) 
+    for (colX = 1; colX < boardSize; colX++) 
     {
-      if(cells[rowY][colX].value) 
+      if (cells[rowY][colX].value) 
       {
         cur = colX;
         if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
@@ -315,7 +315,7 @@ function addLeft()
     }
   }
   moveLeft();
-  if(movementMade)
+  if (movementMade)
   {
     pasteNewCell();
   }
@@ -324,16 +324,16 @@ function addLeft()
 function moveUp()
 {
   var rowY, colX, cur;
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
   {
-    for(rowY = 1; rowY < boardSize; rowY++)
+    for (rowY = 1; rowY < boardSize; rowY++)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = rowY;
         while (cur > 0)
         {
-          if(!cells[cur - 1][colX].value)
+          if (!cells[cur - 1][colX].value)
           {
             cells[cur - 1][colX].value = cells[cur][colX].value;
             cells[cur][colX].value = 0;
@@ -353,11 +353,11 @@ function moveUp()
 function addUp()
 {
   var rowY, colX, cur;
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
   {
-    for(rowY = 1; rowY < boardSize; rowY++)
+    for (rowY = 1; rowY < boardSize; rowY++)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = rowY;
         if (cells[cur][colX].value == cells[cur - 1][colX].value)
@@ -371,7 +371,7 @@ function addUp()
     }
   }
   moveUp();
-  if(movementMade)
+  if (movementMade)
   {
     pasteNewCell();
   }
@@ -380,11 +380,11 @@ function addUp()
 function moveDown()
 {
   var rowY, colX, row;
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
   {
-    for(rowY = boardSize - 2; rowY >= 0; rowY--)
+    for (rowY = boardSize - 2; rowY >= 0; rowY--)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = rowY;
         while (cur + 1 < boardSize)
@@ -406,14 +406,14 @@ function moveDown()
   }
 }
 
-function addDown()
+function addDown() 
 {
   var rowY, colX, cur;
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
   {
-    for(rowY = boardSize - 2; rowY >= 0; rowY--)
+    for (rowY = boardSize - 2; rowY >= 0; rowY--)
     {
-      if(cells[rowY][colX].value)
+      if (cells[rowY][colX].value)
       {
         cur = rowY;
         if (cells[cur][colX].value == cells[cur + 1][colX].value)
@@ -427,7 +427,7 @@ function addDown()
     }
   } 
   moveDown();
-  if(movementMade)
+  if (movementMade)
   {
     pasteNewCell();
   }
@@ -440,9 +440,9 @@ function checkGameLoss()
 
   // Up
   var rowY, colX, cur;
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
   {
-    for(rowY = 1; rowY < boardSize; rowY++)
+    for (rowY = 1; rowY < boardSize; rowY++)
     {
       cur = rowY;
       if (cells[cur][colX].value == cells[cur - 1][colX].value)
@@ -453,9 +453,9 @@ function checkGameLoss()
   }
 
   // Down
-  for(colX = 0; colX < boardSize; colX++)
+  for (colX = 0; colX < boardSize; colX++)
     {
-    for(rowY = boardSize - 2; rowY >= 0; rowY--)
+    for (rowY = boardSize - 2; rowY >= 0; rowY--)
     {
       cur = rowY;
       if (cells[cur][colX].value == cells[cur + 1][colX].value)
@@ -466,9 +466,9 @@ function checkGameLoss()
   } 
 
   // Left
-  for(rowY = 0; rowY < boardSize; rowY++) 
+  for (rowY = 0; rowY < boardSize; rowY++) 
     {
-    for(colX = 1; colX < boardSize; colX++) 
+    for (colX = 1; colX < boardSize; colX++) 
     {
       cur = colX;
       if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
@@ -479,19 +479,19 @@ function checkGameLoss()
   }
 
   // Right
-  for(rowY = 0; rowY < boardSize; ++rowY)
+  for (rowY = 0; rowY < boardSize; ++rowY)
     {
-    for(colX = boardSize - 2; colX >= 0; --colX)
+    for (colX = boardSize - 2; colX >= 0; --colX)
     {
       cur = colX;
-      if(cells[rowY][cur].value == cells[rowY][cur + 1].value)
+      if (cells[rowY][cur].value == cells[rowY][cur + 1].value)
       {
         loss = false;    
       }
     }
   }
 
-  if(loss)
+  if (loss)
   {
     finishGame();
   }
