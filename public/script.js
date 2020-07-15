@@ -27,15 +27,16 @@ class game2048{
    */
   constructor (size=4, target= 2048){
     /**
-     * The constructor for game2048
+     * The constructor for game2048 (default params included)
+     * ex game = new game2048(3, 1024) => creates a 3x3 board where 1024 is the win score
      */
-    this.size = size;
-    this.target = target;
-    this.lastMove = null;
+    this.size = size; // size of board
+    this.target = target; // score for win
     this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
-    this.board = this.createBoard();
-    this.gameStatus = 'UNFINISHED';
-    this.score = 0;
+    this.board = this.createBoard(); // creates an empty board of cells
+    this.lastMove = null; // this will tract the previous move after a move is made
+    this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
+    this.score = 0; // current game score.
   };
 
   createBoard(){
@@ -54,9 +55,23 @@ class game2048{
         board[i][j] = new cell(i,j);
       }
     }
-    console.log(board);
+    //console.log(board);
     return board;
   };
+
+  deepCopyBoard(){
+    let lastboard = [];
+
+    for (let i = 0; i < this.size; i++){
+      lastboard[i] = [];
+      
+      for (let  j = 0; j < this.size; j++){
+        lastboard[i][j] = new cell(i,j,this.board[i][j].value);
+      }
+    }
+    //console.log(board);
+    this.lastMove = lastboard;
+  }
 
   drawCell(cell, canvas){
     /**
@@ -357,9 +372,9 @@ class game2048{
 
 
 // sets new cell where value is either a number OR null if empty;
-function cell(row, coll){
+function cell(row, coll , value=null){
   //console.log('inside cell');
-  this.value = null;
+  this.value = value;
   this.x = coll * width + 5 * (coll + 1);
   this.y = row * width + 5 * (row + 1);
 }
@@ -426,6 +441,7 @@ document.onkeydown = function(event)
     {
       console.log('Pre-move');
       console.log(game.board);
+      game.deepCopyBoard();
       game.moveUp();
       game.addUp();
       console.log('post-move')
@@ -434,18 +450,21 @@ document.onkeydown = function(event)
     }
     else if (event.keyCode === 39 || event.keyCode === 68)
     {
+      game.deepCopyBoard();
       game.moveRight();
       game.addRight();
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 40 || event.keyCode === 83)
     {
+      game.deepCopyBoard();
       game.moveDown(); 
       game.addDown();
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 37 || event.keyCode === 65)
     {
+      game.deepCopyBoard();
       game.moveLeft(); 
       game.addLeft();
       game.drawAllCells(canvas);
