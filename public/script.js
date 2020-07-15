@@ -34,7 +34,7 @@ class game2048{
     this.lastMove = null;
     this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard();
-    this.gameStatus = 'in Progress';
+    this.gameStatus = 'UNFINISHED';
     this.score = 0;
   };
 
@@ -143,7 +143,6 @@ class game2048{
         {
           this.board[row][coll].value = 2;
         }
-        this.drawAllCells(can);
         return;
       }
     }
@@ -154,7 +153,7 @@ class game2048{
     {
       var curValOrdered = [];
       for (let colX = 0; colX < this.size; colX++){
-        console.log(this.board[rowY][colX]);
+        //console.log(this.board[rowY][colX]);
         if (this.board[rowY][colX].value != null){
           curValOrdered.push(this.board[rowY][colX].value);
         }
@@ -181,6 +180,7 @@ class game2048{
           let cur = colX;
           if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
+            this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
             this.board[rowY][cur].value = null;
             
@@ -197,7 +197,7 @@ class game2048{
     {
       var curValOrdered = [];
       for (let colX = this.size -1; colX >= 0; colX--){
-        console.log(this.board[rowY][colX]);
+        //console.log(this.board[rowY][colX]);
         if (this.board[rowY][colX].value != null){
           curValOrdered.push(this.board[rowY][colX].value);
         }
@@ -224,6 +224,7 @@ class game2048{
           let cur = colX;
           if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
+            this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
             this.board[rowY][cur].value = null;
             
@@ -240,7 +241,7 @@ class game2048{
     {
       var curValOrdered = [];
       for (let rowY = this.size -1; rowY >= 0; rowY--){
-        console.log(this.board[rowY][colX]);
+        //console.log(this.board[rowY][colX]);
         if (this.board[rowY][colX].value != null){
           curValOrdered.push(this.board[rowY][colX].value);
         }
@@ -267,6 +268,7 @@ class game2048{
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value)
           {
+            this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
             this.board[cur+1][colX].value = null;
             
@@ -309,6 +311,7 @@ class game2048{
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value)
           {
+            this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
             this.board[cur+1][colX].value = null;
             
@@ -318,6 +321,34 @@ class game2048{
     }
     this.moveDown();
     this.addRandomcell(canvas);
+  };
+
+  checkStatus(){
+    /** traverses the game board to find out current game status
+     * possible options
+     * WIN: There contains a board pieces that hits the target score
+     * LOSE: The board has no empty spaces
+     * UNFINISHED: Not one of the 2 statuses above.
+     */
+    //TODO: Not finished. How to handle if there is still a possible move?
+    let empty_flag = false; // looks for 
+    for (let i = 0; i < this.size; i++){
+
+      for (let j = 0; j < this.size; j++){
+        
+        if (this.board[i][j].value == this.target){
+          return 'WIN'
+        }
+        if (this.board[i][j].value == null){
+          empty_flag  = true;
+        }
+      }
+    }
+    if (empty_flag == false){
+      return 'LOSE';
+    } else{
+      return 'UNFINISHED';
+    }
   };
 
 };
@@ -391,39 +422,43 @@ function canvasClean()
 // button inputs listener
 document.onkeydown = function(event)
 {
-  if (!loss) // if board is full but there is a move option, allow input
-  {
-    movementMade = false;
     if (event.keyCode === 38 || event.keyCode === 87)
     {
+      console.log('Pre-move');
+      console.log(game.board);
       game.moveUp();
       game.addUp();
+      console.log('post-move')
+      console.log(game.board);
+      game.drawAllCells(canvas);
     }
     else if (event.keyCode === 39 || event.keyCode === 68)
     {
       game.moveRight();
       game.addRight();
+      game.drawAllCells(canvas);
     }
     else if (event.keyCode === 40 || event.keyCode === 83)
     {
       game.moveDown(); 
       game.addDown();
+      game.drawAllCells(canvas);
     }
     else if (event.keyCode === 37 || event.keyCode === 65)
     {
       game.moveLeft(); 
       game.addLeft();
+      game.drawAllCells(canvas);
     }
 
-    scoreLabel.innerHTML = 'Score : ' + score; // add score after move
+    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+    game.gameStatus = game.checkStatus();
+    if (this.gameStatus != 'UNFINISHED'){
+      // DO SOMETHING WITH WIN AND LOSE CONDITION
+      console.log(this.gameStatus);
+      }
+	  };
 
-    countFreeCells(); // check if board is full, return t/f
-    if (countFree == 0)
-    {
-      checkGameLoss(); // end game if returned lose == true
-	  }
-  }
-}
 
 // start new game / reset bgame and board
 function startGame()
@@ -435,9 +470,9 @@ function startGame()
   let currentGame = new game2048(boardSize);
   console.log(currentGame);
   currentGame.canvasClean(canvas);
+  currentGame.addRandomcell(canvas);
+  currentGame.addRandomcell(canvas);
   currentGame.drawAllCells(canvas);
-  currentGame.addRandomcell(canvas);
-  currentGame.addRandomcell(canvas);
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
 }
@@ -451,69 +486,4 @@ changeSize.onclick = function()
   startGame();
 }
 
-
-
-// checks if move if possible on full board
-function checkGameLoss()
-{
-  loss = true;
-
-  // Up
-  var rowY, colX, cur;
-  for (colX = 0; colX < boardSize; colX++)
-  {
-    for (rowY = 1; rowY < boardSize; rowY++)
-    {
-      cur = rowY;
-      if (cells[cur][colX].value == cells[cur - 1][colX].value)
-      {
-        loss = false;
-      } 
-    }
-  }
-
-  // Down
-  for (colX = 0; colX < boardSize; colX++)
-    {
-    for (rowY = boardSize - 2; rowY >= 0; rowY--)
-    {
-      cur = rowY;
-      if (cells[cur][colX].value == cells[cur + 1][colX].value)
-      {
-        loss = false;     
-      } 
-    }
-  } 
-
-  // Left
-  for (rowY = 0; rowY < boardSize; rowY++) 
-    {
-    for (colX = 1; colX < boardSize; colX++) 
-    {
-      cur = colX;
-      if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
-      {
-        loss = false; 
-      }
-    }
-  }
-
-  // Right
-  for (rowY = 0; rowY < boardSize; ++rowY)
-    {
-    for (colX = boardSize - 2; colX >= 0; --colX)
-    {
-      cur = colX;
-      if (cells[rowY][cur].value == cells[rowY][cur + 1].value)
-      {
-        loss = false;    
-      }
-    }
-  }
-
-  if (loss)
-  {
-    finishGame();
-  }
-}
 
