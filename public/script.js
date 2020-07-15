@@ -1,7 +1,5 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
 var sizeInput = document.getElementById('size');
 var changeSize = document.getElementById('change-size');
 var scoreLabel = document.getElementById('score');
@@ -13,65 +11,72 @@ var fontSize;
 var loss = false;
 var movementMade = true;
 var countFree;
+
 startGame();
 
-function cell(row, coll)
-{
+function startGame() {
+  boardArea.start();
+  boardCells = function() {
+    var i, j;
+    for(i = 0; i < boardSize; i++) {
+      cells[i] = [];
+      for(j = 0; j < boardSize; j++) {
+        cells[i][j] = new cell(i, j);
+      }
+    }
+  }
+
+  loss = false;
+  boardSize = sizeInput.value;
+  width = canvas.width / boardSize - 6;
+  pasteNewCell();
+  pasteNewCell();
+  score = 0;
+  scoreLabel.innerHTML = 'Score : ' + score;
+}
+
+var boardArea = {
+  canvas: document.getElementById('canvas'),
+  start: function() {
+    this.canvas.style.opacity = '1.0';
+    this.ctx = this.canvas.getContext('2d');
+  },
+  clean: function() {
+    this.context.clearRect(0, 0, 500, 500);
+  }
+}
+
+function cell(row, coll) {
   this.value = 0;
   this.x = coll * width + 5 * (coll + 1);
   this.y = row * width + 5 * (row + 1);
-}
-
-function createCells()
-{
-  var i, j;
-  for(i = 0; i < boardSize; i++)
-  {
-    cells[i] = [];
-    for(j = 0; j < boardSize; j++)
-    {
-      cells[i][j] = new cell(i, j);
+  this.drawCell = function() {
+    ctx = boardArea.context;
+    switch (this.value) {
+      case 0 : ctx.fillStyle = '#A9A9A9'; break;
+      case 2 : ctx.fillStyle = '#D2691E'; break;
+      case 4 : ctx.fillStyle = '#FF7F50'; break;
+      case 8 : ctx.fillStyle = '#ffbf00'; break;
+      case 16 : ctx.fillStyle = '#bfff00'; break;
+      case 32 : ctx.fillStyle = '#40ff00'; break;
+      case 64 : ctx.fillStyle = '#00bfff'; break;
+      case 128 : ctx.fillStyle = '#FF7F50'; break;
+      case 256 : ctx.fillStyle = '#0040ff'; break;
+      case 512 : ctx.fillStyle = '#ff0080'; break;
+      case 1024 : ctx.fillStyle = '#D2691E'; break;
+      case 2048 : ctx.fillStyle = '#FF7F50'; break;
+      case 4096 : ctx.fillStyle = '#ffbf00'; break;
+      default : ctx.fillStyle = '#ff0080';
+    }
+    ctx.fillRect(this.x, this.y, width, width);
+    if (cell.value) {
+      fontSize = width / 2;
+      ctx.font = fontSize + 'px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
     }
   }
-}
-
-function drawCell(cell)
-{
-  ctx.beginPath();
-  ctx.rect(cell.x, cell.y, width, width);
-
-  switch (cell.value)
-  {
-    case 0 : ctx.fillStyle = '#A9A9A9'; break;
-    case 2 : ctx.fillStyle = '#D2691E'; break;
-    case 4 : ctx.fillStyle = '#FF7F50'; break;
-    case 8 : ctx.fillStyle = '#ffbf00'; break;
-    case 16 : ctx.fillStyle = '#bfff00'; break;
-    case 32 : ctx.fillStyle = '#40ff00'; break;
-    case 64 : ctx.fillStyle = '#00bfff'; break;
-    case 128 : ctx.fillStyle = '#FF7F50'; break;
-    case 256 : ctx.fillStyle = '#0040ff'; break;
-    case 512 : ctx.fillStyle = '#ff0080'; break;
-    case 1024 : ctx.fillStyle = '#D2691E'; break;
-    case 2048 : ctx.fillStyle = '#FF7F50'; break;
-    case 4096 : ctx.fillStyle = '#ffbf00'; break;
-    default : ctx.fillStyle = '#ff0080';
-  }
-
-  ctx.fill();
-  if (cell.value)
-  {
-    fontSize = width / 2;
-    ctx.font = fontSize + 'px Arial';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
-  }
-}
-
-function canvasClean()
-{
-  ctx.clearRect(0, 0, 500, 500);
 }
 
 document.onkeydown = function(event)
@@ -108,21 +113,6 @@ document.onkeydown = function(event)
   }
 }
 
-function startGame()
-{
-    canvas.style.opacity = '1.0';
-    loss = false;
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    createCells();
-  drawAllCells();
-  pasteNewCell();
-  pasteNewCell();
-  score = 0;
-  scoreLabel.innerHTML = 'Score : ' + score;
-}
-
 changeSize.onclick = function()
 {
     startGame();
@@ -133,18 +123,6 @@ function finishGame()
 {
   canvas.style.opacity = '0.5';
   loss = true;
-}
-
-function drawAllCells()
-{
-  var i, j;
-  for(i = 0; i < boardSize; i++)
-  {
-    for(j = 0; j < boardSize; j++)
-    {
-      drawCell(cells[i][j]);
-    }
-  }
 }
 
 function countFreeCells()
@@ -163,29 +141,25 @@ function countFreeCells()
   }
 }
 
-function pasteNewCell()
-{
+function pasteNewCell() {
   countFreeCells();
   
-  if(!countFree)
-  {
+  if(!countFree) {
     finishGame();
     return;
   }
-  while(true)
-  {
+
+  while(true) {
     var row = Math.floor(Math.random() * boardSize);
     var coll = Math.floor(Math.random() * boardSize);
-    if(!cells[row][coll].value)
-    {
-      if(Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
-      { 
+    if(!cells[row][coll].value) {
+      // adds 20% chance to start with 4
+      if(Math.ceil(Math.random()*99 > 79)) { 
         cells[row][coll].value = 4;
-      }
-      else
-      {
+      } else {
         cells[row][coll].value = 2;
       }
+      
       drawAllCells();
       return;
     }
