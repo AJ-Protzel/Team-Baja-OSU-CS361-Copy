@@ -235,6 +235,91 @@ class game2048{
     this.addRandomcell(canvas);
   };
 
+  moveUp(){
+    for (let colX = 0; colX < this.size; colX++)
+    {
+      var curValOrdered = [];
+      for (let rowY = this.size -1; rowY >= 0; rowY--){
+        console.log(this.board[rowY][colX]);
+        if (this.board[rowY][colX].value != null){
+          curValOrdered.push(this.board[rowY][colX].value);
+        }
+      }
+      if (curValOrdered.length > 0){
+        for (let y = 0; y < this.size; y++){
+          if (curValOrdered != 0){
+            this.board[y][colX].value = curValOrdered.pop();
+          } else {
+            this.board[y][colX].value = null;
+          }
+        }
+
+      }
+    }
+  };
+
+  addUp(){
+    for (let colX = 0; colX < this.size; ++colX)
+    {
+      for (let rowY = this.size - 2; rowY >= 0; --rowY)
+      {
+        if (this.board[rowY][colX].value != null){
+          let cur = rowY;
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
+          {
+            this.board[cur][colX].value *= 2;
+            this.board[cur+1][colX].value = null;
+            
+          }
+        }
+      }
+    }
+    this.moveUp();
+    this.addRandomcell(canvas);
+  };
+
+  moveDown(){
+    for (let colX = 0; colX < this.size; colX++)
+    {
+      var curValOrdered = [];
+      for (let rowY = 0; rowY < this.size; rowY++){
+        if (this.board[rowY][colX].value != null){
+          curValOrdered.push(this.board[rowY][colX].value);
+        }
+      }
+      if (curValOrdered.length > 0){
+        for (let y = this.size -1; y >= 0; y--){
+          if (curValOrdered != 0){
+            this.board[y][colX].value = curValOrdered.pop();
+          } else {
+            this.board[y][colX].value = null;
+          }
+        }
+
+      }
+    }
+  };
+
+  addDown(){
+    for (let colX = 0; colX < this.size; ++colX)
+    {
+      for (let rowY = this.size - 2; rowY >= 0; --rowY)
+      {
+        if (this.board[rowY][colX].value != null){
+          let cur = rowY;
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
+          {
+            this.board[cur][colX].value *= 2;
+            this.board[cur+1][colX].value = null;
+            
+          }
+        }
+      }
+    }
+    this.moveDown();
+    this.addRandomcell(canvas);
+  };
+
 };
 
 
@@ -311,8 +396,8 @@ document.onkeydown = function(event)
     movementMade = false;
     if (event.keyCode === 38 || event.keyCode === 87)
     {
-      moveUp();
-      addUp();
+      game.moveUp();
+      game.addUp();
     }
     else if (event.keyCode === 39 || event.keyCode === 68)
     {
@@ -321,8 +406,8 @@ document.onkeydown = function(event)
     }
     else if (event.keyCode === 40 || event.keyCode === 83)
     {
-      moveDown(); 
-      addDown();
+      game.moveDown(); 
+      game.addDown();
     }
     else if (event.keyCode === 37 || event.keyCode === 65)
     {
@@ -366,301 +451,7 @@ changeSize.onclick = function()
   startGame();
 }
 
-// end game 
-function finishGame()
-{
-  canvas.style.opacity = '0.5';
-  loss = true;
-}
 
-// puts numbers and colored squares
-function drawAllCells()
-{
-  var i, j;
-  for (i = 0; i < boardSize; i++)
-  {
-    for (j = 0; j < boardSize; j++)
-    {
-      drawCell(cells[i][j]);
-    }
-  }
-}
-
-// returns t/f if board if full
-function countFreeCells()
-{
-    countFree = 0;
-    var i, j;
-  for (i = 0; i < boardSize; i++)
-  {
-    for (j = 0; j < boardSize; j++)
-    {
-      if (!cells[i][j].value)
-      {
-        countFree++;
-      }
-    }
-  }
-}
-
-// if board is not full, paste new 2 or 4 cell
-function pasteNewCell()
-{
-  countFreeCells();
-  
-  if (!countFree)
-  {
-    finishGame();
-    return;
-  }
-  while(true)
-  {
-    var row = Math.floor(Math.random() * boardSize);
-    var coll = Math.floor(Math.random() * boardSize);
-    if (!cells[row][coll].value)
-    {
-      if (Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
-      { 
-        cells[row][coll].value = 4;
-      }
-      else
-      {
-        cells[row][coll].value = 2;
-      }
-      drawAllCells();
-      return;
-    }
-  }
-}
-
-// shift all cells to right
-function moveRight()
-{
-  var rowY, colX;
-  var cur;
-  for (rowY = 0; rowY < boardSize; ++rowY)
-  {
-    for (colX = boardSize - 2; colX >= 0; --colX)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = colX;
-        while(cur + 1 < boardSize)
-        {
-          if (!cells[rowY][cur + 1].value)
-          {
-            cells[rowY][cur + 1].value = cells[rowY][cur].value;
-            cells[rowY][cur].value = 0;
-            cur++;
-            movementMade = true;
-          }
-          else
-          {
-            break;
-          }
-        }
-      }
-    }
-  }
-}
-
-// check cells to right, add if ==
-function addRight()
-{
-  var rowY, colX;
-  var cur;
-  for (rowY = 0; rowY < boardSize; ++rowY)
-  {
-    for (colX = boardSize - 2; colX >= 0; --colX)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = colX;
-        if (cells[rowY][cur].value == cells[rowY][cur + 1].value)
-        {
-          cells[rowY][cur + 1].value *= 2;
-          score +=  cells[rowY][cur + 1].value;
-          cells[rowY][cur].value = 0;
-          movementMade = true;
-        }
-      }
-    }
-  }
-  moveRight();
-  if (movementMade)
-  {
-    pasteNewCell();
-  }
-}
-
-function moveLeft()
-{
-  var rowY, colX;
-  var cur;
-  for (rowY = 0; rowY < boardSize; rowY++)
-  {
-    for (colX = 1; colX < boardSize; colX++)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = colX;
-        while (cur - 1 >= 0){
-          if (!cells[rowY][cur - 1].value)
-          {
-            cells[rowY][cur - 1].value = cells[rowY][cur].value;
-            cells[rowY][cur].value = 0;
-            cur--;
-            movementMade = true;
-          } 
-          else 
-          {
-            break; 
-          }
-        }
-      }
-    }
-  }
-}
-
-function addLeft() 
-{
-  var rowY, colX;
-  var cur;
-  for (rowY = 0; rowY < boardSize; rowY++) 
-  {
-    for (colX = 1; colX < boardSize; colX++) 
-    {
-      if (cells[rowY][colX].value) 
-      {
-        cur = colX;
-        if (cells[rowY][cur].value == cells[rowY][cur - 1].value) 
-        {
-          cells[rowY][cur - 1].value *= 2;
-          score +=   cells[rowY][cur - 1].value;
-          cells[rowY][cur].value = 0;
-          movementMade = true;
-        } 
-      }
-    }
-  }
-  moveLeft();
-  if (movementMade)
-  {
-    pasteNewCell();
-  }
-}
-
-function moveUp()
-{
-  var rowY, colX, cur;
-  for (colX = 0; colX < boardSize; colX++)
-  {
-    for (rowY = 1; rowY < boardSize; rowY++)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = rowY;
-        while (cur > 0)
-        {
-          if (!cells[cur - 1][colX].value)
-          {
-            cells[cur - 1][colX].value = cells[cur][colX].value;
-            cells[cur][colX].value = 0;
-            cur--;
-            movementMade = true;
-          }  
-          else 
-          {
-            break; 
-          }
-        }
-      }
-    }
-  }
-}
-
-function addUp()
-{
-  var rowY, colX, cur;
-  for (colX = 0; colX < boardSize; colX++)
-  {
-    for (rowY = 1; rowY < boardSize; rowY++)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = rowY;
-        if (cells[cur][colX].value == cells[cur - 1][colX].value)
-        {
-          cells[cur - 1][colX].value *= 2;
-          score += cells[cur - 1][colX].value;
-          cells[cur][colX].value = 0;
-          movementMade = true;
-        } 
-      }
-    }
-  }
-  moveUp();
-  if (movementMade)
-  {
-    pasteNewCell();
-  }
-}
-
-function moveDown()
-{
-  var rowY, colX, row;
-  for (colX = 0; colX < boardSize; colX++)
-  {
-    for (rowY = boardSize - 2; rowY >= 0; rowY--)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = rowY;
-        while (cur + 1 < boardSize)
-        {
-          if (!cells[cur + 1][colX].value)
-          {
-            cells[cur + 1][colX].value = cells[cur][colX].value;
-            cells[cur][colX].value = 0;
-            cur++;
-            movementMade = true;
-          }  
-          else
-          {
-            break; 
-          }
-        }
-      }
-    }
-  }
-}
-
-function addDown() 
-{
-  var rowY, colX, cur;
-  for (colX = 0; colX < boardSize; colX++)
-  {
-    for (rowY = boardSize - 2; rowY >= 0; rowY--)
-    {
-      if (cells[rowY][colX].value)
-      {
-        cur = rowY;
-        if (cells[cur][colX].value == cells[cur + 1][colX].value)
-        {
-          cells[cur + 1][colX].value *= 2;
-          score +=  cells[cur + 1][colX].value;
-          cells[cur][colX].value = 0;
-          movementMade = true;
-        } 
-      }
-    }
-  } 
-  moveDown();
-  if (movementMade)
-  {
-    pasteNewCell();
-  }
-}
 
 // checks if move if possible on full board
 function checkGameLoss()
