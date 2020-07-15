@@ -13,12 +13,193 @@ var fontSize;
 var loss = false;
 var movementMade = true;
 var countFree;
-startGame();
+var game;
 
-// sets new cell as 0 (false)
-function cell(row, coll)
-{
-  this.value = 0;
+
+
+class game2048{
+  /**
+   * 
+   * @param {*} size 
+   * @param {*} target 
+   * 
+   * This class will cont
+   */
+  constructor (size=4, target= 2048){
+    /**
+     * The constructor for game2048
+     */
+    this.size = size;
+    this.target = target;
+    this.lastMove = null;
+    this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
+    this.board = this.createBoard();
+    this.gameStatus = 'in Progress';
+    this.score = 0;
+  }
+
+  createBoard(){
+    /**
+     * This function will create an array representation of the initized game board.
+     * To create the board, it will take in the size passed into the function.
+     * Return empty array board of empty cell objects.
+     */
+
+    let board = [];
+
+    for (let i = 0; i < this.size; i++){
+      board[i] = [];
+      
+      for (let  j = 0; j < this.size; j++){
+        board[i][j] = new cell(i,j);
+      }
+    }
+    console.log(board);
+    return board;
+  }
+
+  drawCell(cell, canvas){
+    /**
+     * Takes in individual cell object and current canvas and draws cell onto canvas
+     */
+    //console.log(cell);
+    //console.log(canvas);
+    let ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.rect(cell.x, cell.y, width, width);
+    ctx.fillStyle =  this.cellColor(cell.value);
+    ctx.fill();
+    if (cell.value){
+      fontSize = width / 2.5;
+      ctx.font = fontSize + 'px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
+    }
+  }
+
+  cellColor(val){
+    switch (val){
+      case null : return '#A9A9A9'; break;
+      case 2 : 
+        return '#D2691E'; 
+      case 4 :
+        return'#FF7F50';
+      case 8 : 
+        return'#ffbf00';
+      case 16 : 
+        return'#bfff00';
+      case 32 : 
+        return'#40ff00';
+      case 64 : 
+        return'#00bfff'; 
+      case 128 : 
+        return'#FF7F50';
+      case 256 : 
+        return'#0040ff'; 
+      case 512 : 
+        return'#ff0080';
+      case 1024 : 
+        return'#D2691E';
+      case 2048 : 
+        return'#FF7F50';
+      case 4096 : 
+        return'#ffbf00';
+    }
+  }
+  
+  canvasClean(can){
+    /**
+     * Takes current canvas and cleans it up.
+     */
+    //console.log('inside canvasclean');
+    let ctx = can.getContext('2d');
+    ctx.clearRect(0, 0, 500, 500);
+  }
+
+  drawAllCells(can){
+    //console.log('inside draw all');
+    for (let i = 0; i < this.size; i++){
+      for (let j = 0; j < this.size; j++){
+        this.drawCell(this.board[i][j], can);
+      }
+    }
+  }
+  addRandomcell(can){
+    /**
+     * class function adds random cell to existing game board in an empty space
+     */
+    //console.log('inside addRandom');
+    while(true){
+      var row = Math.floor(Math.random() * boardSize);
+      var coll = Math.floor(Math.random() * boardSize);
+      if (this.board[row][coll].value == null){
+        
+        if (Math.ceil(Math.random()*99 > 79)){ // adds 20% chance to start with 4{ 
+          this.board[row][coll].value = 4;
+        }
+        else
+        {
+          this.board[row][coll].value = 2;
+        }
+        this.drawAllCells(can);
+        return;
+      }
+    }
+  }
+  
+  moveRight(){
+    for (let rowY = 0; rowY < this.size; rowY++)
+    {
+      var curValOrdered = [];
+      for (let colX = 0; colX < this.size; colX++){
+        console.log(this.board[rowY][colX]);
+        if (this.board[rowY][colX].value != null){
+          curValOrdered.push(this.board[rowY][colX].value);
+        }
+      }
+      if (curValOrdered.length > 0){
+        for (let x = this.size -1; x >= 0; x--){
+          if (curValOrdered != 0){
+            this.board[rowY][x].value = curValOrdered.pop();
+          } else {
+            this.board[rowY][x].value = null;
+          }
+        }
+
+      }
+    }
+  }
+
+  addRight(){
+    for (let rowY = 0; rowY < this.size; ++rowY)
+    {
+      for (let colX = this.size - 2; colX >= 0; --colX)
+      {
+        if (this.board[rowY][colX].value != null){
+          let cur = colX;
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          {
+            this.board[rowY][cur + 1].value *= 2;
+            this.board[rowY][cur].value = null;
+            
+          }
+        }
+      }
+    }
+    this.moveRight();
+    this.addRandomcell(canvas);
+  }
+
+}
+
+
+
+
+// sets new cell where value is either a number OR null if empty;
+function cell(row, coll){
+  //console.log('inside cell');
+  this.value = null;
   this.x = coll * width + 5 * (coll + 1);
   this.y = row * width + 5 * (row + 1);
 }
@@ -91,8 +272,8 @@ document.onkeydown = function(event)
     }
     else if (event.keyCode === 39 || event.keyCode === 68)
     {
-      moveRight();
-      addRight();
+      game.moveRight();
+      game.addRight();
     }
     else if (event.keyCode === 40 || event.keyCode === 83)
     {
@@ -118,18 +299,22 @@ document.onkeydown = function(event)
 // start new game / reset bgame and board
 function startGame()
 {
+  console.log("Start game");
   canvas.style.opacity = '1.0';
-  loss = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
-  canvasClean();
-  createCells();
-  drawAllCells();
-  pasteNewCell();
-  pasteNewCell();
-  score = 0;
-  scoreLabel.innerHTML = 'Score : ' + score;
+  let currentGame = new game2048(boardSize);
+  console.log(currentGame);
+  currentGame.canvasClean(canvas);
+  currentGame.drawAllCells(canvas);
+  currentGame.addRandomcell(canvas);
+  currentGame.addRandomcell(canvas);
+  scoreLabel.innerHTML = 'Score : ' + currentGame.score;
+  game = currentGame;
 }
+
+startGame();
+
 
 // Start New Game button press
 changeSize.onclick = function()
@@ -496,3 +681,4 @@ function checkGameLoss()
     finishGame();
   }
 }
+
