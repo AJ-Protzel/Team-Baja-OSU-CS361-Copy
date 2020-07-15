@@ -36,7 +36,7 @@ class game2048{
     this.board = this.createBoard();
     this.gameStatus = 'in Progress';
     this.score = 0;
-  }
+  };
 
   createBoard(){
     /**
@@ -56,7 +56,7 @@ class game2048{
     }
     console.log(board);
     return board;
-  }
+  };
 
   drawCell(cell, canvas){
     /**
@@ -76,7 +76,7 @@ class game2048{
       ctx.textAlign = 'center';
       ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
     }
-  }
+  };
 
   cellColor(val){
     switch (val){
@@ -106,7 +106,7 @@ class game2048{
       case 4096 : 
         return'#ffbf00';
     }
-  }
+  };
   
   canvasClean(can){
     /**
@@ -115,7 +115,7 @@ class game2048{
     //console.log('inside canvasclean');
     let ctx = can.getContext('2d');
     ctx.clearRect(0, 0, 500, 500);
-  }
+  };
 
   drawAllCells(can){
     //console.log('inside draw all');
@@ -124,7 +124,8 @@ class game2048{
         this.drawCell(this.board[i][j], can);
       }
     }
-  }
+  };
+  
   addRandomcell(can){
     /**
      * class function adds random cell to existing game board in an empty space
@@ -146,7 +147,7 @@ class game2048{
         return;
       }
     }
-  }
+  };
   
   moveRight(){
     for (let rowY = 0; rowY < this.size; rowY++)
@@ -169,7 +170,7 @@ class game2048{
 
       }
     }
-  }
+  };
 
   addRight(){
     for (let rowY = 0; rowY < this.size; ++rowY)
@@ -189,9 +190,52 @@ class game2048{
     }
     this.moveRight();
     this.addRandomcell(canvas);
-  }
+  };
 
-}
+  moveLeft(){
+    for (let rowY = 0; rowY < this.size; rowY++)
+    {
+      var curValOrdered = [];
+      for (let colX = this.size -1; colX >= 0; colX--){
+        console.log(this.board[rowY][colX]);
+        if (this.board[rowY][colX].value != null){
+          curValOrdered.push(this.board[rowY][colX].value);
+        }
+      }
+      if (curValOrdered.length > 0){
+        for (let x = 0; x < this.size; x++){
+          if (curValOrdered != 0){
+            this.board[rowY][x].value = curValOrdered.pop();
+          } else {
+            this.board[rowY][x].value = null;
+          }
+        }
+
+      }
+    }
+  };
+
+  addLeft(){
+    for (let rowY = 0; rowY < this.size; ++rowY)
+    {
+      for (let colX = this.size - 2; colX >= 0; --colX)
+      {
+        if (this.board[rowY][colX].value != null){
+          let cur = colX;
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          {
+            this.board[rowY][cur + 1].value *= 2;
+            this.board[rowY][cur].value = null;
+            
+          }
+        }
+      }
+    }
+    this.moveLeft();
+    this.addRandomcell(canvas);
+  };
+
+};
 
 
 
@@ -282,8 +326,8 @@ document.onkeydown = function(event)
     }
     else if (event.keyCode === 37 || event.keyCode === 65)
     {
-      moveLeft(); 
-      addLeft();
+      game.moveLeft(); 
+      game.addLeft();
     }
 
     scoreLabel.innerHTML = 'Score : ' + score; // add score after move
