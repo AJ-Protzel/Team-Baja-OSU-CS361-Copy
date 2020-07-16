@@ -435,7 +435,7 @@ function canvasClean()
 }
 
 // button inputs listener
-document.onkeydown = function(event)
+document.onkeyup = function(event)
 {
     if (event.keyCode === 38 || event.keyCode === 87)
     {
