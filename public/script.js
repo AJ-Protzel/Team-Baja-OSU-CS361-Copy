@@ -6,7 +6,7 @@ var setting_form = document.getElementById('settings_form');
 var score_form = document.getElementById('highScore_form');
 var scoreButton = document.getElementById('highScores')
 var ctx = canvas.getContext('2d');
-var main_options = document.getElementById('options');
+var mainOptions = document.getElementById('mainOptions');
 var sizeInput = document.getElementById('size'); // button
 var changeSize = document.getElementById('change-size'); // button
 var scoreLabel = document.getElementById('score-container'); // display
@@ -27,7 +27,7 @@ function showSettings(event){
   console.log("inside settings function");
   canvas.hidden = true;
   setting_form.hidden = false;
-  main_options.hidden = true;
+  mainOptions.hidden = true;
   var x = document.createElement("BUTTON");
   var t = document.createTextNode("Save");
   x.appendChild(t);
@@ -70,13 +70,13 @@ function showSettings(event){
     setting_form.innerHTML = '';
     setting_form.hidden = true;
     canvas.hidden = false;
-    main_options.hidden = false;
+    mainOptions.hidden = false;
   };
 }
 
 function showHighscore(event){
   console.log("inside settings function");
-  main_options.hidden = true
+  mainOptions.hidden = true
   canvas.hidden = true
   score_form.hidden = false
   var x = document.createElement("BUTTON");
@@ -91,7 +91,7 @@ function showHighscore(event){
     score_form.innerHTML = '';
     score_form.hidden = true;
     canvas.hidden = false;
-    main_options.hidden = false;
+    mainOptions.hidden = false;
   };
 }
 
@@ -102,13 +102,6 @@ changeSize.onclick = function()
     width = canvas.width / boardSize - 6;
     canvasClean();
     startGame();
-}
-
-function cell(row, coll)
-{
-  this.value = 0;
-  this.x = coll * width + 5 * (coll + 1);
-  this.y = row * width + 5 * (row + 1);
 }
 
 
