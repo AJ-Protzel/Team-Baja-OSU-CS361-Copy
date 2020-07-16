@@ -4,7 +4,8 @@ var canvas = document.getElementById('canvas');
 var setting_button = document.getElementById('settings');
 var setting_form = document.getElementById('settings_form');
 var score_form = document.getElementById('highScore_form');
-var scoreButton = document.getElementById('highScores')
+var scoreButton = document.getElementById('highScores');
+var highScoreBack = document.getElementById('highScoreBack');
 var ctx = canvas.getContext('2d');
 var mainOptions = document.getElementById('mainOptions');
 var sizeInput = document.getElementById('size'); // button
@@ -75,25 +76,19 @@ function showSettings(event){
 }
 
 function showHighscore(event){
-  console.log("inside settings function");
-  mainOptions.hidden = true
-  canvas.hidden = true
-  score_form.hidden = false
-  var x = document.createElement("BUTTON");
-  var t = document.createTextNode("Click me");
-  x.appendChild(t);
-  score_form.appendChild(x);
-  var back = score_form.firstElementChild;
+  console.log("inside score function");
+  mainOptions.hidden = true;
+  canvas.hidden = true;
+  score_form.hidden = false;
 
 
+};
 
-  back.onclick = function(){
-    score_form.innerHTML = '';
-    score_form.hidden = true;
-    canvas.hidden = false;
-    mainOptions.hidden = false;
-  };
-}
+highScoreBack.onclick = function(){
+  score_form.hidden = true;
+  canvas.hidden = false;
+  mainOptions.hidden = false;
+};
 
 
 changeSize.onclick = function()

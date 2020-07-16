@@ -38,7 +38,37 @@
       <div id="canvas-block"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
         <div hidden id='settings_form'>SETTINGS</div>
-        <div hidden id='highScore_form'>SCORES</div>
+        <div hidden id='highScore_form'>
+          <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
+            <select id="highScoreSize">
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          <table border='1'>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+                <th> Date </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>test</td>
+                <td>test</td>
+                <td>test</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="clear"></div>
+          <input id='highScoreBack' type='button' value='Back'>
+        </div>
       </div>
     </div>
   </body>
