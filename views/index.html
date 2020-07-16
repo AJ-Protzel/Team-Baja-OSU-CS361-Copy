@@ -12,85 +12,75 @@
   </head>
 
   <body>
-      <h1>2048</h1>
-      <p id="score"></p>
-      <div id="size-bloc">
-          <p id="size-title">Size:</p>
-          <select id="size">
-              <option value="3">3</option>
-              <option value="4" selected>4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-          </select>
-
-          <input id="change-size" type="button" value="Start New Game">
-          <input id="high-scores" type="button" value="High Scores">
-          <input id="settings" type="button" value="settings">
-          <!--<input id="reset-board" type="button" value="New Game">-->
-          <div class="clear"></div>
+    <div id="container"> <!--container for body-->
+      <div id="heading"> <!--top most box-->
+        <h1 id="title">2048</h1>
+        <div id="score-container"></div>
       </div>
+      <div class="clear"></div> <!--adds space under heading-->
+      <div id="size-container"> <!--box under heading-->
+        <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
+        <select id="size">
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
 
-    <div id="canvas-block">
-        <!--Sets size of board-->
-          <canvas id="canvas" width="500" height="500"></canvas>
-          <div hidden id='settings_form'>SETTINGS</div>
-          <div hidden id='high_score_form'>SCORES</div>
-
-          <!--
-
-                  <div class="grid-row">
-              <div class="grid-cell"></div>
-              <div class="grid-cell"></div>
-              <div class="grid-cell"></div>
-          </div>
-      <script>
-          for(var i=0; i < document.getElementById('size'); i++)
-          {
-          document.write('<div class="grid-row">');
-          for(var j = 0; j < document.getElementById('size'); j++ )
-          {
-          document.write('<div class="grid-cell"></div>');
-          }
-          document.write('</div>');
-          }
-      </script>
+        <input id="change-size" type="button" value="Start New Game"> <!--resets board, starts new game-->
+        <input id='settings' type='button' value='settings'>
+        <input id='highScores' type='button' value='High Score'>
+      </div>
+      <div id="canvas-block"> <!--holds canvas block-->
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <div hidden id='settings_form'>SETTINGS</div>
+        <div hidden id='high_score_form'>SCORES</div>
+      </div>
     </div>
-
-    <p>
-        <button onclick="myMove()">Click Me</button>
-        <input id="testMove" type="button" value="testMove">
-    </p>
-    <div class="grid-row">
-        <div id ="grid-cell"></div>
-    </div>
-
-    <script>
-        function myMove()
-        {
-          var elem = document.getElementById("grid-cell");
-          var pos = 0;
-          var id = setInterval(frame, 10);
-
-        function frame()
-        {
-          if (pos == 450)
-          {
-              clearInterval(id);
-          }
-          else
-          {
-            pos+=10;
-            elem.style.left = pos + 'px';
-            }
-          }
-        }
-    </script>-->
-
-          <script src="/script.js"></script> <!--Calls scripts file-->
-
-</body>
+  </body>
+  <script src="/script.js"></script> <!--Calls JS file-->
 </html>
+
+<!--
+  <script> //auto write cell objects
+    for(var i=0; i < document.getElementById('size'); i++)
+    {
+      document.write('<div class="grid-row">');
+      for(var j = 0; j < document.getElementById('size'); j++ )
+      {
+        document.write('<div class="grid-cell"></div>');
+      }
+      document.write('</div>');
+    }
+  </script>
+
+  <p> // test button
+    <button onclick="myMove()">Click Me</button>
+    <input id="testMove" type="button" value="testMove">
+  </p>
+
+  <script>
+    function myMove()
+    {
+      var elem = document.getElementById("grid-cell");
+      var pos = 0;
+      var id = setInterval(frame, 10);
+      function frame()
+      {
+        if (pos == 450)
+        {
+          clearInterval(id);
+        }
+        else
+        {
+          pos+=10;
+          elem.style.left = pos + 'px';
+        }
+      }
+    }
+  </script>
+-->
