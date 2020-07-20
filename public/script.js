@@ -1,11 +1,17 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
+
 var canvas = document.getElementById('canvas'); //background square
+var setting_button = document.getElementById('settings');
+var setting_form = document.getElementById('settings_form');
+var score_form = document.getElementById('highScore_form');
+var scoreButton = document.getElementById('highScores');
+var highScoreBack = document.getElementById('highScoreBack');
 var ctx = canvas.getContext('2d');
+var mainOptions = document.getElementById('mainOptions');
 var sizeInput = document.getElementById('size'); // button
 var changeSize = document.getElementById('change-size'); // button
 var scoreLabel = document.getElementById('score-container'); // display
-var score = 0;
 var boardSize = 4; // default
 var width = canvas.width / boardSize - 6; //-6 moves cell image to center
 var cells = [];
@@ -15,6 +21,84 @@ var movementMade = true;
 var countFree;
 var game;
 
+
+setting_button.addEventListener('click', function() {showSettings(event)});
+scoreButton.addEventListener('click',  function() {showHighscore(event)});
+
+function showSettings(event){
+  console.log("inside settings function");
+  canvas.hidden = true;
+  setting_form.hidden = false;
+  mainOptions.hidden = true;
+  var x = document.createElement("BUTTON");
+  var t = document.createTextNode("Save");
+  x.appendChild(t);
+  setting_form.appendChild(x);
+  var current_Node = setting_form.firstElementChild
+  var back = setting_form.firstElementChild;
+  setting_form.appendChild(document.createElement('form'));
+  current_Node = current_Node.nextElementSibling // current_node -> Form
+  var i = document.createElement("input"); //board
+  i.setAttribute('type',"range");
+  i.setAttribute('id',"boardSize");
+  i.setAttribute('min', '3');
+  i.setAttribute('max', '16');
+
+  var s = document.createElement("label"); //board label
+  s.setAttribute('for',"boardsize");
+  s.innerText = "Board Size"
+  current_Node.appendChild(s);
+  current_Node.appendChild(i);
+  current_Node.appendChild(document.createElement('br'));
+
+  var i = document.createElement("input"); //input element, text
+  i.setAttribute('type',"range");
+  i.setAttribute('id',"targetScore");
+  i.setAttribute('min', '0');
+  i.setAttribute('max', '50');
+
+  var s = document.createElement("label"); //input element, Submit button
+  s.setAttribute('for',"targetScore");
+  s.innerText = "Target Score"
+
+
+  current_Node.appendChild(s);
+  current_Node.appendChild(i);
+
+
+
+
+  back.onclick = function(){
+    setting_form.innerHTML = '';
+    setting_form.hidden = true;
+    canvas.hidden = false;
+    mainOptions.hidden = false;
+  };
+}
+
+function showHighscore(event){
+  console.log("inside score function");
+  mainOptions.hidden = true;
+  canvas.hidden = true;
+  score_form.hidden = false;
+
+
+};
+
+highScoreBack.onclick = function(){
+  score_form.hidden = true;
+  canvas.hidden = false;
+  mainOptions.hidden = false;
+};
+
+
+changeSize.onclick = function()
+{
+    boardSize = sizeInput.value;
+    width = canvas.width / boardSize - 6;
+    canvasClean();
+    startGame();
+}
 
 
 class game2048{
