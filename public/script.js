@@ -581,7 +581,7 @@ document.onkeyup = function(event)
       console.log(game.board);
       game.drawAllCells(canvas);
     }
-    else if (event.keyCode === 39 || event.keyCode === 68 //right move
+    else if (event.keyCode === 39 || event.keyCode === 68) //right move
     {
       game.deepCopyBoard();
       game.moveRight();
