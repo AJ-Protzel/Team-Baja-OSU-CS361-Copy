@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 var HighScoreSchema = new Schema (
     {
         name: {type: String, required: true, maxlength: 100},
-        score: {type: Number, required: true}
+        score: {type: Number, required: true},
+        size: {type: Number, required: true}
     }
 );
 

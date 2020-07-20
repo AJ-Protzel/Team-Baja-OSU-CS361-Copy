@@ -1,6 +1,7 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-var canvas = document.getElementById('canvas');
+
+var canvas = document.getElementById('canvas'); //background square
 var setting_button = document.getElementById('settings');
 var setting_form = document.getElementById('settings_form');
 var score_form = document.getElementById('highScore_form');
@@ -12,7 +13,7 @@ var sizeInput = document.getElementById('size'); // button
 var changeSize = document.getElementById('change-size'); // button
 var scoreLabel = document.getElementById('score-container'); // display
 var boardSize = 4; // default
-var width = canvas.width / boardSize - 6;
+var width = canvas.width / boardSize - 6; //-6 moves cell image to center
 var cells = [];
 var fontSize;
 var loss = false;
@@ -122,7 +123,8 @@ class game2048{
     this.score = 0; // current game score.
   };
 
-  createBoard(){
+  createBoard()
+  {
     /**
      * This function will create an array representation of the initized game board.
      * To create the board, it will take in the size passed into the function.
@@ -142,13 +144,16 @@ class game2048{
     return board;
   };
 
-  deepCopyBoard(){
+  deepCopyBoard()
+  {
     let lastboard = [];
 
-    for (let i = 0; i < this.size; i++){
+    for (let i = 0; i < this.size; i++)
+    {
       lastboard[i] = [];
       
-      for (let  j = 0; j < this.size; j++){
+      for (let  j = 0; j < this.size; j++)
+      {
         lastboard[i][j] = new cell(i,j,this.board[i][j].value);
       }
     }
@@ -156,7 +161,8 @@ class game2048{
     this.lastMove = lastboard;
   }
 
-  drawCell(cell, canvas){
+  drawCell(cell, canvas)
+  {
     /**
      * Takes in individual cell object and current canvas and draws cell onto canvas
      */
@@ -176,8 +182,10 @@ class game2048{
     }
   };
 
-  cellColor(val){
-    switch (val){
+  cellColor(val)
+  {
+    switch (val)
+    {
       case null : return '#A9A9A9'; break;
       case 2 : 
         return '#D2691E'; 
@@ -206,7 +214,8 @@ class game2048{
     }
   };
   
-  canvasClean(can){
+  canvasClean(can)
+  {
     /**
      * Takes current canvas and cleans it up.
      */
@@ -215,26 +224,32 @@ class game2048{
     ctx.clearRect(0, 0, 500, 500);
   };
 
-  drawAllCells(can){
+  drawAllCells(can)
+  {
     //console.log('inside draw all');
-    for (let i = 0; i < this.size; i++){
-      for (let j = 0; j < this.size; j++){
+    for (let i = 0; i < this.size; i++)
+    {
+      for (let j = 0; j < this.size; j++)
+      {
         this.drawCell(this.board[i][j], can);
       }
     }
   };
   
-  addRandomcell(can){
+  addRandomcell(can)
+  {
     /**
      * class function adds random cell to existing game board in an empty space
      */
     //console.log('inside addRandom');
-    while(true){
+    while(true)
+    {
       var row = Math.floor(Math.random() * boardSize);
       var coll = Math.floor(Math.random() * boardSize);
-      if (this.board[row][coll].value == null){
-        
-        if (Math.ceil(Math.random()*99 > 79)){ // adds 20% chance to start with 4{ 
+      if (this.board[row][coll].value == null)
+      {        
+        if (Math.ceil(Math.random()*99 > 79))// adds 20% chance to start with 4{ 
+        { 
           this.board[row][coll].value = 4;
         }
         else
@@ -246,21 +261,29 @@ class game2048{
     }
   };
   
-  moveRight(){
+  moveRight()
+  {
     for (let rowY = 0; rowY < this.size; rowY++)
     {
       var curValOrdered = [];
-      for (let colX = 0; colX < this.size; colX++){
+      for (let colX = 0; colX < this.size; colX++)
+      {
         //console.log(this.board[rowY][colX]);
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           curValOrdered.push(this.board[rowY][colX].value);
         }
       }
-      if (curValOrdered.length > 0){
-        for (let x = this.size -1; x >= 0; x--){
-          if (curValOrdered != 0){
+      if (curValOrdered.length > 0)
+      {
+        for (let x = this.size -1; x >= 0; x--)
+        {
+          if (curValOrdered != 0)
+          {
             this.board[rowY][x].value = curValOrdered.pop();
-          } else {
+          } 
+          else 
+          {
             this.board[rowY][x].value = null;
           }
         }
@@ -274,14 +297,14 @@ class game2048{
     {
       for (let colX = this.size - 2; colX >= 0; --colX)
       {
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           let cur = colX;
           if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
             this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
-            this.board[rowY][cur].value = null;
-            
+            this.board[rowY][cur].value = null;          
           }
         }
       }
@@ -290,42 +313,50 @@ class game2048{
     this.addRandomcell(canvas);
   };
 
-  moveLeft(){
+  moveLeft()
+  {
     for (let rowY = 0; rowY < this.size; rowY++)
     {
       var curValOrdered = [];
-      for (let colX = this.size -1; colX >= 0; colX--){
+      for (let colX = this.size -1; colX >= 0; colX--)
+      {
         //console.log(this.board[rowY][colX]);
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           curValOrdered.push(this.board[rowY][colX].value);
         }
       }
-      if (curValOrdered.length > 0){
-        for (let x = 0; x < this.size; x++){
-          if (curValOrdered != 0){
+      if (curValOrdered.length > 0)
+      {
+        for (let x = 0; x < this.size; x++)
+        {
+          if (curValOrdered != 0)
+          {
             this.board[rowY][x].value = curValOrdered.pop();
-          } else {
+          } 
+          else 
+          {
             this.board[rowY][x].value = null;
           }
         }
-
       }
     }
   };
 
-  addLeft(){
+  addLeft()
+  {
     for (let rowY = 0; rowY < this.size; ++rowY)
     {
       for (let colX = this.size - 2; colX >= 0; --colX)
       {
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           let cur = colX;
           if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
             this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
-            this.board[rowY][cur].value = null;
-            
+            this.board[rowY][cur].value = null;            
           }
         }
       }
@@ -334,42 +365,50 @@ class game2048{
     this.addRandomcell(canvas);
   };
 
-  moveUp(){
+  moveUp()
+  {
     for (let colX = 0; colX < this.size; colX++)
     {
       var curValOrdered = [];
-      for (let rowY = this.size -1; rowY >= 0; rowY--){
+      for (let rowY = this.size -1; rowY >= 0; rowY--)
+      {
         //console.log(this.board[rowY][colX]);
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           curValOrdered.push(this.board[rowY][colX].value);
         }
       }
-      if (curValOrdered.length > 0){
-        for (let y = 0; y < this.size; y++){
-          if (curValOrdered != 0){
+      if (curValOrdered.length > 0)
+      {
+        for (let y = 0; y < this.size; y++)
+        {
+          if (curValOrdered != 0)
+          {
             this.board[y][colX].value = curValOrdered.pop();
-          } else {
+          } 
+          else 
+          {
             this.board[y][colX].value = null;
           }
         }
-
       }
     }
   };
 
-  addUp(){
+  addUp()
+  {
     for (let colX = 0; colX < this.size; ++colX)
     {
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
       {
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value)
           {
             this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
-            this.board[cur+1][colX].value = null;
-            
+            this.board[cur+1][colX].value = null;       
           }
         }
       }
@@ -378,41 +417,49 @@ class game2048{
     this.addRandomcell(canvas);
   };
 
-  moveDown(){
+  moveDown()
+  {
     for (let colX = 0; colX < this.size; colX++)
     {
       var curValOrdered = [];
-      for (let rowY = 0; rowY < this.size; rowY++){
-        if (this.board[rowY][colX].value != null){
+      for (let rowY = 0; rowY < this.size; rowY++)
+      {
+        if (this.board[rowY][colX].value != null)
+        {
           curValOrdered.push(this.board[rowY][colX].value);
         }
       }
-      if (curValOrdered.length > 0){
-        for (let y = this.size -1; y >= 0; y--){
-          if (curValOrdered != 0){
+      if (curValOrdered.length > 0)
+      {
+        for (let y = this.size -1; y >= 0; y--)
+        {
+          if (curValOrdered != 0)
+          {
             this.board[y][colX].value = curValOrdered.pop();
-          } else {
+          } 
+          else 
+          {
             this.board[y][colX].value = null;
           }
         }
-
       }
     }
   };
 
-  addDown(){
+  addDown()
+  {
     for (let colX = 0; colX < this.size; ++colX)
     {
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
       {
-        if (this.board[rowY][colX].value != null){
+        if (this.board[rowY][colX].value != null)
+        {
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value)
           {
             this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
-            this.board[cur+1][colX].value = null;
-            
+            this.board[cur+1][colX].value = null;            
           }
         }
       }
@@ -421,7 +468,8 @@ class game2048{
     this.addRandomcell(canvas);
   };
 
-  checkStatus(){
+  checkStatus()
+  {
     /** traverses the game board to find out current game status
      * possible options
      * WIN: There contains a board pieces that hits the target score
@@ -430,28 +478,30 @@ class game2048{
      */
     //TODO: Not finished. How to handle if there is still a possible move?
     let empty_flag = false; // looks for 
-    for (let i = 0; i < this.size; i++){
-
-      for (let j = 0; j < this.size; j++){
-        
-        if (this.board[i][j].value == this.target){
+    for (let i = 0; i < this.size; i++)
+    {
+      for (let j = 0; j < this.size; j++)
+      {     
+        if (this.board[i][j].value == this.target)
+        {
           return 'WIN'
         }
-        if (this.board[i][j].value == null){
+        if (this.board[i][j].value == null)
+        {
           empty_flag  = true;
         }
       }
     }
-    if (empty_flag == false){
+    if (empty_flag == false)
+    {
       return 'LOSE';
-    } else{
+    } 
+    else
+    {
       return 'UNFINISHED';
     }
   };
-
 };
-
-
 
 
 // sets new cell where value is either a number OR null if empty;
@@ -520,7 +570,7 @@ function canvasClean()
 // button inputs listener
 document.onkeyup = function(event)
 {
-    if (event.keyCode === 38 || event.keyCode === 87)
+    if (event.keyCode === 38 || event.keyCode === 87) //upward move
     {
       console.log('Pre-move');
       console.log(game.board);
@@ -531,21 +581,21 @@ document.onkeyup = function(event)
       console.log(game.board);
       game.drawAllCells(canvas);
     }
-    else if (event.keyCode === 39 || event.keyCode === 68)
+    else if (event.keyCode === 39 || event.keyCode === 68 //right move
     {
       game.deepCopyBoard();
       game.moveRight();
       game.addRight();
       game.drawAllCells(canvas);
     }
-    else if (event.keyCode === 40 || event.keyCode === 83)
+    else if (event.keyCode === 40 || event.keyCode === 83) //downawrd move
     {
       game.deepCopyBoard();
       game.moveDown(); 
       game.addDown();
       game.drawAllCells(canvas);
     }
-    else if (event.keyCode === 37 || event.keyCode === 65)
+    else if (event.keyCode === 37 || event.keyCode === 65) //left move
     {
       game.deepCopyBoard();
       game.moveLeft(); 
@@ -555,18 +605,19 @@ document.onkeyup = function(event)
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
     game.gameStatus = game.checkStatus();
-    if (this.gameStatus != 'UNFINISHED'){
+    if (this.gameStatus != 'UNFINISHED')
+    {
       // DO SOMETHING WITH WIN AND LOSE CONDITION
       console.log(this.gameStatus);
-      }
-	  };
+    }
+};
 
 
-// start new game / reset bgame and board
+// start new game / reset game and board
 function startGame()
 {
   console.log("Start game");
-  canvas.style.opacity = '1.0';
+  canvas.style.opacity = '1.0'; //reset board opacity to normal
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize);
