@@ -1,5 +1,7 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
+//const { find } = require("./models/highscores");
+
 
 var canvas = document.getElementById('canvas'); //background square
 var setting_button = document.getElementById('settings');
@@ -20,6 +22,44 @@ var loss = false;
 var movementMade = true;
 var countFree;
 var game;
+
+
+canvas.addEventListener('click', function(e){
+  /**
+   * TODO: Not working for game size ten
+   * 
+   */
+  //console.log(e);
+  //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
+  console.log(game);
+  let currentX = e.offsetX -20;
+  let currentY = e.offsetY-20;
+  let xPos;
+  let yPos;
+  ref = 0 // x/y coord ref
+  counter = 0;
+  while (ref <= width * parseInt(game.size)){
+    //console.log("ref: " + ref);
+    //console.log("counter " + counter);
+    if (currentX > ref && currentX <= (counter+1) * width){
+      xPos = counter
+    }
+    if (currentY > ref && currentY <= (counter+1) * width){
+      yPos = counter
+    }
+    counter += 1;
+    ref += width;
+  }
+  console.log(xPos);
+  console.log(yPos);
+  console.log(game.board[yPos][xPos]);
+  game.board[yPos][xPos].value = null;
+  game.deepCopyBoard(); // saves removed cell as last board
+  game.drawAllCells(canvas);
+
+
+});
+
 
 
 setting_button.addEventListener('click', function() {showSettings(event)});
