@@ -236,27 +236,42 @@ class game2048{
     }
   };
   
+  checkFull () {
+    // Returns true if board is full, else false
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
+        if (this.board[i][j].value == null) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   addRandomcell(can)
   {
     /**
      * class function adds random cell to existing game board in an empty space
      */
     //console.log('inside addRandom');
-    while(true)
-    {
-      var row = Math.floor(Math.random() * boardSize);
-      var coll = Math.floor(Math.random() * boardSize);
-      if (this.board[row][coll].value == null)
-      {        
-        if (Math.ceil(Math.random()*99 > 79))// adds 20% chance to start with 4{ 
-        { 
-          this.board[row][coll].value = 4;
+    
+    if (this.checkFull()) {
+      while(true)
+      {
+        var row = Math.floor(Math.random() * boardSize);
+        var coll = Math.floor(Math.random() * boardSize);
+        if (this.board[row][coll].value == null)
+        {        
+          if (Math.ceil(Math.random()*99 > 79))// adds 20% chance to start with 4{ 
+          { 
+            this.board[row][coll].value = 4;
+          }
+          else
+          {
+            this.board[row][coll].value = 2;
+          }
+          return;
         }
-        else
-        {
-          this.board[row][coll].value = 2;
-        }
-        return;
       }
     }
   };
@@ -292,7 +307,12 @@ class game2048{
     }
   };
 
-  addRight(){
+  addRight(check){
+    /* 
+    If cells in the same direction are equal and check=False, add cells and merge cells.
+    If check=True, then do not add and do not merge.
+    */ 
+
     for (let rowY = 0; rowY < this.size; ++rowY)
     {
       for (let colX = this.size - 2; colX >= 0; --colX)
@@ -300,12 +320,15 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
-          {
-            this.score  += this.board[rowY][cur + 1].value *2;
-            this.board[rowY][cur + 1].value *= 2;
-            this.board[rowY][cur].value = null;          
-          }
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) {
+            if (check == false) {
+              this.score  += this.board[rowY][cur + 1].value *2;
+              this.board[rowY][cur + 1].value *= 2;
+              this.board[rowY][cur].value = null;
+            } else {
+              return true
+            }          
+          } 
         }
       }
     }
@@ -343,8 +366,11 @@ class game2048{
     }
   };
 
-  addLeft()
-  {
+  addLeft(check) {
+    /* 
+    If cells in the same direction are equal and check=False, add cells and merge cells.
+    If check=True, then do not add and do not merge.
+    */ 
     for (let rowY = 0; rowY < this.size; ++rowY)
     {
       for (let colX = this.size - 2; colX >= 0; --colX)
@@ -352,11 +378,14 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
-          {
-            this.score  += this.board[rowY][cur + 1].value *2;
-            this.board[rowY][cur + 1].value *= 2;
-            this.board[rowY][cur].value = null;            
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) {
+            if (check == false) {
+              this.score  += this.board[rowY][cur + 1].value *2;
+              this.board[rowY][cur + 1].value *= 2;
+              this.board[rowY][cur].value = null;  
+            } else {
+              return true;
+            }       
           }
         }
       }
@@ -395,8 +424,12 @@ class game2048{
     }
   };
 
-  addUp()
-  {
+  addUp(check) {
+    /* 
+    If cells in the same direction are equal and check=False, add cells and merge cells.
+    If check=True, then do not add and do not merge.
+    */ 
+
     for (let colX = 0; colX < this.size; ++colX)
     {
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
@@ -404,11 +437,14 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
-          {
-            this.score += this.board[cur][colX].value *2;
-            this.board[cur][colX].value *= 2;
-            this.board[cur+1][colX].value = null;       
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value) {
+            if (check == false) {
+              this.score += this.board[cur][colX].value *2;
+              this.board[cur][colX].value *= 2;
+              this.board[cur+1][colX].value = null;  
+            } else {
+              return true;
+            }    
           }
         }
       }
@@ -434,7 +470,7 @@ class game2048{
         for (let y = this.size -1; y >= 0; y--)
         {
           if (curValOrdered != 0)
-          {
+          { console.log(curValOrdered);
             this.board[y][colX].value = curValOrdered.pop();
           } 
           else 
@@ -446,20 +482,27 @@ class game2048{
     }
   };
 
-  addDown()
-  {
+  addDown(check) {
+    /* 
+    If cells in the same direction are equal and check=False, add cells and merge cells.
+    If check=True, then do not add and do not merge.
+    */ 
+
     for (let colX = 0; colX < this.size; ++colX)
-    {
+    { console.log('colX: ', colX);
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      {
+      { console.log('rowY: ', rowY);
         if (this.board[rowY][colX].value != null)
-        {
+        { console.log('val: ', this.board[rowY][colX].value);
           let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
-          {
-            this.score += this.board[cur][colX].value *2;
-            this.board[cur][colX].value *= 2;
-            this.board[cur+1][colX].value = null;            
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value) {
+            if (check == false) {
+              this.score += this.board[cur][colX].value *2;
+              this.board[cur][colX].value *= 2;
+              this.board[cur+1][colX].value = null;  
+            } else {
+              return true;
+            }
           }
         }
       }
@@ -476,8 +519,9 @@ class game2048{
      * LOSE: The board has no empty spaces
      * UNFINISHED: Not one of the 2 statuses above.
      */
-    //TODO: Not finished. How to handle if there is still a possible move?
-    let empty_flag = false; // looks for 
+
+    let empty_flag = false; // looks for
+
     for (let i = 0; i < this.size; i++)
     {
       for (let j = 0; j < this.size; j++)
@@ -492,14 +536,15 @@ class game2048{
         }
       }
     }
-    if (empty_flag == false)
-    {
-      return 'LOSE';
-    } 
-    else
-    {
-      return 'UNFINISHED';
-    }
+
+    // Check if there is still a possible move
+    if (empty_flag == true) {
+      return 'UNFINISHED'
+    } else if (this.addDown(check=true) || this.addLeft(check=true) || this.addRight(check=true) || this.addUp(check=true)) {
+      return 'UNFINISHED'
+    } else {
+      return 'LOSE'
+    };
   };
 };
 
@@ -576,7 +621,7 @@ document.onkeyup = function(event)
       console.log(game.board);
       game.deepCopyBoard();
       game.moveUp();
-      game.addUp();
+      game.addUp(check=false);
       console.log('post-move')
       console.log(game.board);
       game.drawAllCells(canvas);
@@ -585,21 +630,21 @@ document.onkeyup = function(event)
     {
       game.deepCopyBoard();
       game.moveRight();
-      game.addRight();
+      game.addRight(check=false);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 40 || event.keyCode === 83) //downawrd move
     {
       game.deepCopyBoard();
       game.moveDown(); 
-      game.addDown();
+      game.addDown(check=false);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 37 || event.keyCode === 65) //left move
     {
       game.deepCopyBoard();
       game.moveLeft(); 
-      game.addLeft();
+      game.addLeft(check=false);
       game.drawAllCells(canvas);
     }
 
