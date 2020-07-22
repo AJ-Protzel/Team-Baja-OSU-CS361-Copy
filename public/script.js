@@ -470,7 +470,7 @@ class game2048{
         for (let y = this.size -1; y >= 0; y--)
         {
           if (curValOrdered != 0)
-          { console.log(curValOrdered);
+          { 
             this.board[y][colX].value = curValOrdered.pop();
           } 
           else 
@@ -489,11 +489,11 @@ class game2048{
     */ 
 
     for (let colX = 0; colX < this.size; ++colX)
-    { console.log('colX: ', colX);
+    { 
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      { console.log('rowY: ', rowY);
+      { 
         if (this.board[rowY][colX].value != null)
-        { console.log('val: ', this.board[rowY][colX].value);
+        { 
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value) {
             if (check == false) {
