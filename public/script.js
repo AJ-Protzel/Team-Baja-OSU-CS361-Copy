@@ -1,43 +1,42 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-var canvas = document.getElementById('canvas');
 var scoreLabel = document.getElementById('score-container'); // display
-var startNew = document.getElementById('start-new'); // button
-var setting_button = document.getElementById('settings'); // button
-var setting_form = document.getElementById('settings_form'); // page
-var scoreButton = document.getElementById('highScores'); // button
-var score_form = document.getElementById('highScore_form'); // page
-var highScoreBack = document.getElementById('highScoreBack'); // button button
 
-var ctx = canvas.getContext('2d'); // color 2d array
 var mainOptions = document.getElementById('mainOptions');
-var sizeInput = document.getElementById('size'); // button
-var boardSize = 4; // default
-var width = canvas.width / boardSize - 6;
-var cells = []; // 2d aray to store number values
-var fontSize;
+  var sizeInput = document.getElementById('size'); // button
+    var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
+  var startNew = document.getElementById('start-new'); // button
 
-var canMove = true; // if game has valid moves
-var moveMade = false;
-var countFree = boardSize * boardSize; // see if board is full (count == 0; board is full)
+  var setting_button = document.getElementById('settings'); // button
+  var setting_form = document.getElementById('settings_form'); // page
 
-var game;
-/*
-startNew.onclick = function()
-{
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    startGame();
-}
-*/
-startNew.addEventListener('click', function() {startGame(event)});
+  var scoreButton = document.getElementById('highScores'); // button
+  var score_form = document.getElementById('highScore_form'); // page
+  var highScoreBack = document.getElementById('highScoreBack'); // back button
+
+  var targetInput = document.getElementById('scoreTarget'); // submit button
+    var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
+      //console.log("is " + scoreTarget);
+
+var canvas = document.getElementById('canvas');
+
+
+
+var width = canvas.width / boardSize - 6; // ?class?
+var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
+var cells = []; // 2d aray to store number values // ?class?
+var fontSize; // ?class?
+
+var game; // creates a game board
+
+//startNew.addEventListener('click', function() {startGame(event)});
+startNew.addEventListener('click', function() {checkInput(event)});
 setting_button.addEventListener('click', function() {showSettings(event)});
 scoreButton.addEventListener('click',  function() {showHighscore(event)});
 
-function showSettings(event)
+function showSettings(event) // settings page
 {
-  console.log("inside settings function");
+  //console.log("inside settings function");
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
@@ -84,9 +83,9 @@ function showSettings(event)
   };
 }
 
-function showHighscore(event)
+function showHighscore(event) // highscore page
 {
-  console.log("inside score function");
+  //console.log("inside score function");
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
@@ -99,7 +98,8 @@ function showHighscore(event)
   };
 };
 
-class game2048{
+class gameBoard
+{
   /**
    * 
    * @param {*} size 
@@ -107,19 +107,28 @@ class game2048{
    * 
    * This class will cont
    */
-  constructor (size=4, target= 2048){
+  constructor(size, target)
+  {
+    console.log("size: " + size);
+    console.log("target: " + target);
     /**
-     * The constructor for game2048 (default params included)
-     * ex game = new game2048(3, 1024) => creates a 3x3 board where 1024 is the win score
+     * The constructor for gameBoard (default params included)
+     * ex game = new gameBoard(3, 1024) => creates a 3x3 board where 1024 is the win score
      */
     this.size = size; // size of board
     this.target = target; // score for win
-    this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
+    //console.log("target is " + target);
+    //this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will track the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
+
+    //this.canMove = true; // if game has valid moves
+    //this.moveMade = false;
+    //this.countFree = boardSize * boardSize; // see if board is full (count == 0; board is full)
   };
+
 /*
   cell(row, coll)
   { // removed value = null
@@ -144,21 +153,21 @@ class game2048{
   }
 */
 
-canvasClean(can){
-  /*
-   * Takes current canvas and cleans it up.
-   */
-  //console.log('inside canvasclean');
-  let ctx = can.getContext('2d');
-  ctx.clearRect(0, 0, 500, 500);
-};
+  canvasClean(can){
+    /**
+     * Takes current canvas and cleans it up.
+     */
+    //console.log('inside canvasclean');
+    let ctx = can.getContext('2d');
+    ctx.clearRect(0, 0, 500, 500);
+  };
 
   createBoard(){
-    /*
-     * This function will create an array representation of the initized game board.
-     * To create the board, it will take in the size passed into the function.
-     * Return empty array board of empty cell objects.
-     */
+    /**
+      * This function will create an array representation of the initized game board.
+      * To create the board, it will take in the size passed into the function.
+      * Return empty array board of empty cell objects.
+      */
 
     let board = [];
 
@@ -211,6 +220,8 @@ canvasClean(can){
   cellColor(val){
     switch (val){
       case null : return '#A9A9A9'; break;
+      case 0 : 
+        return '#A9A9A9';
       case 2 : 
         return '#D2691E'; 
       case 4 :
@@ -278,7 +289,7 @@ canvasClean(can){
   };
   
   moveUp(){
-    /*
+    
     for (let colX = 0; colX < this.size; colX++)
     {
       var curValOrdered = [];
@@ -298,8 +309,8 @@ canvasClean(can){
         }
       }
     }
-    */
-
+    
+/*
    var rowY, colX, cur;
    for(colX = 0; colX < boardSize; colX++)
    {
@@ -325,6 +336,7 @@ canvasClean(can){
        }
      }
    }
+   */
   };
 
   addUp(){
@@ -339,6 +351,8 @@ canvasClean(can){
             this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
             this.board[cur+1][colX].value = null;
+
+            moveMade = true;
           }
         }
       }
@@ -348,7 +362,7 @@ canvasClean(can){
   };
 
   moveDown(){
-    /*
+    
     for (let colX = 0; colX < this.size; colX++)
     {
       var curValOrdered = [];
@@ -367,22 +381,22 @@ canvasClean(can){
         }
       }
     }
-    */
-
-   var rowY, colX, row;
+    
+/*
+   var rowY, colX, cur;
    for(colX = 0; colX < boardSize; colX++)
    {
      for(rowY = boardSize - 2; rowY >= 0; rowY--)
      {
-       if(this.doard[rowY][colX].value)
+       if(this.board[rowY][colX].value)
        {
          cur = rowY;
          while (cur + 1 < boardSize)
          {
-           if (!this.doard[cur + 1][colX].value)
+           if (!this.board[cur + 1][colX].value)
            {
-             this.doard[cur + 1][colX].value = this.doard[cur][colX].value;
-             this.doard[cur][colX].value = 0;
+             this.board[cur + 1][colX].value = this.board[cur][colX].value;
+             this.board[cur][colX].value = 0;
              cur++;
              moveMade = true;
            }  
@@ -394,6 +408,7 @@ canvasClean(can){
        }
      }
    }
+   */
   };
 
   addDown(){
@@ -408,6 +423,8 @@ canvasClean(can){
             this.score += this.board[cur][colX].value *2;
             this.board[cur][colX].value *= 2;
             this.board[cur+1][colX].value = null;
+
+            moveMade = true;
           }
         }
       }
@@ -417,7 +434,7 @@ canvasClean(can){
   };
 
   moveLeft(){
-    /*
+    
     for (let rowY = 0; rowY < this.size; rowY++)
     {
       var curValOrdered = [];
@@ -437,8 +454,8 @@ canvasClean(can){
         }
       }
     }
-    */
-
+    
+/*
    var rowY, colX, cur;
    for(rowY = 0; rowY < boardSize; rowY++)
    {
@@ -463,6 +480,7 @@ canvasClean(can){
        }
      }
    }
+   */
   };
 
   addLeft(){
@@ -477,6 +495,8 @@ canvasClean(can){
             this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
             this.board[rowY][cur].value = null;
+
+            moveMade = true;
           }
         }
       }
@@ -486,7 +506,7 @@ canvasClean(can){
   };
 
   moveRight(){
-    /*
+    
     for (let rowY = 0; rowY < this.size; rowY++)
     {
       var curValOrdered = [];
@@ -506,8 +526,8 @@ canvasClean(can){
         }
       }
     }
-    */
-
+    
+/*
   var rowY, colX, cur;
   for(rowY = 0; rowY < boardSize; ++rowY)
   {
@@ -533,6 +553,7 @@ canvasClean(can){
       }
     }
   }
+  */
 };
 
   addRight(){
@@ -547,6 +568,8 @@ canvasClean(can){
             this.score  += this.board[rowY][cur + 1].value *2;
             this.board[rowY][cur + 1].value *= 2;
             this.board[rowY][cur].value = null;
+
+            moveMade = true;
           }
         }
       }
@@ -567,6 +590,7 @@ canvasClean(can){
     for (let i = 0; i < this.size; i++){
       for (let j = 0; j < this.size; j++){
         if (this.board[i][j].value == this.target){
+          console.log("WIN");
           return 'WIN'
         }
         else if (this.board[i][j].value == null){
@@ -612,7 +636,7 @@ function createCells()
 document.onkeyup = function(event) // arrow key or wasd
 {
   game.deepCopyBoard(); // copies board before move made
-  console.log('called');
+  //console.log('called');
   moveMade = false;
 
   if(canMove)
@@ -621,11 +645,6 @@ document.onkeyup = function(event) // arrow key or wasd
     {
       game.moveUp();
       game.addUp();
-    }
-    else if(event.keyCode === 39 || event.keyCode === 68) // Right
-    {
-      game.moveRight();
-      game.addRight();
     }
     else if(event.keyCode === 40 || event.keyCode === 83) // Down
     {
@@ -636,6 +655,11 @@ document.onkeyup = function(event) // arrow key or wasd
     {
       game.moveLeft(); 
       game.addLeft();
+    }
+    else if(event.keyCode === 39 || event.keyCode === 68) // Right
+    {
+      game.moveRight();
+      game.addRight();
     }
   }
 
@@ -653,47 +677,39 @@ document.onkeyup = function(event) // arrow key or wasd
     // DO SOMETHING WITH WIN AND LOSE CONDITION
     //console.log(this.gameStatus);
   }
-
-
-
-
-  /*
-  if (!loss) // if board is full but there is a move option, allow input
-  {
-    moveMade = false;
-    if (event.keyCode === 38 || event.keyCode === 87)
-    /////////////////////////////
-    }
-
-    scoreLabel.innerHTML = 'Score : ' + score; // add score after move
-
-    countFreeCells(); // check if board is full, return t/f
-    if(countFree == 0)
-    {
-      checkGameLoss(); // end game if returned lose == true
-	  }
-  }
-  */
 };
 
-// start new game / reset bgame and board
+// checks if winning number is squarable as a valid number
+function checkInput() {
+  scoreTarget = targetInput.value;
+  console.log("is " + scoreTarget);
+
+  if(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0){
+    console.log("YES");
+  }
+  else{
+    console.log("NO");
+  }
+
+  startGame();
+}
+
+// start new game / reset board
 function startGame()
 {
   console.log("Start game");
   canvas.style.opacity = '1.0';
   canMove = true;
   boardSize = sizeInput.value;
+  scoreTarget = targetInput.value;
   width = canvas.width / boardSize - 6;
-  let currentGame = new game2048(boardSize);
-  //console.log(currentGame);
+  let currentGame = new gameBoard(boardSize, scoreTarget);
   currentGame.canvasClean(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.drawAllCells(canvas);
-  //score = 0;
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
-  //game.deepCopyBoard();
 }
 
 startGame();
