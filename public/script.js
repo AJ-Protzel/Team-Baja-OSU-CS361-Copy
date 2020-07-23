@@ -1,6 +1,38 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
+var scoreLabel = document.getElementById('score-container'); // display
 
+var mainOptions = document.getElementById('mainOptions');
+  var sizeInput = document.getElementById('size'); // button
+    var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
+  var startNew = document.getElementById('start-new'); // button
+
+  var setting_button = document.getElementById('settings'); // button
+  var setting_form = document.getElementById('settings_form'); // page
+
+  var scoreButton = document.getElementById('highScores'); // button
+  var score_form = document.getElementById('highScore_form'); // page
+  var highScoreBack = document.getElementById('highScoreBack'); // back button
+
+  var targetInput = document.getElementById('scoreTarget'); // submit button
+    var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
+      //console.log("is " + scoreTarget);
+
+var canvas = document.getElementById('canvas');
+
+var width = canvas.width / boardSize - 6; // ?class?
+var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
+var cells = []; // 2d aray to store number values // ?class?
+var fontSize; // ?class?
+
+var game; // creates a game board
+
+//startNew.addEventListener('click', function() {startGame(event)});
+startNew.addEventListener('click', function() {checkInput(event)});
+setting_button.addEventListener('click', function() {showSettings(event)});
+scoreButton.addEventListener('click',  function() {showHighscore(event)});
+
+/*
 var canvas = document.getElementById('canvas'); //background square
 var setting_button = document.getElementById('settings');
 var setting_form = document.getElementById('settings_form');
@@ -8,11 +40,11 @@ var score_form = document.getElementById('highScore_form');
 var scoreButton = document.getElementById('highScores');
 var highScoreBack = document.getElementById('highScoreBack');
 var ctx = canvas.getContext('2d');
-var mainOptions = document.getElementById('mainOptions');
-var sizeInput = document.getElementById('size'); // button
+//var mainOptions = document.getElementById('mainOptions');
+//var sizeInput = document.getElementById('size'); // button
 var changeSize = document.getElementById('change-size'); // button
-var scoreLabel = document.getElementById('score-container'); // display
-var boardSize = 4; // default
+//var scoreLabel = document.getElementById('score-container'); // display
+//var boardSize = 4; // default
 var width = canvas.width / boardSize - 6; //-6 moves cell image to center
 var cells = [];
 var fontSize;
@@ -21,10 +53,9 @@ var movementMade = true;
 var countFree;
 var game;
 
-
-setting_button.addEventListener('click', function() {showSettings(event)});
-scoreButton.addEventListener('click',  function() {showHighscore(event)});
-
+//setting_button.addEventListener('click', function() {showSettings(event)});
+//scoreButton.addEventListener('click',  function() {showHighscore(event)});
+*/
 function showSettings(event){
   console.log("inside settings function");
   canvas.hidden = true;
@@ -91,7 +122,7 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
 };
 
-
+/*
 changeSize.onclick = function()
 {
     boardSize = sizeInput.value;
@@ -99,7 +130,7 @@ changeSize.onclick = function()
     canvasClean();
     startGame();
 }
-
+*/
 
 class game2048{
   /**
@@ -187,6 +218,7 @@ class game2048{
     switch (val)
     {
       case null : return '#A9A9A9'; break;
+      //case 0 : return '#A9A9A9'; break;
       case 2 : 
         return '#D2691E'; 
       case 4 :
@@ -255,7 +287,7 @@ class game2048{
      */
     //console.log('inside addRandom');
     
-    if (this.checkFull()) {
+    if (this.checkFull()) { // Returns true if board is full, else false
       while(true)
       {
         var row = Math.floor(Math.random() * boardSize);
@@ -308,10 +340,10 @@ class game2048{
   };
 
   addRight(check){
-    /* 
-    If cells in the same direction are equal and check=False, add cells and merge cells.
-    If check=True, then do not add and do not merge.
-    */ 
+    /**
+     * If cells in the same direction are equal and check=False, add cells and merge cells.
+     * If check=True, then do not add and do not merge.
+     */ 
 
     for (let rowY = 0; rowY < this.size; ++rowY)
     {
@@ -367,10 +399,10 @@ class game2048{
   };
 
   addLeft(check) {
-    /* 
-    If cells in the same direction are equal and check=False, add cells and merge cells.
-    If check=True, then do not add and do not merge.
-    */ 
+    /**
+     * If cells in the same direction are equal and check=False, add cells and merge cells.
+     * If check=True, then do not add and do not merge.
+     */  
     for (let rowY = 0; rowY < this.size; ++rowY)
     {
       for (let colX = this.size - 2; colX >= 0; --colX)
@@ -425,11 +457,10 @@ class game2048{
   };
 
   addUp(check) {
-    /* 
-    If cells in the same direction are equal and check=False, add cells and merge cells.
-    If check=True, then do not add and do not merge.
-    */ 
-
+    /**
+     * If cells in the same direction are equal and check=False, add cells and merge cells.
+     * If check=True, then do not add and do not merge.
+     */ 
     for (let colX = 0; colX < this.size; ++colX)
     {
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
@@ -483,11 +514,10 @@ class game2048{
   };
 
   addDown(check) {
-    /* 
-    If cells in the same direction are equal and check=False, add cells and merge cells.
-    If check=True, then do not add and do not merge.
-    */ 
-
+    /**
+     * If cells in the same direction are equal and check=False, add cells and merge cells.
+     * If check=True, then do not add and do not merge.
+     */ 
     for (let colX = 0; colX < this.size; ++colX)
     { 
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
@@ -519,8 +549,7 @@ class game2048{
      * LOSE: The board has no empty spaces
      * UNFINISHED: Not one of the 2 statuses above.
      */
-
-    let empty_flag = false; // looks for
+    let empty_flag = false;
 
     for (let i = 0; i < this.size; i++)
     {
@@ -548,7 +577,6 @@ class game2048{
   };
 };
 
-
 // sets new cell where value is either a number OR null if empty;
 function cell(row, coll , value=null){
   //console.log('inside cell');
@@ -570,7 +598,7 @@ function createCells()
     }
   }
 }
-
+/*
 // sets colors to cells based on number
 function drawCell(cell)
 {
@@ -605,7 +633,7 @@ function drawCell(cell)
     ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
   }
 }
-
+*/
 // removes cells colors
 function canvasClean()
 {
@@ -617,13 +645,13 @@ document.onkeyup = function(event)
 {
     if (event.keyCode === 38 || event.keyCode === 87) //upward move
     {
-      console.log('Pre-move');
-      console.log(game.board);
+      //console.log('Pre-move');
+      //console.log(game.board);
       game.deepCopyBoard();
       game.moveUp();
       game.addUp(check=false);
-      console.log('post-move')
-      console.log(game.board);
+      //console.log('post-move')
+      //console.log(game.board);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 39 || event.keyCode === 68) //right move
@@ -657,7 +685,6 @@ document.onkeyup = function(event)
     }
 };
 
-
 // start new game / reset game and board
 function startGame()
 {
@@ -677,11 +704,23 @@ function startGame()
 
 startGame();
 
+function checkInput() {
+  scoreTarget = targetInput.value;
+  console.log("scoreTarget is " + scoreTarget);
 
+  if(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0){
+    console.log("YES");
+  }
+  else{
+    console.log("NO");
+  }
+
+  startGame();
+}
+/*
 // Start New Game button press
 changeSize.onclick = function()
 {
   startGame();
 }
-
-
+*/
