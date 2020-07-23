@@ -485,7 +485,7 @@ class game2048{
       }
     }
   };
-
+  
   addDown()
   {
     for (let colX = 0; colX < this.size; ++colX)
