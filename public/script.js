@@ -1,9 +1,5 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-<<<<<<< HEAD
-//const { find } = require("./models/highscores");
-
-=======
 var scoreLabel = document.getElementById('score-container'); // display
 
 var mainOptions = document.getElementById('mainOptions');
@@ -30,7 +26,6 @@ var cells = []; // 2d aray to store number values // ?class?
 var fontSize; // ?class?
 
 var game; // creates a game board
->>>>>>> master
 
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', function() {checkInput(event)});
@@ -57,8 +52,7 @@ var loss = false;
 var movementMade = true;
 var countFree;
 var game;
-
-<<<<<<< HEAD
+*/
 
 canvas.addEventListener('click', function(e){
   /**
@@ -101,11 +95,6 @@ canvas.addEventListener('click', function(e){
 setting_button.addEventListener('click', function() {showSettings(event)});
 scoreButton.addEventListener('click',  function() {showHighscore(event)});
 
-=======
-//setting_button.addEventListener('click', function() {showSettings(event)});
-//scoreButton.addEventListener('click',  function() {showHighscore(event)});
-*/
->>>>>>> master
 function showSettings(event){
   console.log("inside settings function");
   canvas.hidden = true;
@@ -562,18 +551,12 @@ class game2048{
       }
     }
   };
-<<<<<<< HEAD
-  
-  addDown()
-  {
-=======
 
   addDown(check) {
     /**
      * If cells in the same direction are equal and check=False, add cells and merge cells.
      * If check=True, then do not add and do not merge.
      */ 
->>>>>>> master
     for (let colX = 0; colX < this.size; ++colX)
     { 
       for (let rowY = this.size - 2; rowY >= 0; --rowY)
