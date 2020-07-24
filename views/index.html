@@ -43,8 +43,13 @@
                 <option value="9">9</option>
                 <option value="10">10</option>
               </select>
+              <div class='clear'></div>
               <label for="target">Winning Number:</label>
               <input type="number" id="scoreTarget" value="2048" min="2">
+              <div class='clear'></div>
+              <label for='removeAmount'> # to remove</label>
+              <input type='number' id='removeAmount' value='1' min ='0'>
+              <div class='clear'></div>
               <input id='settingsBack' type='button' value='back'>
            </form> 
 
@@ -62,7 +67,7 @@
               <option value="9">9</option>
               <option value="10">10</option>
             </select>
-          <table border='1'>
+          <table id='' border='1'>
             <thead>
               <tr>
                 <th>Name</th>
