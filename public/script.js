@@ -17,6 +17,7 @@ var highScoreBack = document.getElementById('highScoreBack'); // back button
 var targetInput = document.getElementById('scoreTarget'); // submit button
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var removeCellButton = document.getElementById('removeCell');
+var disableRemoveButton  = document.getElementById('disableRemove');
 //console.log("is " + scoreTarget);
 
 var canvas = document.getElementById('canvas');
@@ -36,46 +37,49 @@ removeCellButton.addEventListener('click',  function() {removeCell()});
 
 function removeCell()
 {
+  game.remove_check = false;
   console.log("inside removeCell function");
   canvas.addEventListener('click', function() {subtractRemoveCounter(event)});
-  canvas.removeEventListener('click', function() {subtractRemoveCounter(event)});
-}
+  }
 
 function subtractRemoveCounter(e)
 {
-  console.log('inside subtract');
-    //console.log(e);
-  //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
-  console.log(game);
-  let currentX = e.offsetX -20; //x position relative to canvas
-  let currentY = e.offsetY-20; // y position relative to canvas
-  let xPos; //points to x position in array
-  let yPos; //points to y possition in array
-  ref = 0 // x/y coord ref
-  counter = 0; //tracks current position on the board
-  while (ref <= width * parseInt(game.size))
-  {
-    //console.log("ref: " + ref);
-    //console.log("counter " + counter);
-    if (currentX > ref && currentX <= (counter+1) * width){
-      xPos = counter
+  if (game.removeSquare > 0 && game.remove_check == false) {
+    console.log('inside subtract');
+      //console.log(e);
+    //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
+    console.log(game);
+    let currentX = e.offsetX -20; //x position relative to canvas
+    let currentY = e.offsetY-20; // y position relative to canvas
+    let xPos; //points to x position in array
+    let yPos; //points to y possition in array
+    ref = 0 // x/y coord ref
+    counter = 0; //tracks current position on the board
+    while (ref <= width * parseInt(game.size))
+    {
+      //console.log("ref: " + ref);
+      //console.log("counter " + counter);
+      if (currentX > ref && currentX <= (counter+1) * width){
+        xPos = counter
+      }
+      if (currentY > ref && currentY <= (counter+1) * width){
+        yPos = counter
+      }
+      counter += 1;
+      ref += width;
     }
-    if (currentY > ref && currentY <= (counter+1) * width){
-      yPos = counter
-    }
-    counter += 1;
-    ref += width;
-  }
-  console.log(xPos);
-  console.log(yPos);
-  console.log(game.board[yPos][xPos]);
-  game.board[yPos][xPos].value = null;
-  game.deepCopyBoard(); // saves removed cell as last board
-  game.drawAllCells(canvas);
+    console.log(xPos);
+    console.log(yPos);
+    console.log(game.board[yPos][xPos]);
+    game.board[yPos][xPos].value = null;
+    game.deepCopyBoard(); // saves removed cell as last board
+    game.drawAllCells(canvas);
 
-  game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
-  game.removeSquare-=1;
-  return;
+    game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
+    game.removeSquare-=1;
+    game.remove_check = true;
+    return
+  }
 }
 
 
@@ -143,6 +147,7 @@ class game2048{
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
+    this.remove_check  = false;
   };
 
   createBoard()
