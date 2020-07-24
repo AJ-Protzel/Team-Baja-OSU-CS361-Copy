@@ -16,6 +16,7 @@ var highScoreBack = document.getElementById('highScoreBack'); // back button
 
 var targetInput = document.getElementById('scoreTarget'); // submit button
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
+var removeCellButton = document.getElementById('removeCell');
 //console.log("is " + scoreTarget);
 
 var canvas = document.getElementById('canvas');
@@ -31,23 +32,29 @@ var game; // creates a game board
 startNew.addEventListener('click', function() {checkInput(event)});
 setting_button.addEventListener('click', function() {showSettings(event)});
 scoreButton.addEventListener('click',  function() {showHighscore(event)});
+removeCellButton.addEventListener('click',  function() {removeCell()});
 
+function removeCell()
+{
+  console.log("inside removeCell function");
+  canvas.addEventListener('click', function() {subtractRemoveCounter(event)});
+  canvas.removeEventListener('click', function() {subtractRemoveCounter(event)});
+}
 
-canvas.addEventListener('click', function(e){
-  /**
-   * TODO: Not working for game size ten
-   * 
-   */
-  //console.log(e);
+function subtractRemoveCounter(e)
+{
+  console.log('inside subtract');
+    //console.log(e);
   //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
   console.log(game);
-  let currentX = e.offsetX -20;
-  let currentY = e.offsetY-20;
-  let xPos;
-  let yPos;
+  let currentX = e.offsetX -20; //x position relative to canvas
+  let currentY = e.offsetY-20; // y position relative to canvas
+  let xPos; //points to x position in array
+  let yPos; //points to y possition in array
   ref = 0 // x/y coord ref
-  counter = 0;
-  while (ref <= width * parseInt(game.size)){
+  counter = 0; //tracks current position on the board
+  while (ref <= width * parseInt(game.size))
+  {
     //console.log("ref: " + ref);
     //console.log("counter " + counter);
     if (currentX > ref && currentX <= (counter+1) * width){
@@ -66,8 +73,10 @@ canvas.addEventListener('click', function(e){
   game.deepCopyBoard(); // saves removed cell as last board
   game.drawAllCells(canvas);
 
-
-});
+  game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
+  game.removeSquare-=1;
+  return;
+}
 
 
 
@@ -129,7 +138,7 @@ class game2048{
      */
     this.size = size; // size of board
     this.target = target; // score for win
-    this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
+    this.removeSquare = 2; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
