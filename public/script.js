@@ -30,23 +30,24 @@ var fontSize; // ?class?
 var game; // creates a game board
 
 //startNew.addEventListener('click', function() {startGame(event)});
-startNew.addEventListener('click', function() {checkInput(event)});
-setting_button.addEventListener('click', function() {showSettings(event)});
-scoreButton.addEventListener('click',  function() {showHighscore(event)});
-removeCellButton.addEventListener('click',  function() {removeCell()});
+startNew.addEventListener('click', checkInput);
+removeCellButton.addEventListener('click',  removeCell);
+
+setting_button.addEventListener('click', showSettings);
+scoreButton.addEventListener('click',  showHighscore);
 
 function removeCell()
 {
   game.remove_check = false;
   console.log("inside removeCell function");
-  canvas.addEventListener('click', function() {subtractRemoveCounter(event)});
-  }
+  canvas.addEventListener('click', subtractRemoveCounter);
+}
 
 function subtractRemoveCounter(e)
 {
-  if (game.removeSquare > 0 && game.remove_check == false) {
+  if (game.removeSquare > 0) {
     console.log('inside subtract');
-      //console.log(e);
+    //console.log(e);
     //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
     console.log(game);
     let currentX = e.offsetX -20; //x position relative to canvas
@@ -77,17 +78,14 @@ function subtractRemoveCounter(e)
 
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
     game.removeSquare-=1;
-    game.remove_check = true;
+    canvas.removeEventListener('click', subtractRemoveCounter);
     return
   }
 }
 
 
-
-setting_button.addEventListener('click', function() {showSettings(event)});
-scoreButton.addEventListener('click',  function() {showHighscore(event)});
-
 function showSettings(event){
+  event.preventDefault();
   console.log("inside settings function");
   canvas.hidden = true;
   setting_form.hidden = false;
@@ -103,6 +101,7 @@ function showSettings(event){
 }
 
 function showHighscore(event){
+  event.preventDefault();
   console.log("inside score function");
   mainOptions.hidden = true;
   canvas.hidden = true;
@@ -117,15 +116,6 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
 };
 
-/*
-changeSize.onclick = function()
-{
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    startGame();
-}
-*/
 
 class game2048{
   /**
