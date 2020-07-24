@@ -120,7 +120,7 @@ class game2048{
    * @param {*} size 
    * @param {*} target 
    * 
-   * This class will cont
+   * 
    */
   constructor (size=4, target= 2048){
     /**
