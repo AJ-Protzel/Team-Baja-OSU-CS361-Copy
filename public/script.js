@@ -3,20 +3,20 @@
 var scoreLabel = document.getElementById('score-container'); // display
 
 var mainOptions = document.getElementById('mainOptions');
-  var sizeInput = document.getElementById('size'); // button
-    var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
-  var startNew = document.getElementById('start-new'); // button
+var sizeInput = document.getElementById('size'); // button
+var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
+var startNew = document.getElementById('start-new'); // button
 
-  var setting_button = document.getElementById('settings'); // button
-  var setting_form = document.getElementById('settings_form'); // page
+var setting_button = document.getElementById('settings'); // button
+var setting_form = document.getElementById('settings_form'); // page
 
-  var scoreButton = document.getElementById('highScores'); // button
-  var score_form = document.getElementById('highScore_form'); // page
-  var highScoreBack = document.getElementById('highScoreBack'); // back button
+var scoreButton = document.getElementById('highScores'); // button
+var score_form = document.getElementById('highScore_form'); // page
+var highScoreBack = document.getElementById('highScoreBack'); // back button
 
-  var targetInput = document.getElementById('scoreTarget'); // submit button
-    var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
-      //console.log("is " + scoreTarget);
+var targetInput = document.getElementById('scoreTarget'); // submit button
+var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
+//console.log("is " + scoreTarget);
 
 var canvas = document.getElementById('canvas');
 
@@ -32,27 +32,6 @@ startNew.addEventListener('click', function() {checkInput(event)});
 setting_button.addEventListener('click', function() {showSettings(event)});
 scoreButton.addEventListener('click',  function() {showHighscore(event)});
 
-/*
-var canvas = document.getElementById('canvas'); //background square
-var setting_button = document.getElementById('settings');
-var setting_form = document.getElementById('settings_form');
-var score_form = document.getElementById('highScore_form');
-var scoreButton = document.getElementById('highScores');
-var highScoreBack = document.getElementById('highScoreBack');
-var ctx = canvas.getContext('2d');
-//var mainOptions = document.getElementById('mainOptions');
-//var sizeInput = document.getElementById('size'); // button
-var changeSize = document.getElementById('change-size'); // button
-//var scoreLabel = document.getElementById('score-container'); // display
-//var boardSize = 4; // default
-var width = canvas.width / boardSize - 6; //-6 moves cell image to center
-var cells = [];
-var fontSize;
-var loss = false;
-var movementMade = true;
-var countFree;
-var game;
-*/
 
 canvas.addEventListener('click', function(e){
   /**
@@ -100,46 +79,10 @@ function showSettings(event){
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
-  var x = document.createElement("BUTTON");
-  var t = document.createTextNode("Save");
-  x.appendChild(t);
-  setting_form.appendChild(x);
-  var current_Node = setting_form.firstElementChild
-  var back = setting_form.firstElementChild;
-  setting_form.appendChild(document.createElement('form'));
-  current_Node = current_Node.nextElementSibling // current_node -> Form
-  var i = document.createElement("input"); //board
-  i.setAttribute('type',"range");
-  i.setAttribute('id',"boardSize");
-  i.setAttribute('min', '3');
-  i.setAttribute('max', '16');
-
-  var s = document.createElement("label"); //board label
-  s.setAttribute('for',"boardsize");
-  s.innerText = "Board Size"
-  current_Node.appendChild(s);
-  current_Node.appendChild(i);
-  current_Node.appendChild(document.createElement('br'));
-
-  var i = document.createElement("input"); //input element, text
-  i.setAttribute('type',"range");
-  i.setAttribute('id',"targetScore");
-  i.setAttribute('min', '0');
-  i.setAttribute('max', '50');
-
-  var s = document.createElement("label"); //input element, Submit button
-  s.setAttribute('for',"targetScore");
-  s.innerText = "Target Score"
-
-
-  current_Node.appendChild(s);
-  current_Node.appendChild(i);
-
-
+  var back = document.getElementById('settingsBack');;
 
 
   back.onclick = function(){
-    setting_form.innerHTML = '';
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
