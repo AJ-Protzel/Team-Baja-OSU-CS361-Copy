@@ -38,6 +38,10 @@ scoreButton.addEventListener('click',  showHighscore);
 
 function removeCell()
 {
+  if (game.removeSquare == 0){
+    alert("You are out of moves!");
+    return
+  }
   game.remove_check = false;
   console.log("inside removeCell function");
   canvas.addEventListener('click', subtractRemoveCounter);
@@ -72,6 +76,8 @@ function subtractRemoveCounter(e)
     console.log(xPos);
     console.log(yPos);
     console.log(game.board[yPos][xPos]);
+    game.score -= game.board[yPos][xPos].value;
+    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
     game.deepCopyBoard(); // saves removed cell as last board
     game.drawAllCells(canvas);
@@ -79,9 +85,10 @@ function subtractRemoveCounter(e)
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
     game.removeSquare-=1;
     canvas.removeEventListener('click', subtractRemoveCounter);
-    return
+    return;
+    } 
   }
-}
+
 
 
 function showSettings(event){
