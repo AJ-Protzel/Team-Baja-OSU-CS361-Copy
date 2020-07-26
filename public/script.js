@@ -77,6 +77,7 @@ function subtractRemoveCounter(e)
     console.log(yPos);
     console.log(game.board[yPos][xPos]);
     game.score -= game.board[yPos][xPos].value;
+    // add protection if no cell is there.
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
     game.deepCopyBoard(); // saves removed cell as last board
