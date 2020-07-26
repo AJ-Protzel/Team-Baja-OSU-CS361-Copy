@@ -1,27 +1,22 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
 var scoreLabel = document.getElementById('score-container'); // display
-
 var mainOptions = document.getElementById('mainOptions');
 var sizeInput = document.getElementById('size'); // button
 var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
 var startNew = document.getElementById('start-new'); // button
-
 var setting_button = document.getElementById('settings'); // button
 var setting_form = document.getElementById('settings_form'); // page
-
 var scoreButton = document.getElementById('highScores'); // button
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button
-
 var targetInput = document.getElementById('scoreTarget'); // submit button
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var removeCellButton = document.getElementById('removeCell');
 var disableRemoveButton  = document.getElementById('disableRemove');
-//console.log("is " + scoreTarget);
+var undoButton = document.getElementById('undoMove');
 
 var canvas = document.getElementById('canvas');
-
 var width = canvas.width / boardSize - 6; // ?class?
 var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
@@ -29,12 +24,11 @@ var fontSize; // ?class?
 
 var game; // creates a game board
 
-//startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
-removeCellButton.addEventListener('click',  removeCell);
-
 setting_button.addEventListener('click', showSettings);
 scoreButton.addEventListener('click',  showHighscore);
+removeCellButton.addEventListener('click',  removeCell);
+undoButton.addEventListener('click',  undoLastMove);
 
 function removeCell()
 {
@@ -50,10 +44,8 @@ function removeCell()
 function subtractRemoveCounter(e)
 {
   if (game.removeSquare > 0) {
-    console.log('inside subtract');
-    //console.log(e);
-    //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
-    console.log(game);
+    game.deepCopyBoard(); // saves removed cell as last board
+
     let currentX = e.offsetX -20; //x position relative to canvas
     let currentY = e.offsetY-20; // y position relative to canvas
     let xPos; //points to x position in array
@@ -62,8 +54,6 @@ function subtractRemoveCounter(e)
     counter = 0; //tracks current position on the board
     while (ref <= width * parseInt(game.size))
     {
-      //console.log("ref: " + ref);
-      //console.log("counter " + counter);
       if (currentX > ref && currentX <= (counter+1) * width){
         xPos = counter
       }
@@ -77,20 +67,23 @@ function subtractRemoveCounter(e)
     console.log(yPos);
     console.log(game.board[yPos][xPos]);
     game.score -= game.board[yPos][xPos].value;
-    // add protection if no cell is there.
+      // add protection if no cell is there.
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
-    game.deepCopyBoard(); // saves removed cell as last board
     game.drawAllCells(canvas);
-
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
     game.removeSquare-=1;
     canvas.removeEventListener('click', subtractRemoveCounter);
+    game.moveMade = true;
     return;
-    } 
-  }
+  } 
+}
 
-
+function undoLastMove()
+{
+  game.undoMove();
+  game.moveMade = false;
+}
 
 function showSettings(event){
   event.preventDefault();
@@ -99,7 +92,6 @@ function showSettings(event){
   setting_form.hidden = false;
   mainOptions.hidden = true;
   var back = document.getElementById('settingsBack');;
-
 
   back.onclick = function(){
     setting_form.hidden = true;
@@ -114,8 +106,6 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
-
-
 };
 
 highScoreBack.onclick = function(){
@@ -124,13 +114,11 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
 };
 
-
 class game2048{
   /**
    * 
    * @param {*} size 
    * @param {*} target 
-   * 
    * 
    */
   constructor (size=4, target= 2048){
@@ -146,6 +134,9 @@ class game2048{
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
     this.remove_check  = false;
+    this.moveMade = false;
+    this.lastScore = 0;
+    this.undoes = 5; // number of undoes available
   };
 
   createBoard()
@@ -184,6 +175,21 @@ class game2048{
     }
     //console.log(board);
     this.lastMove = lastboard;
+    this.lastScore = this.score;
+  }
+
+  undoMove()
+  {
+    if(this.undoes > 0 && this.moveMade == true)
+    {
+      console.log("undo pressed");
+      this.board = this.lastMove;
+      this.score = this.lastScore;
+      
+      game.drawAllCells(canvas);
+      scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+      this.undoes--;
+    }
   }
 
   drawCell(cell, canvas)
@@ -592,42 +598,7 @@ function createCells()
     }
   }
 }
-/*
-// sets colors to cells based on number
-function drawCell(cell)
-{
-  ctx.beginPath();
-  ctx.rect(cell.x, cell.y, width, width);
 
-  switch (cell.value)
-  {
-    case 0 : ctx.fillStyle = '#A9A9A9'; break;
-    case 2 : ctx.fillStyle = '#D2691E'; break;
-    case 4 : ctx.fillStyle = '#FF7F50'; break;
-    case 8 : ctx.fillStyle = '#ffbf00'; break;
-    case 16 : ctx.fillStyle = '#bfff00'; break;
-    case 32 : ctx.fillStyle = '#40ff00'; break;
-    case 64 : ctx.fillStyle = '#00bfff'; break;
-    case 128 : ctx.fillStyle = '#FF7F50'; break;
-    case 256 : ctx.fillStyle = '#0040ff'; break;
-    case 512 : ctx.fillStyle = '#ff0080'; break;
-    case 1024 : ctx.fillStyle = '#D2691E'; break;
-    case 2048 : ctx.fillStyle = '#FF7F50'; break;
-    case 4096 : ctx.fillStyle = '#ffbf00'; break;
-    default : ctx.fillStyle = '#ff0080';
-  }
-
-  ctx.fill();
-  if (cell.value)
-  {
-    fontSize = width / 2.5;
-    ctx.font = fontSize + 'px Arial';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.fillText(cell.value, cell.x + width / 2, cell.y + width / 2 + width/7);
-  }
-}
-*/
 // removes cells colors
 function canvasClean()
 {
@@ -639,34 +610,34 @@ document.onkeyup = function(event)
 {
     if (event.keyCode === 38 || event.keyCode === 87) //upward move
     {
-      //console.log('Pre-move');
-      //console.log(game.board);
+      game.moveMade = true;
       game.deepCopyBoard();
       game.moveUp();
-      game.addUp(check=false);
-      //console.log('post-move')
-      //console.log(game.board);
+      game.addUp(check = false);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 39 || event.keyCode === 68) //right move
     {
+      game.moveMade = true;
       game.deepCopyBoard();
       game.moveRight();
-      game.addRight(check=false);
+      game.addRight(check = false);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 40 || event.keyCode === 83) //downawrd move
     {
+      game.moveMade = true;
       game.deepCopyBoard();
       game.moveDown(); 
-      game.addDown(check=false);
+      game.addDown(check = false);
       game.drawAllCells(canvas);
     }
     else if (event.keyCode === 37 || event.keyCode === 65) //left move
     {
+      game.moveMade = true;
       game.deepCopyBoard();
       game.moveLeft(); 
-      game.addLeft(check=false);
+      game.addLeft(check = false);
       game.drawAllCells(canvas);
     }
 
@@ -687,7 +658,6 @@ function startGame()
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize);
-  console.log(currentGame);
   currentGame.canvasClean(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.addRandomcell(canvas);
@@ -711,10 +681,3 @@ function checkInput() {
 
   startGame();
 }
-/*
-// Start New Game button press
-changeSize.onclick = function()
-{
-  startGame();
-}
-*/
