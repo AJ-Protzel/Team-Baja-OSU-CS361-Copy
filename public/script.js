@@ -29,6 +29,11 @@ var fontSize; // ?class?
 
 var game; // creates a game board
 
+var upKeypad = document.querySelector(".fa-arrow-alt-circle-up");
+var downKeypad = document.querySelector(".fa-arrow-alt-circle-down");
+var leftKeypad = document.querySelector(".fa-arrow-alt-circle-left");
+var rightKeypad = document.querySelector(".fa-arrow-alt-circle-right");
+
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
 removeCellButton.addEventListener('click',  removeCell);
@@ -668,7 +673,7 @@ document.onkeyup = function(event)
       game.moveLeft(); 
       game.addLeft(check=false);
       game.drawAllCells(canvas);
-    }
+    } 
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
     game.gameStatus = game.checkStatus();

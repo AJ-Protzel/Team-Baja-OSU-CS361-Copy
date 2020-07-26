@@ -81,3 +81,11 @@ body
     margin-left: -250px;
     padding-left: 50%;
 }
+
+#keypads {
+    border: 1px solid black;
+}
+
+.far {
+    font-size: 3rem;
+}
