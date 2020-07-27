@@ -29,6 +29,7 @@ var fontSize; // ?class?
 
 var game; // creates a game board
 
+var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector(".fa-arrow-alt-circle-up");
 var downKeypad = document.querySelector(".fa-arrow-alt-circle-down");
 var leftKeypad = document.querySelector(".fa-arrow-alt-circle-left");
@@ -103,6 +104,7 @@ function showSettings(event){
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
+  keypads.hidden = true;
   var back = document.getElementById('settingsBack');;
 
 
@@ -110,6 +112,7 @@ function showSettings(event){
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
+    keypads.hidden = false;
   };
 }
 
@@ -119,14 +122,14 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
-
-
+  keypads.hidden = true;
 };
 
 highScoreBack.onclick = function(){
   score_form.hidden = true;
   canvas.hidden = false;
   mainOptions.hidden = false;
+  keypads.hidden = false;
 };
 
 

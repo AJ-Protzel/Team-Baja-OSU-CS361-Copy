@@ -29,6 +29,7 @@
         <br>
       </div>
 
+      
       <div id="canvas-block"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
         <div hidden id='settings_form'> <!-- Holds setting options and hides when not needed.-->
@@ -52,7 +53,7 @@
               <input type='number' id='removeAmount' value='1' min ='0'>
               <div class='clear'></div>
               <input id='settingsBack' type='button' value='back'>
-           </form> 
+            </form> 
 
 
         </div>
@@ -87,20 +88,13 @@
           <div class="clear"></div>
           <input id='highScoreBack' type='button' value='Back'>
         </div>
-
-        <div id="keypads">
-          <div>
-            </button><i class="far fa-arrow-alt-circle-up"></i>
-          </div>
-          <div>
-            <i class="far fa-arrow-alt-circle-left"></i>
-            <i class="far fa-arrow-alt-circle-right"></i>
-          </div>
-          <div>
-            <i class="far fa-arrow-alt-circle-down"></i>
-          </div>
-        </div>
       </div>
+    </div>
+    <div id="keypads">
+      <span class="keypad-up"><i class="fa fa-caret-up"></i></span>
+      <span class="keypad-left"><i class="fa fa-caret-left"></i></span>
+      <span class="keypad-right"><i class="fa fa-caret-right"></i></span>
+      <span class="keypad-down"><i class="fa fa-caret-down"></i></span>
     </div>
   </body>
   <script src="/script.js"></script> <!--Calls JS file-->
