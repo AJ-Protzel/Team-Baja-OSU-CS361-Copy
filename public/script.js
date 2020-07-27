@@ -42,6 +42,12 @@ removeCellButton.addEventListener('click',  removeCell);
 setting_button.addEventListener('click', showSettings);
 scoreButton.addEventListener('click',  showHighscore);
 
+// arrows keypad event listener
+upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
+downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
+leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
+rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
+
 function removeCell()
 {
   if (game.removeSquare == 0){
@@ -727,12 +733,6 @@ document.onkeyup = function(event)
 
     manageGameState();
 };
-
-// arrows keypad event listener
-upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
-downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
-leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
-rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
 
 // start new game / reset game and board
 function startGame()
