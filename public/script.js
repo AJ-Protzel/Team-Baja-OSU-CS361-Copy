@@ -37,7 +37,6 @@ function removeCell()
     return
   }
   game.remove_check = false;
-  console.log("inside removeCell function");
   canvas.addEventListener('click', subtractRemoveCounter);
 }
 
@@ -63,11 +62,8 @@ function subtractRemoveCounter(e)
       counter += 1;
       ref += width;
     }
-    console.log(xPos);
-    console.log(yPos);
-    console.log(game.board[yPos][xPos]);
+
     game.score -= game.board[yPos][xPos].value;
-      // add protection if no cell is there.
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
     game.drawAllCells(canvas);
@@ -75,6 +71,7 @@ function subtractRemoveCounter(e)
     game.removeSquare-=1;
     canvas.removeEventListener('click', subtractRemoveCounter);
     game.moveMade = true;
+
     return;
   } 
 }
@@ -135,7 +132,6 @@ class game2048{
     this.moveMade = false;
     this.lastScore = 0;
     this.undoes = 5; // number of undoes available
-    //this.validMove = false; // checks if a valid move occurs each round
   };
 
   createBoard()
