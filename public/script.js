@@ -719,7 +719,7 @@ document.onkeyup = function(event) // button inputs listener
         game.deepCopyBoard();
         game.moveUp(false);
         game.addUp(false);
-        game.moveUp();
+        game.moveUp(false);
         game.addRandomcell(canvas);
         game.drawAllCells(canvas);
       }
@@ -734,7 +734,7 @@ document.onkeyup = function(event) // button inputs listener
         game.deepCopyBoard();
         game.moveDown(false);
         game.addDown(false);
-        game.moveDown();
+        game.moveDown(false);
         game.addRandomcell(canvas);
         game.drawAllCells(canvas);
       }
@@ -749,7 +749,7 @@ document.onkeyup = function(event) // button inputs listener
         game.deepCopyBoard();
         game.moveLeft(false);
         game.addLeft(false);
-        game.moveLeft();
+        game.moveLeft(false);
         game.addRandomcell(canvas);
         game.drawAllCells(canvas);
       }
@@ -764,7 +764,7 @@ document.onkeyup = function(event) // button inputs listener
         game.deepCopyBoard();
         game.moveRight(false);
         game.addRight(false);
-        game.moveRight();
+        game.moveRight(false);
         game.addRandomcell(canvas);
         game.drawAllCells(canvas);
       }
