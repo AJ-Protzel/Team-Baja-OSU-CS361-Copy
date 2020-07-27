@@ -642,50 +642,76 @@ function canvasClean()
   ctx.clearRect(0, 0, 500, 500);
 }
 
-// button inputs listener
+function up() {
+  // upward move
+  game.deepCopyBoard();
+  game.moveUp();
+  game.addUp(check=false);
+  game.drawAllCells(canvas);
+}
+
+function right() {
+  game.deepCopyBoard();
+  game.moveRight();
+  game.addRight(check=false);
+  game.drawAllCells(canvas);
+}
+
+function down() {
+  game.deepCopyBoard();
+  game.moveDown(); 
+  game.addDown(check=false);
+  game.drawAllCells(canvas);
+}
+
+function left() {
+  game.deepCopyBoard();
+  game.moveLeft(); 
+  game.addLeft(check=false);
+  game.drawAllCells(canvas);
+}
+
+function manageGameState() {
+  // Update game state UI
+  scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+  game.gameStatus = game.checkStatus();
+
+  // Update game state UI and post game state
+  if (this.gameStatus != 'UNFINISHED')
+  {
+    // DO SOMETHING WITH WIN AND LOSE CONDITION
+    console.log(this.gameStatus);
+  }
+}
+
+// keyboard button inputs listener
 document.onkeyup = function(event)
 {
     if (event.keyCode === 38 || event.keyCode === 87) //upward move
     {
-      //console.log('Pre-move');
-      //console.log(game.board);
-      game.deepCopyBoard();
-      game.moveUp();
-      game.addUp(check=false);
-      //console.log('post-move')
-      //console.log(game.board);
-      game.drawAllCells(canvas);
+      up();
     }
     else if (event.keyCode === 39 || event.keyCode === 68) //right move
     {
-      game.deepCopyBoard();
-      game.moveRight();
-      game.addRight(check=false);
-      game.drawAllCells(canvas);
+      right();
     }
     else if (event.keyCode === 40 || event.keyCode === 83) //downawrd move
     {
-      game.deepCopyBoard();
-      game.moveDown(); 
-      game.addDown(check=false);
-      game.drawAllCells(canvas);
+      down();
     }
     else if (event.keyCode === 37 || event.keyCode === 65) //left move
     {
-      game.deepCopyBoard();
-      game.moveLeft(); 
-      game.addLeft(check=false);
-      game.drawAllCells(canvas);
+      left();
     } 
 
-    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
-    game.gameStatus = game.checkStatus();
-    if (this.gameStatus != 'UNFINISHED')
-    {
-      // DO SOMETHING WITH WIN AND LOSE CONDITION
-      console.log(this.gameStatus);
-    }
+    manageGameState();
 };
+
+// arrows keypad event listener
+upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
+downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
+leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
+rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
 
 // start new game / reset game and board
 function startGame()
