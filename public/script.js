@@ -3,20 +3,22 @@
 var scoreLabel = document.getElementById('score-container'); // display
 
 var mainOptions = document.getElementById('mainOptions');
-  var sizeInput = document.getElementById('size'); // button
-    var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
-  var startNew = document.getElementById('start-new'); // button
+var sizeInput = document.getElementById('size'); // button
+var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class?
+var startNew = document.getElementById('start-new'); // button
 
-  var setting_button = document.getElementById('settings'); // button
-  var setting_form = document.getElementById('settings_form'); // page
+var setting_button = document.getElementById('settings'); // button
+var setting_form = document.getElementById('settings_form'); // page
 
-  var scoreButton = document.getElementById('highScores'); // button
-  var score_form = document.getElementById('highScore_form'); // page
-  var highScoreBack = document.getElementById('highScoreBack'); // back button
+var scoreButton = document.getElementById('highScores'); // button
+var score_form = document.getElementById('highScore_form'); // page
+var highScoreBack = document.getElementById('highScoreBack'); // back button
 
-  var targetInput = document.getElementById('scoreTarget'); // submit button
-    var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
-      //console.log("is " + scoreTarget);
+var targetInput = document.getElementById('scoreTarget'); // submit button
+var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
+var removeCellButton = document.getElementById('removeCell');
+var disableRemoveButton  = document.getElementById('disableRemove');
+//console.log("is " + scoreTarget);
 
 var canvas = document.getElementById('canvas');
 
@@ -33,79 +35,78 @@ var highscoreScores = [];
 var highscoreDates = [];
 
 //startNew.addEventListener('click', function() {startGame(event)});
-startNew.addEventListener('click', function() {checkInput(event)});
-setting_button.addEventListener('click', function() {showSettings(event)});
-scoreButton.addEventListener('click',  function() {showHighscore(event)});
+startNew.addEventListener('click', checkInput);
+removeCellButton.addEventListener('click',  removeCell);
 
-/*
-var canvas = document.getElementById('canvas'); //background square
-var setting_button = document.getElementById('settings');
-var setting_form = document.getElementById('settings_form');
-var score_form = document.getElementById('highScore_form');
-var scoreButton = document.getElementById('highScores');
-var highScoreBack = document.getElementById('highScoreBack');
-var ctx = canvas.getContext('2d');
-//var mainOptions = document.getElementById('mainOptions');
-//var sizeInput = document.getElementById('size'); // button
-var changeSize = document.getElementById('change-size'); // button
-//var scoreLabel = document.getElementById('score-container'); // display
-//var boardSize = 4; // default
-var width = canvas.width / boardSize - 6; //-6 moves cell image to center
-var cells = [];
-var fontSize;
-var loss = false;
-var movementMade = true;
-var countFree;
-var game;
+setting_button.addEventListener('click', showSettings);
+scoreButton.addEventListener('click',  showHighscore);
 
-//setting_button.addEventListener('click', function() {showSettings(event)});
-//scoreButton.addEventListener('click',  function() {showHighscore(event)});
-*/
+function removeCell()
+{
+  if (game.removeSquare == 0){
+    alert("You are out of moves!");
+    return
+  }
+  game.remove_check = false;
+  console.log("inside removeCell function");
+  canvas.addEventListener('click', subtractRemoveCounter);
+}
+
+function subtractRemoveCounter(e)
+{
+  if (game.removeSquare > 0) {
+    console.log('inside subtract');
+    //console.log(e);
+    //console.log("x" + (e.offsetX -20) + " y" + (e.offsetY-20));
+    console.log(game);
+    let currentX = e.offsetX -20; //x position relative to canvas
+    let currentY = e.offsetY-20; // y position relative to canvas
+    let xPos; //points to x position in array
+    let yPos; //points to y possition in array
+    ref = 0 // x/y coord ref
+    counter = 0; //tracks current position on the board
+    while (ref <= width * parseInt(game.size))
+    {
+      //console.log("ref: " + ref);
+      //console.log("counter " + counter);
+      if (currentX > ref && currentX <= (counter+1) * width){
+        xPos = counter
+      }
+      if (currentY > ref && currentY <= (counter+1) * width){
+        yPos = counter
+      }
+      counter += 1;
+      ref += width;
+    }
+    console.log(xPos);
+    console.log(yPos);
+    console.log(game.board[yPos][xPos]);
+    game.score -= game.board[yPos][xPos].value;
+    // add protection if no cell is there.
+    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
+    game.board[yPos][xPos].value = null;
+    game.deepCopyBoard(); // saves removed cell as last board
+    game.drawAllCells(canvas);
+
+    game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
+    game.removeSquare-=1;
+    canvas.removeEventListener('click', subtractRemoveCounter);
+    return;
+    } 
+  }
+
+
+
 function showSettings(event){
+  event.preventDefault();
   console.log("inside settings function");
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
-  var x = document.createElement("BUTTON");
-  var t = document.createTextNode("Save");
-  x.appendChild(t);
-  setting_form.appendChild(x);
-  var current_Node = setting_form.firstElementChild
-  var back = setting_form.firstElementChild;
-  setting_form.appendChild(document.createElement('form'));
-  current_Node = current_Node.nextElementSibling // current_node -> Form
-  var i = document.createElement("input"); //board
-  i.setAttribute('type',"range");
-  i.setAttribute('id',"boardSize");
-  i.setAttribute('min', '3');
-  i.setAttribute('max', '16');
-
-  var s = document.createElement("label"); //board label
-  s.setAttribute('for',"boardsize");
-  s.innerText = "Board Size"
-  current_Node.appendChild(s);
-  current_Node.appendChild(i);
-  current_Node.appendChild(document.createElement('br'));
-
-  var i = document.createElement("input"); //input element, text
-  i.setAttribute('type',"range");
-  i.setAttribute('id',"targetScore");
-  i.setAttribute('min', '0');
-  i.setAttribute('max', '50');
-
-  var s = document.createElement("label"); //input element, Submit button
-  s.setAttribute('for',"targetScore");
-  s.innerText = "Target Score"
-
-
-  current_Node.appendChild(s);
-  current_Node.appendChild(i);
-
-
+  var back = document.getElementById('settingsBack');;
 
 
   back.onclick = function(){
-    setting_form.innerHTML = '';
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
@@ -113,6 +114,7 @@ function showSettings(event){
 }
 
 function showHighscore(event){
+  event.preventDefault();
   console.log("inside score function");
   mainOptions.hidden = true;
   canvas.hidden = true;
@@ -257,15 +259,6 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
 };
 
-/*
-changeSize.onclick = function()
-{
-    boardSize = sizeInput.value;
-    width = canvas.width / boardSize - 6;
-    canvasClean();
-    startGame();
-}
-*/
 
 class game2048{
   /**
@@ -273,7 +266,7 @@ class game2048{
    * @param {*} size 
    * @param {*} target 
    * 
-   * This class will cont
+   * 
    */
   constructor (size=4, target= 2048){
     /**
@@ -282,11 +275,13 @@ class game2048{
      */
     this.size = size; // size of board
     this.target = target; // score for win
-    this.removeSquare = false; // this flag signals if the user has used their removed square option during the game
+    this.removeSquare = 2; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
+    this.remove_check  = false;
+    this.validMove = false; // checks if a valid move occurs each round
   };
 
   createBoard()
@@ -404,7 +399,7 @@ class game2048{
   };
   
   checkFull () {
-    // Returns true if board is full, else false
+    // Returns false if board is full, else true
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         if (this.board[i][j].value == null) {
@@ -422,7 +417,7 @@ class game2048{
      */
     //console.log('inside addRandom');
     
-    if (this.checkFull()) { // Returns true if board is full, else false
+    if (this.checkFull() && (this.lastMove == null || this.validMove == true)) { // Returns true if board is full, else false
       while(true)
       {
         var row = Math.floor(Math.random() * boardSize);
@@ -442,7 +437,7 @@ class game2048{
       }
     }
   };
-  
+
   moveRight()
   {
     for (let rowY = 0; rowY < this.size; rowY++)
@@ -462,7 +457,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[rowY][x].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[rowY][x].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[rowY][x].value = curVal;
           } 
           else 
           {
@@ -522,7 +521,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[rowY][x].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[rowY][x].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[rowY][x].value = curVal;
           } 
           else 
           {
@@ -580,7 +583,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[y][colX].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[y][colX].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[y][colX].value = curVal;
           } 
           else 
           {
@@ -637,7 +644,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           { 
-            this.board[y][colX].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[y][colX].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[y][colX].value = curVal;
           } 
           else 
           {
@@ -788,6 +799,7 @@ document.onkeyup = function(event)
       //console.log('post-move')
       //console.log(game.board);
       game.drawAllCells(canvas);
+      game.validMove = false;
     }
     else if (event.keyCode === 39 || event.keyCode === 68) //right move
     {
@@ -795,6 +807,7 @@ document.onkeyup = function(event)
       game.moveRight();
       game.addRight(check=false);
       game.drawAllCells(canvas);
+      game.validMove = false;
     }
     else if (event.keyCode === 40 || event.keyCode === 83) //downawrd move
     {
@@ -802,6 +815,7 @@ document.onkeyup = function(event)
       game.moveDown(); 
       game.addDown(check=false);
       game.drawAllCells(canvas);
+      game.validMove = false;
     }
     else if (event.keyCode === 37 || event.keyCode === 65) //left move
     {
@@ -809,7 +823,8 @@ document.onkeyup = function(event)
       game.moveLeft(); 
       game.addLeft(check=false);
       game.drawAllCells(canvas);
-    }
+      game.validMove = false;
+    } 
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
     game.gameStatus = game.checkStatus();
