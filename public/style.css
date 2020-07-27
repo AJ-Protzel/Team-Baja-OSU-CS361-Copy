@@ -94,26 +94,26 @@ body
         margin-top: 25px;
     }
 
-    .keypad-up, .keypad-down, .keypad-left, .keypad-right {
+    #keypad-up, #keypad-down, #keypad-left, #keypad-right {
         position: relative;
     }
 
-    .keypad-up {
+    #keypad-up {
         top: -580px;
         left: 250px;
     }
 
-    .keypad-down {
+    #keypad-down {
         top: -10px;
         left: 170px;
     }
 
-    .keypad-left {
+    #keypad-left {
         top: -295px;
         left: -66px;
     }
 
-    .keypad-right {
+    #keypad-right {
         top: -295px;
         left: 486px;
     }
