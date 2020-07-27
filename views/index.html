@@ -20,12 +20,11 @@
       </div>
       <div class="clear"></div> <!--adds space under heading-->
       <div id="mainOptions"> <!--box under heading-->
-
         <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
         <input id='settings' type='button' value='settings'>
         <input id='highScores' type='button' value='High Score'>
         <input id='removeCell' type='button' value='Remove cell'>
-
+        <input id='undoMove' type='button' value='Undo'>
         <br>
       </div>
 
@@ -53,10 +52,15 @@
               <input type='number' id='removeAmount' value='1' min ='0'>
               <div class='clear'></div>
               <input id='settingsBack' type='button' value='back'>
+<<<<<<< HEAD
             </form> 
 
 
+=======
+           </form> 
+>>>>>>> master
         </div>
+
         <div hidden id='highScore_form'>
           <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
             <select id="highScoreSize">
@@ -97,6 +101,7 @@
       <span id="keypad-down"><i class="fa fa-caret-down"></i></span>
     </div>
   </body>
+  
   <script src="/script.js"></script> <!--Calls JS file-->
 
   <!-- Font Awesome -->
