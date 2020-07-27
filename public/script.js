@@ -119,25 +119,22 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
-
-  if(game.gameStatus == 'LOSE')
-  {
-    updateHighscore();
-  }
 };
 
 function updateHighscore()
 {
+  game.scoreAdded = true;
   console.log("updating highscore");
-
+  
   //gets date for scoreboard when called
   var today = new Date();
   var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
 
-  let highscorePlacement = checkHighScore(game.score, currentDate);
+  let playerName = prompt("Enter name for the leaderboard:");
+  let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
   if(highscorePlacement != null)
   {
-    //highscoreNames.splice(highscorePlacement, 0, playerName); PLAYER NAME WOULD GO HERE SO IT APPEARS IN ARRAY
+    highscoreNames.splice(highscorePlacement, 0, playerName);
     highscoreScores.splice(highscorePlacement, 0, game.score);
     highscoreDates.splice(highscorePlacement, 0, currentDate);
   }
@@ -152,103 +149,110 @@ function updateHighscore()
   //update the board
   //gets elements from the highscore board and sets them
   if(highscoreScores[0] != null){
-  document.getElementById('name1').innerHTML = 'test1'; //name stored in array goes here
+  document.getElementById('name1').innerHTML = highscoreNames[0]; //name stored in array goes here
   document.getElementById('score1').innerHTML = highscoreScores[0];
   document.getElementById('date1').innerHTML = highscoreDates[0];
   }
 
   if(highscoreScores[1] != null){
-  document.getElementById('name2').innerHTML = 'test2'; //name stored in array goes here
+  document.getElementById('name2').innerHTML = highscoreNames[1]; //name stored in array goes here
   document.getElementById('score2').innerHTML = highscoreScores[1];
   document.getElementById('date2').innerHTML = highscoreDates[1];
   }
 
   if(highscoreScores[2] != null){
-  document.getElementById('name3').innerHTML = 'test3'; //name stored in array goes here
+  document.getElementById('name3').innerHTML = highscoreNames[2]; //name stored in array goes here
   document.getElementById('score3').innerHTML = highscoreScores[2];
   document.getElementById('date3').innerHTML = highscoreDates[2];
   }
 
   if(highscoreScores[3] != null){
-  document.getElementById('name4').innerHTML = 'test4'; //name stored in array goes here
+  document.getElementById('name4').innerHTML = highscoreNames[3]; //name stored in array goes here
   document.getElementById('score4').innerHTML = highscoreScores[3];
   document.getElementById('date4').innerHTML = highscoreDates[3];
   }
 
   if(highscoreScores[4] != null){
-  document.getElementById('name5').innerHTML = 'test5'; //name stored in array goes here
+  document.getElementById('name5').innerHTML = highscoreNames[4]; //name stored in array goes here
   document.getElementById('score5').innerHTML = highscoreScores[4];
   document.getElementById('date5').innerHTML = highscoreDates[4];
   }
 
   if(highscoreScores[5] != null){
-  document.getElementById('name6').innerHTML = 'test6'; //name stored in array goes here
+  document.getElementById('name6').innerHTML = highscoreNames[5]; //name stored in array goes here
   document.getElementById('score6').innerHTML = highscoreScores[5];
   document.getElementById('date6').innerHTML = highscoreDates[5];
   }
 
   if(highscoreScores[6] != null){
-  document.getElementById('name7').innerHTML = 'test7'; //name stored in array goes here
+  document.getElementById('name7').innerHTML = highscoreNames[6]; //name stored in array goes here
   document.getElementById('score7').innerHTML = highscoreScores[6];
   document.getElementById('date7').innerHTML = highscoreDates[6];
   }
 
   if(highscoreScores[7] != null){
-  document.getElementById('name8').innerHTML = 'test8'; //name stored in array goes here
+  document.getElementById('name8').innerHTML = highscoreNames[7]; //name stored in array goes here
   document.getElementById('score8').innerHTML = highscoreScores[7];
   document.getElementById('date8').innerHTML = highscoreDates[7];
   }
 
   if(highscoreScores[8] != null){
-  document.getElementById('name9').innerHTML = 'test9'; //name stored in array goes here
+  document.getElementById('name9').innerHTML = highscoreNames[8]; //name stored in array goes here
   document.getElementById('score9').innerHTML = highscoreScores[8];
   document.getElementById('date9').innerHTML = highscoreDates[8];
   }
 
   if(highscoreScores[9] != null){
-  document.getElementById('name10').innerHTML = 'test10'; //name stored in array goes here
+  document.getElementById('name10').innerHTML = highscoreNames[9]; //name stored in array goes here
   document.getElementById('score10').innerHTML = highscoreScores[9];
   document.getElementById('date10').innerHTML = highscoreDates[9];
   }
 };
 
-function checkHighScore(currentScore, date) //also player name
+function checkHighScore(name, currentScore, date) //also player name
 {
+  let i = 0;
+
   if(currentScore > 0)
   {
     //if there are other scores on the leaderboard
     if(highscoreScores[0] != null)
     {
-    for(let i = 0; i < highscoreScores.length; i++)
-    {
-      if(currentScore >= highscoreScores[i])
-      { 
-        if(currentScore == highscoreScores[i]) //check to see that the same exact score from the same game not relogged
-        {
-          if(highscoreDates[i] != date) //ADD || NAME CHECK AS WELL
+      for(i; i < highscoreScores.length; i++)
+      {
+        if(currentScore >= highscoreScores[i])
+        { 
+          if(currentScore == highscoreScores[i]) //check to see that the same exact score from the same game not relogged
           {
-          return i; //return where this should go on the board
+            if(highscoreDates[i] != date || highscoreNames[i] != name) //any variation from the highscore is good
+            {
+              return i; //return where this should go on the board
+            }
+            else //discount entry if it is exactly the same as another on the board
+            {
+              return null;
+            }
           }
-          else
+          else //score is greater than something else on the board, so just return i
           {
-            return null;
+            return i;
           }
-        }
-        else
-        {
-          return i;
         }
       }
+      if(i < 10) //if the score is less than that on the top, but still spaces underneath
+      {
+        return i; //add it to the next avaiable space
+      }
+      return null; //or null, if its not within the top 10 at all
     }
-    return null; //or null, if its not within the top 10
-    }
-    else //the board is empty
+    else //the scoreboard is empty and this is first entry
     {
       return 0;
     }
   }
-  else //score is blank
+  else //score is blank, shouldn't happen but just in case
   {
+    console.log("returning null");
     return null;
   }
 };
@@ -282,6 +286,7 @@ class game2048{
     this.score = 0; // current game score.
     this.remove_check  = false;
     this.validMove = false; // checks if a valid move occurs each round
+    this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
   };
 
   createBoard()
@@ -828,11 +833,26 @@ document.onkeyup = function(event)
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
     game.gameStatus = game.checkStatus();
-    if (this.gameStatus != 'UNFINISHED')
+    if (game.gameStatus != 'UNFINISHED')
     {
       // DO SOMETHING WITH WIN AND LOSE CONDITION
-      console.log(this.gameStatus);
+      console.log(game.gameStatus);
+
+      if(game.gameStatus == 'LOSE')
+      {
+        console.log("game lost");
+        if(game.scoreAdded == false)
+        {
+          console.log("adding highscore");
+          updateHighscore();
+        }
+      }
+      else
+      {
+        //display win message
+      }
     }
+    
 };
 
 // start new game / reset game and board
