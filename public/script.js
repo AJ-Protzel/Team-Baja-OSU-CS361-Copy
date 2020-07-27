@@ -302,22 +302,6 @@ class game2048{
       }
     }
   };
- 
-  // checkValidMovement () {
-  //   // Returns true if a valid movement occurred, else return false
-  //   if (this.lastMove == null) {
-  //     return true;
-  //   };
-
-  //   for (let i = 0; i < this.lastMove; i ++) {
-  //     for (let j = 0; j < this.lastMove[i]; j++) {
-  //       if (this.lastMove[i][j].value !== this.board[i][j].value) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
 
   moveRight()
   {
