@@ -263,7 +263,7 @@ class game2048{
   };
   
   checkFull () {
-    // Returns true if board is full, else false
+    // Returns false if board is full, else true
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         if (this.board[i][j].value == null) {
@@ -272,6 +272,15 @@ class game2048{
       }
     }
     return false;
+  }
+
+  checkValidMovement () {
+    // Returns true if a valid movement occurred, else return false
+    let oldBoard = this.lastMove;
+    let newBoard = this.board;
+
+    console.log(oldBoard);
+    console.log(newBoard);
   }
 
   addRandomcell(can)
@@ -668,7 +677,7 @@ document.onkeyup = function(event)
       game.moveLeft(); 
       game.addLeft(check=false);
       game.drawAllCells(canvas);
-    }
+    } 
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
     game.gameStatus = game.checkStatus();
