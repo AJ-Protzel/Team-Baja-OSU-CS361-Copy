@@ -24,7 +24,6 @@ var fontSize; // ?class?
 
 var game; // creates a game board
 
-<<<<<<< HEAD
 var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
@@ -32,18 +31,11 @@ var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
 //startNew.addEventListener('click', function() {startGame(event)});
-startNew.addEventListener('click', checkInput);
-removeCellButton.addEventListener('click',  removeCell);
-
-setting_button.addEventListener('click', showSettings);
-scoreButton.addEventListener('click',  showHighscore);
-=======
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
 removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
 undoButton.addEventListener('click',  undoLastMove); // undoes move
->>>>>>> master
 
 // arrows keypad event listener
 upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
@@ -126,10 +118,7 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
-<<<<<<< HEAD
   keypads.hidden = true;
-=======
->>>>>>> master
 };
 
 highScoreBack.onclick = function(){
