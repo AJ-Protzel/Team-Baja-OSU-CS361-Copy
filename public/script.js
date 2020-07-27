@@ -154,6 +154,7 @@ class game2048{
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
     this.remove_check  = false;
+    this.validMove = false; // checks if a valid move occurs each round
   };
 
   createBoard()
@@ -271,7 +272,7 @@ class game2048{
   };
   
   checkFull () {
-    // Returns true if board is full, else false
+    // Returns false if board is full, else true
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         if (this.board[i][j].value == null) {
@@ -289,7 +290,7 @@ class game2048{
      */
     //console.log('inside addRandom');
     
-    if (this.checkFull()) { // Returns true if board is full, else false
+    if (this.checkFull() && (this.lastMove == null || this.validMove == true)) { // Returns true if board is full, else false
       while(true)
       {
         var row = Math.floor(Math.random() * boardSize);
@@ -309,7 +310,7 @@ class game2048{
       }
     }
   };
-  
+
   moveRight()
   {
     for (let rowY = 0; rowY < this.size; rowY++)
@@ -329,7 +330,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[rowY][x].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[rowY][x].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[rowY][x].value = curVal;
           } 
           else 
           {
@@ -389,7 +394,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[rowY][x].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[rowY][x].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[rowY][x].value = curVal;
           } 
           else 
           {
@@ -447,7 +456,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           {
-            this.board[y][colX].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[y][colX].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[y][colX].value = curVal;
           } 
           else 
           {
@@ -504,7 +517,11 @@ class game2048{
         {
           if (curValOrdered != 0)
           { 
-            this.board[y][colX].value = curValOrdered.pop();
+            let curVal = curValOrdered.pop();
+            if (this.board[y][colX].value !== curVal) {
+              this.validMove = true;
+            }
+            this.board[y][colX].value = curVal;
           } 
           else 
           {
@@ -648,6 +665,7 @@ function up() {
   game.moveUp();
   game.addUp(check=false);
   game.drawAllCells(canvas);
+  game.validMove = false;
 }
 
 function right() {
@@ -655,6 +673,7 @@ function right() {
   game.moveRight();
   game.addRight(check=false);
   game.drawAllCells(canvas);
+  game.validMove = false;
 }
 
 function down() {
@@ -662,6 +681,7 @@ function down() {
   game.moveDown(); 
   game.addDown(check=false);
   game.drawAllCells(canvas);
+  game.validMove = false;
 }
 
 function left() {
@@ -669,6 +689,7 @@ function left() {
   game.moveLeft(); 
   game.addLeft(check=false);
   game.drawAllCells(canvas);
+  game.validMove = false;
 }
 
 function manageGameState() {
