@@ -14,6 +14,7 @@ var targetInput = document.getElementById('scoreTarget'); // submit button // in
 var removeCellButton = document.getElementById('removeCell');
 var disableRemoveButton  = document.getElementById('disableRemove');
 var undoButton = document.getElementById('undoMove');
+var scoreHolder = null // TODO: grab 4x4 board scores
 
 var canvas = document.getElementById('canvas');
 var width = canvas.width / boardSize - 6; // ?class?
@@ -136,27 +137,28 @@ function updateHighscore()
   let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
   if(highscorePlacement != null)
   {
-    highscoreNames.splice(highscorePlacement, 0, playerName);
-    highscoreScores.splice(highscorePlacement, 0, game.score);
-    highscoreDates.splice(highscorePlacement, 0, currentDate);
+   // function send score to DB
+   // scoreHolder = DB pull to include new entry
   }
 
+  /*
   if(highscoreScores.length > 10)
   {
     highscoreNames.pop()
     highscoreScores.pop()
     highscoreDates.pop()
   }
+  */
 
   //update the board
   for(let i = 0; i < 10; i++)
   {
-    if(highscoreScores[i] != null)
+    if(scoreHolder[i] != null)
     {
-      console.log('name'+ (i+1).toString());
-      document.getElementById('name'+ (i+1).toString()).innerHTML = highscoreNames[i]
-      document.getElementById('score'+ (i+1).toString()).innerHTML = highscoreScores[i]
-      document.getElementById('date'+ (i+1).toString()).innerHTML = highscoreDates[i]
+      
+      document.getElementById('name'+ (i+1).toString()).innerHTML = scoreHolder[i].name
+      document.getElementById('score'+ (i+1).toString()).innerHTML = scoreHolder[i].score
+      document.getElementById('date'+ (i+1).toString()).innerHTML = currentDate
     }
   }
 };
@@ -168,15 +170,15 @@ function checkHighScore(name, currentScore, date) //also player name
   if(currentScore > 0)
   {
     //if there are other scores on the leaderboard
-    if(highscoreScores[0] != null)
+    if(scoreHolder[0] != null)
     {
-      for(i; i < highscoreScores.length; i++)
+      for(i; i < scoreHolder.length; i++)
       {
-        if(currentScore >= highscoreScores[i])
+        if(currentScore >= scoreHolder[i].score)
         { 
-          if(currentScore == highscoreScores[i]) //check to see that the same exact score from the same game not relogged
+          if(currentScore == scoreHolder[i].score) //check to see that the same exact score from the same game not relogged
           {
-            if(highscoreDates[i] != date || highscoreNames[i] != name) //any variation from the highscore is good
+            if(scoreHolder[i].date != date || scoreHolder[i].name != name) //any variation from the highscore is good
             {
               return i; //return where this should go on the board
             }
