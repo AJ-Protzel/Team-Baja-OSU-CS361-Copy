@@ -9,6 +9,7 @@
     <base href="public/">
 
     <link rel="stylesheet" href="/style.css"> <!--Calls CSS file-->
+
   </head>
 
   <body>
@@ -19,15 +20,15 @@
       </div>
       <div class="clear"></div> <!--adds space under heading-->
       <div id="mainOptions"> <!--box under heading-->
-
         <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
         <input id='settings' type='button' value='Settings'>
         <input id='highScores' type='button' value='High Score'>
         <input id='removeCell' type='button' value='Remove cell'>
-
+        <input id='undoMove' type='button' value='Undo'>
         <br>
       </div>
 
+      
       <div id="canvas-block"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
         <div hidden id='settings_form'> <!-- Holds setting options and hides when not needed.-->
@@ -51,10 +52,11 @@
               <input type='number' id='removeAmount' value='1' min ='0'>
               <div class='clear'></div>
               <input id='settingsBack' type='button' value='back'>
-           </form> 
+            </form> 
 
 
         </div>
+
         <div hidden id='highScore_form'>
           <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
             <select id="highScoreSize">
@@ -149,7 +151,17 @@
         </div>
       </div>
     </div>
+    <div id="keypads">
+      <span id="keypad-up"><i class="fa fa-caret-up"></i></span>
+      <span id="keypad-left"><i class="fa fa-caret-left"></i></span>
+      <span id="keypad-right"><i class="fa fa-caret-right"></i></span>
+      <span id="keypad-down"><i class="fa fa-caret-down"></i></span>
+    </div>
   </body>
+  
   <script src="/script.js"></script> <!--Calls JS file-->
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/ec98087ff6.js" crossorigin="anonymous"></script>
 </html>
 
