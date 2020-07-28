@@ -24,11 +24,24 @@ var fontSize; // ?class?
 
 var game; // creates a game board
 
+var keypads = document.querySelector("#keypads");
+var upKeypad = document.querySelector("#keypad-up");
+var downKeypad = document.querySelector("#keypad-down");
+var leftKeypad = document.querySelector("#keypad-left");
+var rightKeypad = document.querySelector("#keypad-right");
+
+//startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
 removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
 undoButton.addEventListener('click',  undoLastMove); // undoes move
+
+// arrows keypad event listener
+upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
+downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
+leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
+rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
 
 function removeCell()
 {
@@ -88,12 +101,14 @@ function showSettings(event){
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
+  keypads.hidden = true;
   var back = document.getElementById('settingsBack');;
 
   back.onclick = function(){
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
+    keypads.hidden = false;
   };
 }
 
@@ -103,12 +118,14 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
+  keypads.hidden = true;
 };
 
 highScoreBack.onclick = function(){
   score_form.hidden = true;
   canvas.hidden = false;
   mainOptions.hidden = false;
+  keypads.hidden = false;
 };
 
 class game2048{
@@ -707,71 +724,85 @@ function canvasClean() // removes cells colors
   ctx.clearRect(0, 0, 500, 500);
 }
 
-document.onkeyup = function(event) // button inputs listener
+function up() {
+  if(game.checkValidMove("up")) {
+    console.log("UP Valid");
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveUp(false);
+    game.addUp(false);
+    game.moveUp(false);
+    game.addRandomcell(canvas);
+    game.drawAllCells(canvas);
+  }
+}
+
+function right() {
+  if(game.checkValidMove("right")) {
+    console.log("Right Valid");
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveRight(false);
+    game.addRight(false);
+    game.moveRight(false);
+    game.addRandomcell(canvas);
+    game.drawAllCells(canvas);
+  }
+}
+
+function down() {
+  if(game.checkValidMove("down")) {
+    console.log("Down Valid");
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveDown(false);
+    game.addDown(false);
+    game.moveDown(false);
+    game.addRandomcell(canvas);
+    game.drawAllCells(canvas);
+  }
+}
+
+function left() {
+  if(game.checkValidMove("left")) {
+    console.log("Left Valid");
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveLeft(false);
+    game.addLeft(false);
+    game.moveLeft(false);
+    game.addRandomcell(canvas);
+    game.drawAllCells(canvas);
+  }
+}
+
+function manageGameState() {
+  // Update game state UI
+  scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+  game.gameStatus = game.checkStatus();
+}
+
+// keyboard button inputs listener
+document.onkeyup = function(event)
 {
-    if (event.keyCode === 38 || event.keyCode === 87) //up
+    if (event.keyCode === 38 || event.keyCode === 87) //upward move
     {
-      console.log("UP");
-      if(game.checkValidMove("up"))
-      {
-        console.log("UP Valid");
-        game.moveMade = true;
-        game.deepCopyBoard();
-        game.moveUp(false);
-        game.addUp(false);
-        game.moveUp(false);
-        game.addRandomcell(canvas);
-        game.drawAllCells(canvas);
-      }
+      up();
+    }
+    else if (event.keyCode === 39 || event.keyCode === 68) //right move
+    {
+      right();
     }
     else if (event.keyCode === 40 || event.keyCode === 83) //down
     {
-      console.log("Down");
-      if(game.checkValidMove("down"))
-      {
-        console.log("Down Valid");
-        game.moveMade = true;
-        game.deepCopyBoard();
-        game.moveDown(false);
-        game.addDown(false);
-        game.moveDown(false);
-        game.addRandomcell(canvas);
-        game.drawAllCells(canvas);
-      }
+      down();
     }
     else if (event.keyCode === 37 || event.keyCode === 65) //left
     {
-      console.log("Left");
-      if(game.checkValidMove("left"))
-      {
-        console.log("Left Valid");
-        game.moveMade = true;
-        game.deepCopyBoard();
-        game.moveLeft(false);
-        game.addLeft(false);
-        game.moveLeft(false);
-        game.addRandomcell(canvas);
-        game.drawAllCells(canvas);
-      }
+      left();
     } 
-    else if (event.keyCode === 39 || event.keyCode === 68) //right
-    {
-      console.log("Right");
-      if(game.checkValidMove("right"))
-      {
-        console.log("Right Valid");
-        game.moveMade = true;
-        game.deepCopyBoard();
-        game.moveRight(false);
-        game.addRight(false);
-        game.moveRight(false);
-        game.addRandomcell(canvas);
-        game.drawAllCells(canvas);
-      }
-    }
 
-    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
-    game.gameStatus = game.checkStatus();
+    manageGameState();
 };
 
 function startGame() // start new game / reset game and board
