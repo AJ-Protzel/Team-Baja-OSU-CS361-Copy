@@ -41,10 +41,10 @@ removeCellButton.addEventListener('click',  removeCell); // primes remove cell a
 undoButton.addEventListener('click',  undoLastMove); // undoes move
 
 // arrows keypad event listener
-upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
-downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
-leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
-rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
+//upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
+//downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
+//leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
+//rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
 
 function removeCell()
 {
@@ -132,7 +132,7 @@ function updateHighscore()
   var today = new Date();
   var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
 
-  let playerName = prompt("Enter name for the leaderboard:");
+  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
   let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
   if(highscorePlacement != null)
   {
@@ -149,65 +149,15 @@ function updateHighscore()
   }
 
   //update the board
-  //gets elements from the highscore board and sets them
-  if(highscoreScores[0] != null){
-  document.getElementById('name1').innerHTML = highscoreNames[0]; //name stored in array goes here
-  document.getElementById('score1').innerHTML = highscoreScores[0];
-  document.getElementById('date1').innerHTML = highscoreDates[0];
-  }
-
-  if(highscoreScores[1] != null){
-  document.getElementById('name2').innerHTML = highscoreNames[1]; //name stored in array goes here
-  document.getElementById('score2').innerHTML = highscoreScores[1];
-  document.getElementById('date2').innerHTML = highscoreDates[1];
-  }
-
-  if(highscoreScores[2] != null){
-  document.getElementById('name3').innerHTML = highscoreNames[2]; //name stored in array goes here
-  document.getElementById('score3').innerHTML = highscoreScores[2];
-  document.getElementById('date3').innerHTML = highscoreDates[2];
-  }
-
-  if(highscoreScores[3] != null){
-  document.getElementById('name4').innerHTML = highscoreNames[3]; //name stored in array goes here
-  document.getElementById('score4').innerHTML = highscoreScores[3];
-  document.getElementById('date4').innerHTML = highscoreDates[3];
-  }
-
-  if(highscoreScores[4] != null){
-  document.getElementById('name5').innerHTML = highscoreNames[4]; //name stored in array goes here
-  document.getElementById('score5').innerHTML = highscoreScores[4];
-  document.getElementById('date5').innerHTML = highscoreDates[4];
-  }
-
-  if(highscoreScores[5] != null){
-  document.getElementById('name6').innerHTML = highscoreNames[5]; //name stored in array goes here
-  document.getElementById('score6').innerHTML = highscoreScores[5];
-  document.getElementById('date6').innerHTML = highscoreDates[5];
-  }
-
-  if(highscoreScores[6] != null){
-  document.getElementById('name7').innerHTML = highscoreNames[6]; //name stored in array goes here
-  document.getElementById('score7').innerHTML = highscoreScores[6];
-  document.getElementById('date7').innerHTML = highscoreDates[6];
-  }
-
-  if(highscoreScores[7] != null){
-  document.getElementById('name8').innerHTML = highscoreNames[7]; //name stored in array goes here
-  document.getElementById('score8').innerHTML = highscoreScores[7];
-  document.getElementById('date8').innerHTML = highscoreDates[7];
-  }
-
-  if(highscoreScores[8] != null){
-  document.getElementById('name9').innerHTML = highscoreNames[8]; //name stored in array goes here
-  document.getElementById('score9').innerHTML = highscoreScores[8];
-  document.getElementById('date9').innerHTML = highscoreDates[8];
-  }
-
-  if(highscoreScores[9] != null){
-  document.getElementById('name10').innerHTML = highscoreNames[9]; //name stored in array goes here
-  document.getElementById('score10').innerHTML = highscoreScores[9];
-  document.getElementById('date10').innerHTML = highscoreDates[9];
+  for(let i = 0; i < 10; i++)
+  {
+    if(highscoreScores[i] != null)
+    {
+      console.log('name'+ (i+1).toString());
+      document.getElementById('name'+ (i+1).toString()).innerHTML = highscoreNames[i]
+      document.getElementById('score'+ (i+1).toString()).innerHTML = highscoreScores[i]
+      document.getElementById('date'+ (i+1).toString()).innerHTML = highscoreDates[i]
+    }
   }
 };
 
