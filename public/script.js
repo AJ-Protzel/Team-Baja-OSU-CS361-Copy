@@ -29,7 +29,7 @@ var cells = []; // 2d aray to store number values // ?class?
 var fontSize; // ?class?
 
 var game; // creates a game board
-var offPage; // checks if off game page
+var offPage; // bool to show if off game page
 
 var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector("#keypad-up");
@@ -707,7 +707,6 @@ class game2048{
     }
 
     return false;
-    
   }
 
   checkScoreTarget()
