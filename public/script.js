@@ -5,9 +5,14 @@ var mainOptions = document.getElementById('mainOptions'); // box that holds butt
 var sizeInput = document.getElementById('size'); // button // in setting page
 var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class? // in setting page
 var startNew = document.getElementById('start-new'); // button
+var endStartNew = document.getElementById('end-start-new'); // button
+
 var setting_button = document.getElementById('settings'); // button
 var setting_form = document.getElementById('settings_form'); // page
+//var setting_back = document.getElementById('highScoreBack'); // back button // in high score page
+
 var scoreButton = document.getElementById('highScores'); // button
+var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
@@ -17,6 +22,8 @@ var undoButton = document.getElementById('undoMove');
 var scoreHolder = null // TODO: grab 4x4 board scores
 var debugDB = document.getElementById('debug-db');
 
+var endOverlay = document.getElementById('endOverlay'); // page
+
 var canvas = document.getElementById('canvas');
 var width = canvas.width / boardSize - 6; // ?class?
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
@@ -25,28 +32,33 @@ var cells = []; // 2d aray to store number values // ?class?
 var fontSize; // ?class?
 
 var game; // creates a game board
-
-//arrays for sorting the highscore board
-var highscoreNames = []; 
-var highscoreScores = [];
-var highscoreDates = [];
+var offPage; // bool to show if off game page
 
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
 removeCellButton.addEventListener('click',  removeCell);
 
-//startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
+endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
 removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
 undoButton.addEventListener('click',  undoLastMove); // undoes move
 debugDB.addEventListener('click', grabFromServer);
+highScoreSizeButton.addEventListener('click', function(){
+  grabFromServer(true);
+})
 
-function grabFromServer(){
+function grabFromServer(check=false){
   console.log("inside grab from server");
   var payload = {};
-  payload.size = game.size;
+  if (check == false)
+  {
+    payload.size = game.size;
+  } else {
+    payload.size = highScoreSizeButton.value;
+  }
+  
   var req = new XMLHttpRequest();
   req.open("POST", "/getDB",true);
   req.setRequestHeader('Content-Type', 'application/json');
@@ -54,7 +66,7 @@ function grabFromServer(){
     if (req.status >=200 && req.status < 400){
       console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
-      console.log(response.topscore);
+      //console.log(response.topscore);
       updateHighscore(JSON.parse(response.topscore));
     } else {
       console.log("Error in network request: " + req.statusText);
@@ -77,7 +89,6 @@ function  sendToServer(){
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
       var response = JSON.parse(req.responseText);
-      console.log(response.debug);
     } else {
       console.log("Error in network request: " + req.statusText);
     }
@@ -144,24 +155,35 @@ function undoLastMove()
   game.moveMade = false;
 }
 
-function showSettings(event){
+function showSettings(event)
+{
+  offPage = true;
   event.preventDefault();
-  console.log("inside settings function");
+  console.log("Settings Page");
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
   keypads.hidden = true;
-  var back = document.getElementById('settingsBack');;
+  var back = document.getElementById('settingsBack');
+  startNewSetting = document.getElementById('start-new-setting'); // button
 
-  back.onclick = function(){
+  back.onclick = function()
+  {
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
     keypads.hidden = false;
+    offPage = false;
+  };
+
+  startNewSetting.onclick = function()
+  {
+    checkInput();
   };
 }
 
 function showHighscore(event){
+  offPage = true;
   event.preventDefault();
   grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
   console.log("inside score function");
@@ -174,7 +196,6 @@ function updateHighscore(scores)
 {
   //game.scoreAdded = true;
   console.log("updating highscore");
-  console.log(typeof(scores));
   
   //gets date for scoreboard when called
   var today = new Date();
@@ -203,10 +224,14 @@ function updateHighscore(scores)
   {
     if(scores[i] != null)
     {
-      console.log(scores[i]);
+      //console.log(scores[i]);
       document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
       document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
       document.getElementById('date'+ (i+1).toString()).innerHTML = scores[i].size
+    } else {
+      document.getElementById('name'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('score'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('date'+ (i+1).toString()).innerHTML = "";
     }
   }
 };
@@ -257,6 +282,12 @@ function checkHighScore(name, currentScore, date) //also player name
     console.log("returning null");
     return null;
   }
+  console.log("High Score Page");
+  mainOptions.hidden = true;
+  canvas.hidden = true;
+  score_form.hidden = false;
+  keypads.hidden = true;
+  offPage = false;
 };
 
 highScoreBack.onclick = function(){
@@ -271,7 +302,7 @@ class game2048{
    * @param {*} size 
    * @param {*} target 
    */
-  constructor (size=4, target= 2048){
+  constructor (size = 4, target = 2048){
     /**
      * The constructor for game2048 (default params included)
      * ex game = new game2048(3, 1024) => creates a 3x3 board where 1024 is the win score
@@ -459,7 +490,8 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[y][colX].value !== curVal) {
+              if (this.board[y][colX].value !== curVal)
+              {
                 return true;
               }
             } 
@@ -500,8 +532,10 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value) {
-            if (check == false) {
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
+          {
+            if (check == false)
+            {
               this.score += this.board[cur][colX].value *2;
               this.board[cur][colX].value *= 2;
               this.board[cur+1][colX].value = null;  
@@ -514,6 +548,7 @@ class game2048{
         }
       }
     }
+    return false;
   };
 
   moveDown(check)
@@ -540,7 +575,8 @@ class game2048{
             if (curValOrdered != 0)
             { 
               curVal = curValOrdered.pop();
-              if (this.board[y][colX].value !== curVal) {
+              if (this.board[y][colX].value !== curVal)
+              {
                 return true;
               }
             } 
@@ -581,8 +617,10 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         { 
           let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value) {
-            if (check == false) {
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
+          {
+            if (check == false)
+            {
               this.score += this.board[cur][colX].value *2;
               this.board[cur][colX].value *= 2;
               this.board[cur+1][colX].value = null;  
@@ -595,6 +633,7 @@ class game2048{
         }
       }
     }
+    return false;
   };
   
   moveLeft(check)
@@ -620,7 +659,8 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[rowY][x].value !== curVal) {
+              if (this.board[rowY][x].value !== curVal)
+              {
                 return true;
               }
             } 
@@ -661,8 +701,10 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) {
-            if (check == false) {
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          {
+            if (check == false)
+            {
               this.score  += this.board[rowY][cur + 1].value *2;
               this.board[rowY][cur + 1].value *= 2;
               this.board[rowY][cur].value = null;  
@@ -675,6 +717,7 @@ class game2048{
         }
       }
     }
+    return false;
   };
 
   moveRight(check)
@@ -699,7 +742,8 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[rowY][x].value !== curVal) {
+              if (this.board[rowY][x].value !== curVal)
+              {
                 return true;
               }
             } 
@@ -740,20 +784,23 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) {
-            if (check == false) {
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          {
+            if (check == false)
+            {
               this.score  += this.board[rowY][cur + 1].value *2;
               this.board[rowY][cur + 1].value *= 2;
               this.board[rowY][cur].value = null;
             } 
             else 
             {
-              return true
+              return true;
             }          
           } 
         }
       }
     }
+    return false;
   };
 
   checkValidMove(side) 
@@ -766,74 +813,66 @@ class game2048{
      */
     var move = false;
     var add = false;
-    if(side == "up")
+
+    if(side == "up" || side == "all")
     {
       move = this.moveUp(true);
       add = this.addUp(true);
+
+      if(move || add)
+      {
+        return true;
+      }
     }
-    else if(side == "down")
+    if(side == "down" || side == "all")
     {
       move = this.moveDown(true);
       add = this.addDown(true);
+
+      if(move || add)
+      {
+        return true;
+      }
     }
-    else if(side == "left")
+    if(side == "left" || side == "all")
     {
       move = this.moveLeft(true);
       add = this.addLeft(true);
+      
+      if(move || add)
+      {
+        return true;
+      }
     }
-    else if(side == "right")
+    if(side == "right" || side == "all")
     {
       move = this.moveRight(true);
       add = this.addRight(true);
-    }
-
+  
     if(move || add)
     {
       return true;
+      }
     }
+
     return false;
   }
 
-  checkStatus()
+  checkScoreTarget()
   {
-    /** 
-     * traverses the game board to find out current game status
-     * possible options
-     * WIN: There contains a board pieces that hits the target score
-     * LOSE: The board has no empty spaces
-     * UNFINISHED: Not one of the 2 statuses above.
-     */
-    let empty_flag = false;
-
     for (let i = 0; i < this.size; i++)
     {
       for (let j = 0; j < this.size; j++)
       {     
         if (this.board[i][j].value == this.target)
         {
-          return 'WIN'
-        }
-        if (this.board[i][j].value == null)
-        {
-          empty_flag  = true;
+          return true;
         }
       }
     }
-
-    // Check if there is still a possible move
-    if (empty_flag == true) 
-    {
-      return 'UNFINISHED'
-    } 
-    else if (this.checkValidMove("up") || this.checkValidMove("down") || this.checkValidMove("left") || this.checkValidMove("right")) 
-    {
-      return 'UNFINISHED'
-    } 
-    else 
-    {
-      return 'LOSE'
-    }
-  };
+    
+    return false;
+  }
 }; // end of game2048 class
 
 function cell(row, coll , value=null) // sets new cell where value is either a number OR null if empty;
@@ -863,7 +902,7 @@ function canvasClean() // removes cells colors
 
 function up() {
   if(game.checkValidMove("up")) {
-    console.log("UP Valid");
+    //console.log("UP Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveUp(false);
@@ -876,7 +915,7 @@ function up() {
 
 function right() {
   if(game.checkValidMove("right")) {
-    console.log("Right Valid");
+    //console.log("Right Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveRight(false);
@@ -889,7 +928,7 @@ function right() {
 
 function down() {
   if(game.checkValidMove("down")) {
-    console.log("Down Valid");
+    //console.log("Down Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveDown(false);
@@ -902,7 +941,7 @@ function down() {
 
 function left() {
   if(game.checkValidMove("left")) {
-    console.log("Left Valid");
+    //console.log("Left Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveLeft(false);
@@ -913,82 +952,89 @@ function left() {
   }
 }
 
-function manageGameState() {
-  // Update game state UI
-  scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
-  game.gameStatus = game.checkStatus();
+// keyboard button inputs listener
+function checkEnd()
+{
+  if(game.checkScoreTarget()) // if score target is reached return true
+  {
+    sendToServer();
+    offPage = true;
+    canvas.style.opacity = '0.5';
+    mainOptions.hidden = true;
+    endOverlay.style.display = "block";
+  }
+  else if(!game.checkValidMove("all"))
+  {
+    offPage = true;
+    canvas.style.opacity = '0.5';
+    mainOptions.hidden = true;
+    endOverlay.style.display = "block";
+    sendToServer();
+    var winText = document.getElementById('winText').hidden = true;
+  }
 }
 
-// keyboard button inputs listener
 document.onkeyup = function(event)
 {
-    if (event.keyCode === 38 || event.keyCode === 87) //upward move
+  if(!offPage)
+  {
+    if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
     {
       up();
     }
-    else if (event.keyCode === 39 || event.keyCode === 68) //right move
-    {
+    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
+    { 
       right();
     }
-    else if (event.keyCode === 40 || event.keyCode === 83) //down
+    else if ((event.keyCode === 40 || event.keyCode === 83)) //down
     {
       down();
     }
-    else if (event.keyCode === 37 || event.keyCode === 65) //left
+    else if ((event.keyCode === 37 || event.keyCode === 65)) //left
     {
       left();
     } 
 
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
-    game.gameStatus = game.checkStatus();
-    if (game.gameStatus != 'UNFINISHED')
-    {
-      // DO SOMETHING WITH WIN AND LOSE CONDITION
-      console.log(game.gameStatus);
-
-      if(game.gameStatus == 'LOSE')
-      {
-        console.log("game lost");
-        if(game.scoreAdded == false)
-        {
-          console.log("adding highscore");
-          updateHighscore();
-        }
-      }
-      else
-      {
-        //display win message
-      }
-    }
-    
+    checkEnd();
+  }
 };
 
 function startGame() // start new game / reset game and board
 {
   console.log("Start game");
+  document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
+  offPage = false;
+  endOverlay.style.display = "none";
+  var winText = document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
-  let currentGame = new game2048(boardSize);
+  let currentGame = new game2048(boardSize, scoreTarget);
   currentGame.canvasClean(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.drawAllCells(canvas);
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
+  
+  //endOverlay.style.display = "block";
+  //var winText = document.getElementById('winText').hidden = false;
 }
 
 startGame();
 
 function checkInput() {
   scoreTarget = targetInput.value;
-  console.log("scoreTarget is " + scoreTarget);
-
-  if(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0){
-    console.log("YES");
-  }
-  else{
-    console.log("NO");
+ 
+  if(!(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0)){
+    var num = 2;
+    while(scoreTarget > num)
+    {
+      num *= 2;
+    }
+    scoreTarget = num;
+    alert("Score target will be rounded to " + scoreTarget);
   }
 
   startGame();

@@ -74,13 +74,16 @@ body
     background: #776e65;
     border-radius: 6px;
     box-sizing: border-box;
+    
 }
-
+/*
 #canvas-block
 {
     margin-left: -250px;
     padding-left: 50%;
+    background: red;
 }
+*/
 
 @media (max-width: 992px) {
     #keypads {
@@ -127,4 +130,47 @@ body
     .fa {
         display: none!important;
     }
+}
+
+#endOverlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*background-color: rgba(0,0,0,0.5);*/
+    z-index: 200;
+    cursor: pointer;
+  }
+  
+#winText{
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    font-size: 50px;
+    color: black;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+#endText{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    font-size: 50px;
+    color: black;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+#end-start-new{
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    font-size: 25px;
 }
