@@ -52,8 +52,10 @@ function grabFromServer(){
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
+      console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
-      console.log(response.debug);
+      console.log(response.topscore);
+      updateHighscore(JSON.parse(response.topscore));
     } else {
       console.log("Error in network request: " + req.statusText);
     }
@@ -161,22 +163,24 @@ function showSettings(event){
 
 function showHighscore(event){
   event.preventDefault();
-  updateHighscore();
+  grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
   console.log("inside score function");
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
 };
 
-function updateHighscore()
+function updateHighscore(scores)
 {
-  game.scoreAdded = true;
+  //game.scoreAdded = true;
   console.log("updating highscore");
+  console.log(typeof(scores));
   
   //gets date for scoreboard when called
   var today = new Date();
   var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
 
+  /*
   let playerName = prompt("New Highscore! Enter name for the leaderboard:");
   let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
   if(highscorePlacement != null)
@@ -197,12 +201,12 @@ function updateHighscore()
   //update the board
   for(let i = 0; i < 10; i++)
   {
-    if(scoreHolder[i] != null)
+    if(scores[i] != null)
     {
-      
-      document.getElementById('name'+ (i+1).toString()).innerHTML = scoreHolder[i].name
-      document.getElementById('score'+ (i+1).toString()).innerHTML = scoreHolder[i].score
-      document.getElementById('date'+ (i+1).toString()).innerHTML = currentDate
+      console.log(scores[i]);
+      document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
+      document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
+      document.getElementById('date'+ (i+1).toString()).innerHTML = scores[i].size
     }
   }
 };

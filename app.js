@@ -32,8 +32,24 @@ app.post('/getDB', function(req, res, next){
     console.log("inside getDB");
     console.log(query.size);
     let topScores = {};
+    HighScoreModel.
+        find({size: query.size}).
+        select('name score size -_id').
+        sort({score: -1}).
+        limit(10).
+        lean().
+        exec(function (err, doc){
+            //console.log(doc);
+            context.topscore = JSON.stringify(doc);
+            console.log(context);
+            res.send(context);
+    });
+
+/*        
+        , function(err, data){
+        console.log(data); // grabs all scores above certain size
+    });
     
-    /*
     var dbQuery = HighScoreModel.find({});
     dbQuery instanceof mongoose.Query;
     doc = await query;
