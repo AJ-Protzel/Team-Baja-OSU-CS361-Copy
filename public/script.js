@@ -15,6 +15,7 @@ var removeCellButton = document.getElementById('removeCell');
 var disableRemoveButton  = document.getElementById('disableRemove');
 var undoButton = document.getElementById('undoMove');
 var scoreHolder = null // TODO: grab 4x4 board scores
+var debugDB = document.getElementById('debug-db');
 
 var canvas = document.getElementById('canvas');
 var width = canvas.width / boardSize - 6; // ?class?
@@ -40,6 +41,48 @@ setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
 removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
 undoButton.addEventListener('click',  undoLastMove); // undoes move
+debugDB.addEventListener('click', grabFromServer);
+
+function grabFromServer(){
+  console.log("inside grab from server");
+  var payload = {};
+  payload.size = game.size;
+  var req = new XMLHttpRequest();
+  req.open("POST", "/getDB",true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      var response = JSON.parse(req.responseText);
+      console.log(response.debug);
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  req.send(JSON.stringify(payload));
+};
+
+function  sendToServer(){
+  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  console.log('into send server Client side');
+  var req = new XMLHttpRequest();
+  var payload = {};
+  payload.name = playerName;
+  payload.score = game.score;
+  payload.size  = game.size;
+  payload.debug  = "Send from Client -origin";
+  req.open('POST', '/sendDB', true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      var response = JSON.parse(req.responseText);
+      console.log(response.debug);
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  console.log(JSON.stringify(payload));
+  req.send(JSON.stringify(payload));
+}
 
 // arrows keypad event listener
 //upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
@@ -118,6 +161,7 @@ function showSettings(event){
 
 function showHighscore(event){
   event.preventDefault();
+  updateHighscore();
   console.log("inside score function");
   mainOptions.hidden = true;
   canvas.hidden = true;
@@ -137,7 +181,7 @@ function updateHighscore()
   let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
   if(highscorePlacement != null)
   {
-   // function send score to DB
+    sendToServer(PlayerName, game.score, game.size) // current DB catches size Not date.
    // scoreHolder = DB pull to include new entry
   }
 
