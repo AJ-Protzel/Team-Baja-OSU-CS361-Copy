@@ -7,6 +7,8 @@ var boardSize = sizeInput.value; // sets boardSize equal to user input board siz
 var startNew = document.getElementById('start-new'); // button
 var setting_button = document.getElementById('settings'); // button
 var setting_form = document.getElementById('settings_form'); // page
+//var setting_back = document.getElementById('highScoreBack'); // back button // in high score page
+
 var scoreButton = document.getElementById('highScores'); // button
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
@@ -95,26 +97,34 @@ function undoLastMove()
   game.moveMade = false;
 }
 
-function showSettings(event){
+function showSettings(event)
+{
   event.preventDefault();
-  console.log("inside settings function");
+  console.log("Settings Page");
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
   keypads.hidden = true;
-  var back = document.getElementById('settingsBack');;
+  var back = document.getElementById('settingsBack');
+  startNewSetting = document.getElementById('start-new-setting'); // button
 
-  back.onclick = function(){
+  back.onclick = function()
+  {
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
     keypads.hidden = false;
   };
+
+  startNewSetting.onclick = function()
+  {
+    checkInput();
+  };
 }
 
 function showHighscore(event){
   event.preventDefault();
-  console.log("inside score function");
+  console.log("High Score Page");
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
@@ -726,7 +736,7 @@ function canvasClean() // removes cells colors
 
 function up() {
   if(game.checkValidMove("up")) {
-    console.log("UP Valid");
+    //console.log("UP Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveUp(false);
@@ -739,7 +749,7 @@ function up() {
 
 function right() {
   if(game.checkValidMove("right")) {
-    console.log("Right Valid");
+    //console.log("Right Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveRight(false);
@@ -752,7 +762,7 @@ function right() {
 
 function down() {
   if(game.checkValidMove("down")) {
-    console.log("Down Valid");
+    //console.log("Down Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveDown(false);
@@ -765,7 +775,7 @@ function down() {
 
 function left() {
   if(game.checkValidMove("left")) {
-    console.log("Left Valid");
+    //console.log("Left Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveLeft(false);
@@ -808,6 +818,7 @@ document.onkeyup = function(event)
 function startGame() // start new game / reset game and board
 {
   console.log("Start game");
+  document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
@@ -824,13 +835,17 @@ startGame();
 
 function checkInput() {
   scoreTarget = targetInput.value;
-  console.log("scoreTarget is " + scoreTarget);
+  console.log("target entered: " + scoreTarget);
 
-  if(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0){
-    console.log("YES");
-  }
-  else{
-    console.log("NO");
+  if(!(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0)){
+    var num = 2;
+    while(scoreTarget > num)
+    {
+      num *=2;
+    }
+    scoreTarget = num;
+    alert("Score target will be rounded to " + scoreTarget);
+    console.log("target: " + scoreTarget);
   }
 
   startGame();

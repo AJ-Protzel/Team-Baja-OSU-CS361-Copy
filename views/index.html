@@ -5,11 +5,9 @@
   <head>
     <meta charset="UTF-8">
     <title>2048 Game by Team Bajas</title>
-    
     <base href="public/">
-
     <link rel="stylesheet" href="/style.css"> <!--Calls CSS file-->
-
+    <script src="https://kit.fontawesome.com/ec98087ff6.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
   </head>
 
   <body>
@@ -18,6 +16,7 @@
         <h1 id="title">2048</h1>
         <div id="score-container"></div>
       </div>
+
       <div class="clear"></div> <!--adds space under heading-->
       <div id="mainOptions"> <!--box under heading-->
         <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
@@ -28,33 +27,31 @@
         <br>
       </div>
 
-      
       <div id="canvas-block"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
         <div hidden id='settings_form'> <!-- Holds setting options and hides when not needed.-->
           <form>
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
-              <select id="size">
-                <option value="3">3</option>
-                <option value="4" selected>4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-              <div class='clear'></div>
-              <label for="target">Winning Number:</label>
-              <input type="number" id="scoreTarget" value="2048" min="2">
-              <div class='clear'></div>
-              <label for='removeAmount'> # to remove</label>
-              <input type='number' id='removeAmount' value='1' min ='0'>
-              <div class='clear'></div>
-              <input id='settingsBack' type='button' value='back'>
-            </form> 
-
-
+            <select id="size">
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <div class='clear'></div>
+            <label for="target">Winning Number:</label>
+            <input type="number" id="scoreTarget" value="2048" min="2">
+            <div class='clear'></div>
+            <label for='removeAmount'> # to remove</label>
+            <input type='number' id='removeAmount' value='1' min ='0'>
+            <div class='clear'></div>
+            <input id='settingsBack' type='button' value='back'>
+            <input id="start-new-setting" type="button" value="Start New Game"> <!--resets board, starts new game-->
+          </form> 
         </div>
 
         <div hidden id='highScore_form'>
@@ -99,8 +96,4 @@
   </body>
   
   <script src="/script.js"></script> <!--Calls JS file-->
-
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/ec98087ff6.js" crossorigin="anonymous"></script>
 </html>
-
