@@ -45,10 +45,10 @@ removeCellButton.addEventListener('click',  removeCell); // primes remove cell a
 undoButton.addEventListener('click',  undoLastMove); // undoes move
 
 // arrows keypad event listener
-upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
-downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
-leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
-rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
+upKeypad.addEventListener("click", function(err) {up(); checkEnd();});
+downKeypad.addEventListener("click", function(err) {down(); checkEnd();});
+leftKeypad.addEventListener("click", function(err) {left(); checkEnd();});
+rightKeypad.addEventListener("click", function(err) {right(); checkEnd();});
 
 function removeCell()
 {
@@ -806,6 +806,8 @@ function left() {
 // keyboard button inputs listener
 function checkEnd()
 {
+  scoreLabel.innerHTML = 'Score : ' + game.score;
+
   if(game.checkScoreTarget()) // if score target is reached return true
   {
     offPage = true;
@@ -844,7 +846,6 @@ document.onkeyup = function(event)
       left();
     } 
 
-    scoreLabel.innerHTML = 'Score : ' + game.score;
     checkEnd();
   }
 };
