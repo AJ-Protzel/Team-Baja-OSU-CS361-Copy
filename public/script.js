@@ -34,6 +34,8 @@ var fontSize; // ?class?
 var game; // creates a game board
 var offPage; // bool to show if off game page
 
+var keypads = document.querySelector("#keypads");
+
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
 removeCellButton.addEventListener('click',  removeCell);
@@ -98,10 +100,10 @@ function  sendToServer(){
 }
 
 // arrows keypad event listener
-//upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
-//downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
-//leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
-//rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
+upKeypad.addEventListener("click", function(err) {up(); manageGameState();});
+downKeypad.addEventListener("click", function(err) {down(); manageGameState();});
+leftKeypad.addEventListener("click", function(err) {left(); manageGameState();});
+rightKeypad.addEventListener("click", function(err) {right(); manageGameState();});
 
 function removeCell()
 {
@@ -315,6 +317,7 @@ class game2048{
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
     this.score = 0; // current game score.
     this.remove_check  = false;
+    this.moveMade = false;
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
   };
