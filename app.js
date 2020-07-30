@@ -30,7 +30,7 @@ app.post('/getDB', function(req, res, next){
     var query = req.body;
     let dbQuery;
     console.log("inside getDB");
-    console.log(query.size);
+    //console.log(query.size);
     let topScores = {};
     HighScoreModel.
         find({size: query.size}).
@@ -41,7 +41,7 @@ app.post('/getDB', function(req, res, next){
         exec(function (err, doc){
             //console.log(doc);
             context.topscore = JSON.stringify(doc);
-            console.log(context);
+            //console.log(context);
             res.send(context);
     });
 
