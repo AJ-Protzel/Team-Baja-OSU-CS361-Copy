@@ -322,6 +322,8 @@ class game2048{
     this.score = 0; // current game score.
     this.remove_check  = false;
     this.moveMade = false;
+    this.lastScore = 0;
+    this.undoes = 5; // number of undoes available
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
   };
