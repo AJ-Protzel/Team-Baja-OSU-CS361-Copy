@@ -35,6 +35,10 @@ var game; // creates a game board
 var offPage; // bool to show if off game page
 
 var keypads = document.querySelector("#keypads");
+var upKeypad = document.querySelector("#keypad-up");
+var downKeypad = document.querySelector("#keypad-down");
+var leftKeypad = document.querySelector("#keypad-left");
+var rightKeypad = document.querySelector("#keypad-right");
 
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
