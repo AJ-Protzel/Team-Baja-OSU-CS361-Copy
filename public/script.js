@@ -196,6 +196,7 @@ function showHighscore(event){
   mainOptions.hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
+  keypads.hidden = true
 };
 
 function updateHighscore(scores)
