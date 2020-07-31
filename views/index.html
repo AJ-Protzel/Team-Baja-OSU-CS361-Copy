@@ -26,10 +26,11 @@
       <div class="clear"></div> <!--adds space under heading-->
       <div id="mainOptions"> <!--box under heading-->
         <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
-        <input id='settings' type='button' value='settings'>
+        <input id='settings' type='button' value='Settings'>
         <input id='highScores' type='button' value='High Score'>
         <input id='removeCell' type='button' value='Remove cell'>
         <input id='undoMove' type='button' value='Undo'>
+        <input id='debug-db' type='button' value='debug db send'>
         <br>
       </div>
 
@@ -76,24 +77,84 @@
                 <option value="9">9</option>
                 <option value="10">10</option>
               </select>
-            <table id='' border='1'>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Score</th>
-                  <th> Date </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>test</td>
-                  <td>test</td>
-                  <td>test</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="clear"></div>
-            <input id='highScoreBack' type='button' value='Back'>
+              <div><br></div>
+            
+              <table id='' border='1'>
+                <thead>
+                  <tr>
+                    <tr>
+                      <td></td>
+                      <th scope="col">Name</th>
+                      <th scope="col">Score</th>
+                      <th scope="col">Size</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">#1</th>
+                    <td id = "name1"></td>
+                    <td id = "score1"></td>
+                    <td id = "date1"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#2</th>
+                    <td id = "name2"></td>
+                    <td id = "score2"></td>
+                    <td id = "date2"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#3</th>
+                    <td id = "name3"></td>
+                    <td id = "score3"></td>
+                    <td id = "date3"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#4</th>
+                    <td id = "name4"></td>
+                    <td id = "score4"></td>
+                    <td id = "date4"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#5</th>
+                    <td id = "name5"></td>
+                    <td id = "score5"></td>
+                    <td id = "date5"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#6</th>
+                    <td id = "name6"></td>
+                    <td id = "score6"></td>
+                    <td id = "date6"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#7</th>
+                    <td id = "name7"></td>
+                    <td id = "score7"></td>
+                    <td id = "date7"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#8</th>
+                    <td id = "name8"></td>
+                    <td id = "score8"></td>
+                    <td id = "date8"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#9</th>
+                    <td id = "name9"></td>
+                    <td id = "score9"></td>
+                    <td id = "date9"></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">#10</th>
+                    <td id = "name10"></td>
+                    <td id = "score10"></td>
+                    <td id = "date10"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="clear"></div>
+              <div><br></div>
+              <input id='highScoreBack' type='button' value='Back'>
           </form>
         </div>
       </div>

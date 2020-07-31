@@ -12,12 +12,15 @@ var setting_form = document.getElementById('settings_form'); // page
 //var setting_back = document.getElementById('highScoreBack'); // back button // in high score page
 
 var scoreButton = document.getElementById('highScores'); // button
+var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
 var removeCellButton = document.getElementById('removeCell');
 var disableRemoveButton  = document.getElementById('disableRemove');
 var undoButton = document.getElementById('undoMove');
+var scoreHolder = null // TODO: grab 4x4 board scores
+var debugDB = document.getElementById('debug-db');
 
 var endOverlay = document.getElementById('endOverlay'); // page
 
@@ -37,12 +40,68 @@ var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
+//startNew.addEventListener('click', function() {startGame(event)});
+startNew.addEventListener('click', checkInput);
+removeCellButton.addEventListener('click',  removeCell);
+
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
 endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
 removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
 undoButton.addEventListener('click',  undoLastMove); // undoes move
+debugDB.addEventListener('click', grabFromServer);
+highScoreSizeButton.addEventListener('click', function(){
+  grabFromServer(true);
+})
+
+function grabFromServer(check=false){
+  console.log("inside grab from server");
+  var payload = {};
+  if (check == false)
+  {
+    payload.size = game.size;
+  } else {
+    payload.size = highScoreSizeButton.value;
+  }
+  
+  var req = new XMLHttpRequest();
+  req.open("POST", "/getDB",true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      console.log('inside grab from server');
+      var response = JSON.parse(req.responseText);
+      //console.log(response.topscore);
+      updateHighscore(JSON.parse(response.topscore));
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  req.send(JSON.stringify(payload));
+};
+
+function  sendToServer(){
+  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  console.log('into send server Client side');
+  var req = new XMLHttpRequest();
+  var payload = {};
+  payload.name = playerName;
+  payload.score = game.score;
+  payload.size  = game.size;
+  payload.debug  = "Send from Client -origin";
+  req.open('POST', '/sendDB', true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      var response = JSON.parse(req.responseText);
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  console.log(JSON.stringify(payload));
+  req.send(JSON.stringify(payload));
+}
 
 // arrows keypad event listener
 upKeypad.addEventListener("click", function(err) {up(); checkEnd();});
@@ -132,6 +191,104 @@ function showSettings(event)
 function showHighscore(event){
   offPage = true;
   event.preventDefault();
+  grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
+  console.log("inside score function");
+  mainOptions.hidden = true;
+  canvas.hidden = true;
+  score_form.hidden = false;
+  keypads.hidden = true
+};
+
+function updateHighscore(scores)
+{
+  //game.scoreAdded = true;
+  console.log("updating highscore");
+  
+  //gets date for scoreboard when called
+  var today = new Date();
+  var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
+
+  /*
+  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
+  if(highscorePlacement != null)
+  {
+    sendToServer(PlayerName, game.score, game.size) // current DB catches size Not date.
+   // scoreHolder = DB pull to include new entry
+  }
+
+  /*
+  if(highscoreScores.length > 10)
+  {
+    highscoreNames.pop()
+    highscoreScores.pop()
+    highscoreDates.pop()
+  }
+  */
+
+  //update the board
+  for(let i = 0; i < 10; i++)
+  {
+    if(scores[i] != null)
+    {
+      //console.log(scores[i]);
+      document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
+      document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
+      document.getElementById('date'+ (i+1).toString()).innerHTML = scores[i].size
+    } else {
+      document.getElementById('name'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('score'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('date'+ (i+1).toString()).innerHTML = "";
+    }
+  }
+};
+
+function checkHighScore(name, currentScore, date) //also player name
+{
+  let i = 0;
+
+  if(currentScore > 0)
+  {
+    //if there are other scores on the leaderboard
+    if(scoreHolder[0] != null)
+    {
+      for(i; i < scoreHolder.length; i++)
+      {
+        if(currentScore >= scoreHolder[i].score)
+        { 
+          if(currentScore == scoreHolder[i].score) //check to see that the same exact score from the same game not relogged
+          {
+            if(scoreHolder[i].date != date || scoreHolder[i].name != name) //any variation from the highscore is good
+            {
+              return i; //return where this should go on the board
+            }
+            else //discount entry if it is exactly the same as another on the board
+            {
+              return null;
+            }
+          }
+          else //score is greater than something else on the board, so just return i
+          {
+            return i;
+          }
+        }
+      }
+      if(i < 10) //if the score is less than that on the top, but still spaces underneath
+      {
+        return i; //add it to the next avaiable space
+      }
+      return null; //or null, if its not within the top 10 at all
+    }
+    else //the scoreboard is empty and this is first entry
+    {
+      return 0;
+    }
+  }
+  else //score is blank, shouldn't happen but just in case
+  {
+    console.log("returning null");
+    return null;
+  }
   console.log("High Score Page");
   mainOptions.hidden = true;
   canvas.hidden = true;
@@ -168,6 +325,8 @@ class game2048{
     this.moveMade = false;
     this.lastScore = 0;
     this.undoes = 5; // number of undoes available
+    this.validMove = false; // checks if a valid move occurs each round
+    this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
   };
 
   createBoard()
@@ -341,7 +500,7 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[y][colX].value !== curVal) 
+              if (this.board[y][colX].value !== curVal)
               {
                 return true;
               }
@@ -385,7 +544,7 @@ class game2048{
           let cur = rowY;
           if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
           {
-            if (check == false) 
+            if (check == false)
             {
               this.score += this.board[cur][colX].value *2;
               this.board[cur][colX].value *= 2;
@@ -426,7 +585,7 @@ class game2048{
             if (curValOrdered != 0)
             { 
               curVal = curValOrdered.pop();
-              if (this.board[y][colX].value !== curVal) 
+              if (this.board[y][colX].value !== curVal)
               {
                 return true;
               }
@@ -468,9 +627,9 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         { 
           let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
+          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
           {
-            if (check == false) 
+            if (check == false)
             {
               this.score += this.board[cur][colX].value *2;
               this.board[cur][colX].value *= 2;
@@ -510,7 +669,7 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[rowY][x].value !== curVal) 
+              if (this.board[rowY][x].value !== curVal)
               {
                 return true;
               }
@@ -552,9 +711,9 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) 
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
-            if (check == false) 
+            if (check == false)
             {
               this.score  += this.board[rowY][cur + 1].value *2;
               this.board[rowY][cur + 1].value *= 2;
@@ -593,7 +752,7 @@ class game2048{
             if (curValOrdered != 0)
             {
               curVal = curValOrdered.pop();
-              if (this.board[rowY][x].value !== curVal) 
+              if (this.board[rowY][x].value !== curVal)
               {
                 return true;
               }
@@ -635,9 +794,9 @@ class game2048{
         if (this.board[rowY][colX].value != null)
         {
           let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value) 
+          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
           {
-            if (check == false) 
+            if (check == false)
             {
               this.score  += this.board[rowY][cur + 1].value *2;
               this.board[rowY][cur + 1].value *= 2;
@@ -689,7 +848,7 @@ class game2048{
     {
       move = this.moveLeft(true);
       add = this.addLeft(true);
-
+      
       if(move || add)
       {
         return true;
@@ -699,10 +858,10 @@ class game2048{
     {
       move = this.moveRight(true);
       add = this.addRight(true);
-
-      if(move || add)
-      {
-        return true;
+  
+    if(move || add)
+    {
+      return true;
       }
     }
 
@@ -721,7 +880,7 @@ class game2048{
         }
       }
     }
-
+    
     return false;
   }
 }; // end of game2048 class
@@ -810,6 +969,7 @@ function checkEnd()
 
   if(game.checkScoreTarget()) // if score target is reached return true
   {
+    sendToServer();
     offPage = true;
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
@@ -821,6 +981,7 @@ function checkEnd()
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
+    sendToServer();
     var winText = document.getElementById('winText').hidden = true;
   }
 }
@@ -867,7 +1028,7 @@ function startGame() // start new game / reset game and board
   currentGame.drawAllCells(canvas);
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
-
+  
   //endOverlay.style.display = "block";
   //var winText = document.getElementById('winText').hidden = false;
 }
@@ -876,7 +1037,7 @@ startGame();
 
 function checkInput() {
   scoreTarget = targetInput.value;
-
+ 
   if(!(scoreTarget && (scoreTarget & (scoreTarget - 1)) === 0)){
     var num = 2;
     while(scoreTarget > num)
