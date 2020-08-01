@@ -302,6 +302,7 @@ highScoreBack.onclick = function(){
   canvas.hidden = false;
   mainOptions.hidden = false;
   keypads.hidden = false;
+  offPage = false;
 };
 
 class game2048{
