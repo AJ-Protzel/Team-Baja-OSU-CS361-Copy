@@ -82,7 +82,10 @@ function grabFromServer(check=false){
 };
 
 function  sendToServer(){
-  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  let playerName;
+  while (playerName == null){
+    playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  };  
   console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
