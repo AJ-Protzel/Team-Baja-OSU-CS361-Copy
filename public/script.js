@@ -166,7 +166,7 @@ function undoLastMove()
 
 function showSettings(event)
 {
-  offPage = true;
+  document.removeEventListener('keyup', makeMove);
   event.preventDefault();
   console.log("Settings Page");
   canvas.hidden = true;
@@ -178,11 +178,11 @@ function showSettings(event)
 
   back.onclick = function()
   {
+    document.addEventListener('keyup', makeMove);
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
     keypads.hidden = false;
-    offPage = false;
   };
 
   startNewSetting.onclick = function()
@@ -192,7 +192,7 @@ function showSettings(event)
 }
 
 function showHighscore(event){
-  offPage = true;
+  document.removeEventListener('keyup', makeMove);
   event.preventDefault();
   grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
   console.log("inside score function");
@@ -292,12 +292,6 @@ function checkHighScore(name, currentScore, date) //also player name
     console.log("returning null");
     return null;
   }
-  console.log("High Score Page");
-  mainOptions.hidden = true;
-  canvas.hidden = true;
-  score_form.hidden = false;
-  keypads.hidden = true;
-  offPage = false;
 };
 
 highScoreBack.onclick = function(){
@@ -305,7 +299,7 @@ highScoreBack.onclick = function(){
   canvas.hidden = false;
   mainOptions.hidden = false;
   keypads.hidden = false;
-  offPage = false;
+  document.addEventListener('keyup', makeMove);
 };
 
 class game2048{
@@ -974,14 +968,14 @@ function checkEnd()
   if(game.checkScoreTarget()) // if score target is reached return true
   {
     sendToServer();
-    offPage = true;
+    document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
   }
   else if(!game.checkValidMove("all"))
   {
-    offPage = true;
+    document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
@@ -990,10 +984,10 @@ function checkEnd()
   }
 }
 
-document.onkeyup = function(event)
+
+function makeMove(event)
 {
-  if(!offPage)
-  {
+  console.log(event);
     if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
     {
       up();
@@ -1012,15 +1006,15 @@ document.onkeyup = function(event)
     } 
 
     checkEnd();
-  }
 };
 
 function startGame() // start new game / reset game and board
 {
   console.log("Start game");
+  document.addEventListener('keyup', makeMove);
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
-  offPage = false;
+  //offPage = false;
   endOverlay.style.display = "none";
   var winText = document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
