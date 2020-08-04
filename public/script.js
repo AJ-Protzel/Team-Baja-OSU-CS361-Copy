@@ -1,5 +1,13 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
+
+var undoButton = document.getElementById('undoButton');
+var removeButton = document.getElementById('removeButton');
+
+
+
+
+
 var scoreLabel = document.getElementById('score-container'); // display
 var mainOptions = document.getElementById('mainOptions'); // box that holds buttons
 var sizeInput = document.getElementById('size'); // button // in setting page
@@ -16,9 +24,9 @@ var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
-var removeCellButton = document.getElementById('removeCell');
-var disableRemoveButton  = document.getElementById('disableRemove');
-var undoButton = document.getElementById('undoMove');
+//var removeCellButton = document.getElementById('removeCell');
+//var disableRemoveButton  = document.getElementById('disableRemove');
+//var undoButton = document.getElementById('undoMove');
 var scoreHolder = null // TODO: grab 4x4 board scores
 var debugDB = document.getElementById('debug-db');
 
@@ -41,14 +49,14 @@ var rightKeypad = document.querySelector("#keypad-right");
 
 //startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
-removeCellButton.addEventListener('click',  removeCell);
+//removeCellButton.addEventListener('click',  removeCell);
 
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
 endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
-removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
-undoButton.addEventListener('click',  undoLastMove); // undoes move
+//removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
+//undoButton.addEventListener('click',  undoLastMove); // undoes move
 debugDB.addEventListener('click', grabFromServer);
 highScoreSizeButton.addEventListener('click', function(){
   grabFromServer(true);
@@ -111,19 +119,20 @@ downKeypad.addEventListener("click", function(err) {down(); checkEnd();});
 leftKeypad.addEventListener("click", function(err) {left(); checkEnd();});
 rightKeypad.addEventListener("click", function(err) {right(); checkEnd();});
 
-function removeCell()
+function removeClick()
 {
-  if (game.removeSquare == 0){
-    alert("You are out of moves!");
-    return
-  }
+  //if (game.removes == 0){
+  //  alert("You are out of moves!");
+  //  return
+  //}
   game.remove_check = false;
   canvas.addEventListener('click', subtractRemoveCounter);
+  
 }
 
 function subtractRemoveCounter(e)
 {
-  if (game.removeSquare > 0) {
+  if (game.removes > 0) {
     game.deepCopyBoard(); // saves removed cell as last board
 
     let currentX = e.offsetX -20; //x position relative to canvas
@@ -145,22 +154,25 @@ function subtractRemoveCounter(e)
     }
 
     game.score -= game.board[yPos][xPos].value;
-    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
+    scoreLabel.innerHTML = 'Score: ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
     game.drawAllCells(canvas);
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
-    game.removeSquare-=1;
+    game.removes--;
     canvas.removeEventListener('click', subtractRemoveCounter);
     game.moveMade = true;
+
+    removeButton.value = game.removes + " :Removes";
 
     return;
   } 
 }
 
-function undoLastMove()
+function undoClick()
 {
   game.undoMove();
   game.moveMade = false;
+  removeButton.value = game.removes + " :Removes";
 }
 
 function showSettings(event)
@@ -313,7 +325,7 @@ class game2048{
      */
     this.size = size; // size of board
     this.target = target; // score for win
-    this.removeSquare = 2; // this flag signals if the user has used their removed square option during the game
+    this.removes = 2; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
@@ -367,9 +379,10 @@ class game2048{
       this.board = this.lastMove;
       this.score = this.lastScore;
       game.drawAllCells(canvas);
-      scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+      scoreLabel.innerHTML = 'Score: ' + game.score; // add score after move
       this.undoes--;
     }
+    undoButton.value = this.undoes + " :Undoes";
   }
 
   drawCell(cell, canvas) // Takes in individual cell object and current canvas and draws cell onto canvas
@@ -962,7 +975,7 @@ function left() {
 // keyboard button inputs listener
 function checkEnd()
 {
-  scoreLabel.innerHTML = 'Score : ' + game.score;
+  scoreLabel.innerHTML = 'Score: ' + game.score;
 
   if(game.checkScoreTarget()) // if score target is reached return true
   {
@@ -1023,7 +1036,9 @@ function startGame() // start new game / reset game and board
   currentGame.addRandomcell(canvas);
   currentGame.addRandomcell(canvas);
   currentGame.drawAllCells(canvas);
-  scoreLabel.innerHTML = 'Score : ' + currentGame.score;
+  scoreLabel.innerHTML = 'Score: ' + currentGame.score;
+  undoButton.value = currentGame.undoes + " :Undoes";
+  removeButton.value = currentGame.removes + " :Removes";
   game = currentGame;
   
   //endOverlay.style.display = "block";

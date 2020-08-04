@@ -19,11 +19,16 @@ body
 
 #title
 {
+    
+    margin-top: 0;
+    /*display: block;*/
+    /*float: left;*/
+
+    /*position: relative;*/
+    float: left;
+
     font-size: 80px;
     font-weight: bold;
-    margin: 0;
-    display: block;
-    float: left;
 }
 
 #score-container
@@ -33,12 +38,15 @@ body
     background: #bbada0;
     padding: 15px 25px;
     font-size: 25px;
-    height: 25px;
-    line-height: 25px + 22px;
+    /*height: 25px;*/
+
+
+    /*line-height: 25px + 22px;*/
     font-weight: bold;
-    border-radius: 3px;
+    border-radius: 5px;
     color: white;
-    margin-top: 17px;
+    margin-top: 15px;
+    /*margin-top: 17px;*/
 }
 
 .clear
@@ -76,14 +84,6 @@ body
     box-sizing: border-box;
     
 }
-/*
-#canvas-block
-{
-    margin-left: -250px;
-    padding-left: 50%;
-    background: red;
-}
-*/
 
 @media (max-width: 992px) {
     #keypads {
@@ -141,7 +141,6 @@ body
     left: 0;
     right: 0;
     bottom: 0;
-    /*background-color: rgba(0,0,0,0.5);*/
     z-index: 200;
     cursor: pointer;
   }
@@ -174,3 +173,65 @@ body
     -ms-transform: translate(-50%,-50%);
     font-size: 25px;
 }
+
+#heading{
+    text-align: center;
+    width: 530px;
+    height: 80px;
+
+    background: green;
+}
+
+#counters{
+    text-align: center;
+    width: 530px;
+    height: 50px;
+
+    background: blue;
+}
+
+#mainOptions{
+    text-align: center;
+    width: 530px;
+    height: 50px;  
+
+    background: red;
+}
+
+.button{
+    background-color: #8f7a66; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#removeButton
+{
+    background: #bbada0;
+    height: 50px, 50px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: white;
+    position: relative;
+    float: right;
+}
+
+#undoButton
+{
+    background: #bbada0;
+    height: 50px, 50px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: white;
+    position: relative;
+    float: right;
+    margin-left: 5px;
+}
+

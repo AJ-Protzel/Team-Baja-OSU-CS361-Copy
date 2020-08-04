@@ -22,19 +22,31 @@
         <h1 id="title">2048</h1>
         <div id="score-container"></div>
       </div>
+      
 
-      <div class="clear"></div> <!--adds space under heading-->
-      <div id="mainOptions"> <!--box under heading-->
-        <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
-        <input id='settings' type='button' value='Settings'>
-        <input id='highScores' type='button' value='High Score'>
-        <input id='removeCell' type='button' value='Remove cell'>
-        <input id='undoMove' type='button' value='Undo'>
-        <input id='debug-db' type='button' value='debug db send'>
+      
+      <div id="counters"> <!--box under heading-->
+        <!--<input class="button" id='removeCell' type='button' value='Remove cell'>-->
+        <!--<input class="button" id='undoMove' type='button'>-->
+        <!--<button class="button" id='clickMe' type="button" onClick="onClick()" value="Click Me"></button>-->
+        <!--<input onclick="clickMe()" type="button" class="button" id="myButton1" >ZZZ</input>-->
+        <input type="button" class="button" id="undoButton" onclick="undoClick()"></input>
+        <input type="button" class="button" id="removeButton" onclick="removeClick()"></input>
         <br>
       </div>
 
-      
+
+      <div class="clear"></div> <!--adds space under heading-->
+      <div id="mainOptions"> <!--box under heading-->
+        <input class="button" id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
+        <input class="button" id='settings' type='button' value='Settings'>
+        <input class="button" id='highScores' type='button' value='High Score'>
+        <!--<input class="button" id='removeCell' type='button' value='Remove cell'>-->
+        <!--<input class="button" id='undoMove' type='button' value='Undo'>-->
+        <input class="button" id='debug-db' type='button' value='debug db send'>
+        
+        <br>
+      </div>
 
       <div id="canvas-block"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
@@ -56,8 +68,11 @@
             <label for="target">Winning Number:</label>
             <input type="number" id="scoreTarget" value="2048" min="2">
             <div class='clear'></div>
-            <label for='removeAmount'> # to remove</label>
+            <label for='removeAmount'> # of removes</label>
             <input type='number' id='removeAmount' value='2' min ='0'>
+            <div class='clear'></div>
+            <label for='removeAmount'> # of undoes</label>
+            <input type='number' id='undoAmount' value='5' min ='0'>
             <div class='clear'></div>
             <input id='settingsBack' type='button' value='back'>
             <input id="start-new-setting" type="button" value="Start New Game"> <!--resets board, starts new game-->
