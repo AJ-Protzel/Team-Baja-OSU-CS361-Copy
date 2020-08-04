@@ -9,7 +9,6 @@ var endStartNew = document.getElementById('end-start-new'); // button
 
 var setting_button = document.getElementById('settings'); // button
 var setting_form = document.getElementById('settings_form'); // page
-//var setting_back = document.getElementById('highScoreBack'); // back button // in high score page
 
 var scoreButton = document.getElementById('highScores'); // button
 var highScoreSizeButton = document.getElementById('highScoreSize');
@@ -29,17 +28,14 @@ var width = canvas.width / boardSize - 6; // ?class?
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
-var fontSize; // ?class?
 
 var game; // creates a game board
 
-var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
-//startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
 removeCellButton.addEventListener('click',  removeCell);
 
@@ -81,14 +77,13 @@ function grabFromServer(check=false){
 };
 
 function  sendToServer(){
-  let playerName;
-  while (playerName == null){
-    playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  while (game.playerName == null){
+    game.playerName = prompt("New Highscore! Enter name for the leaderboard:");
   };  
   console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
-  payload.name = playerName;
+  payload.name = game.playerName;
   payload.score = game.score;
   payload.size  = game.size;
   payload.debug  = "Send from Client -origin";
@@ -106,10 +101,10 @@ function  sendToServer(){
 }
 
 // arrows keypad event listener
-upKeypad.addEventListener("click", function(err) {up(); checkEnd();});
-downKeypad.addEventListener("click", function(err) {down(); checkEnd();});
-leftKeypad.addEventListener("click", function(err) {left(); checkEnd();});
-rightKeypad.addEventListener("click", function(err) {right(); checkEnd();});
+upKeypad.addEventListener("click", function() {up(); checkEnd();});
+downKeypad.addEventListener("click", function() {down(); checkEnd();});
+leftKeypad.addEventListener("click", function() {left(); checkEnd();});
+rightKeypad.addEventListener("click", function() {right(); checkEnd();});
 
 function removeCell()
 {
@@ -147,7 +142,7 @@ function subtractRemoveCounter(e)
     game.score -= game.board[yPos][xPos].value;
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
-    game.drawAllCells(canvas);
+    game.drawAllCells();
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
     game.removeSquare-=1;
     canvas.removeEventListener('click', subtractRemoveCounter);
@@ -205,10 +200,6 @@ function updateHighscore(scores)
 {
   //game.scoreAdded = true;
   console.log("updating highscore");
-  
-  //gets date for scoreboard when called
-  var today = new Date();
-  var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
 
   /*
   let playerName = prompt("New Highscore! Enter name for the leaderboard:");
@@ -236,11 +227,11 @@ function updateHighscore(scores)
       //console.log(scores[i]);
       document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
       document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
-      document.getElementById('date'+ (i+1).toString()).innerHTML = scores[i].size
+      document.getElementById('size'+ (i+1).toString()).innerHTML = scores[i].size
     } else {
       document.getElementById('name'+ (i+1).toString()).innerHTML = "";
       document.getElementById('score'+ (i+1).toString()).innerHTML = "";
-      document.getElementById('date'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('size'+ (i+1).toString()).innerHTML = "";
     }
   }
 };
@@ -324,6 +315,7 @@ class game2048{
     this.undoes = 5; // number of undoes available
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
+    this.playerName = null;
   };
 
   createBoard()
@@ -366,21 +358,20 @@ class game2048{
     {
       this.board = this.lastMove;
       this.score = this.lastScore;
-      game.drawAllCells(canvas);
+      game.drawAllCells();
       scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
       this.undoes--;
     }
   }
 
-  drawCell(cell, canvas) // Takes in individual cell object and current canvas and draws cell onto canvas
+  drawCell(cell) // Takes in individual cell object and current canvas and draws cell onto canvas
   {
-    let ctx = canvas.getContext('2d');
     ctx.beginPath();
     ctx.rect(cell.x, cell.y, width, width);
     ctx.fillStyle =  this.cellColor(cell.value);
     ctx.fill();
     if (cell.value){
-      fontSize = width / 2.5;
+      let fontSize = width / 2.5;
       ctx.font = fontSize + 'px Arial';
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
@@ -420,19 +411,18 @@ class game2048{
     }
   };
   
-  canvasClean(can) // Takes current canvas and cleans it up.
+  canvasClean() // Takes current canvas and cleans it up.
   {
-    let ctx = can.getContext('2d');
     ctx.clearRect(0, 0, 500, 500);
   };
 
-  drawAllCells(can)
+  drawAllCells()
   {
     for (let i = 0; i < this.size; i++)
     {
       for (let j = 0; j < this.size; j++)
       {
-        this.drawCell(this.board[i][j], can);
+        this.drawCell(this.board[i][j]);
       }
     }
   };
@@ -449,7 +439,7 @@ class game2048{
     return false;
   }
 
-  addRandomcell(can) // class function adds random cell to existing game board in an empty space
+  addRandomcell() // class function adds random cell to existing game board in an empty space
   {
     if (this.checkFull() || this.lastMove == null)  // Returns true if board is full or first turn, else false (this.validMove == true)
     {
@@ -915,8 +905,8 @@ function up() {
     game.moveUp(false);
     game.addUp(false);
     game.moveUp(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -928,8 +918,8 @@ function right() {
     game.moveRight(false);
     game.addRight(false);
     game.moveRight(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -941,8 +931,8 @@ function down() {
     game.moveDown(false);
     game.addDown(false);
     game.moveDown(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -954,8 +944,8 @@ function left() {
     game.moveLeft(false);
     game.addLeft(false);
     game.moveLeft(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -968,6 +958,8 @@ function checkEnd()
   {
     sendToServer();
     document.removeEventListener('keyup', makeMove);
+    // display image if the player ranked 1st, 2nd or 3rd
+    winningImage()
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
@@ -979,6 +971,8 @@ function checkEnd()
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
+    // display image if the player ranked 1st, 2nd or 3rd
+    winningImage()
     var winText = document.getElementById('winText').hidden = true;
   }
 }
@@ -1007,22 +1001,48 @@ function makeMove(event)
     checkEnd();
 };
 
+function winningImage() {
+  var req = new XMLHttpRequest();
+  var payload = {};
+  payload.size = game.size;
+  req.open("POST", "/getDB",true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      console.log('inside grab from server');
+      var response = JSON.parse(req.responseText);
+      let highScores = JSON.parse(response.topscore);
+      for (let i = 0; i < 3; i ++) {
+        if (highScores[i].name == game.playerName && highScores[i].score == game.score) {
+          let winImage = document.querySelector("#winImage");
+          winImage.hidden = false;
+        }
+      }
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  req.send(JSON.stringify(payload));
+}
+
 function startGame() // start new game / reset game and board
 {
+  stop();
+  document.querySelector("#winImage").hidden = true;
   console.log("Start game");
   document.addEventListener('keyup', makeMove);
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
   //offPage = false;
   endOverlay.style.display = "none";
-  var winText = document.getElementById('winText').hidden = false;
+  document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
-  currentGame.canvasClean(canvas);
-  currentGame.addRandomcell(canvas);
-  currentGame.addRandomcell(canvas);
-  currentGame.drawAllCells(canvas);
+  currentGame.canvasClean();
+  currentGame.addRandomcell();
+  currentGame.addRandomcell();
+  currentGame.drawAllCells();
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
   
