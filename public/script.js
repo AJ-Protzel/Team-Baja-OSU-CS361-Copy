@@ -30,7 +30,6 @@ var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
 
 var game; // creates a game board
-var offPage; // bool to show if off game page
 
 var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
@@ -161,7 +160,7 @@ function undoLastMove()
 
 function showSettings(event)
 {
-  offPage = true;
+  document.removeEventListener('keyup', makeMove);
   event.preventDefault();
   console.log("Settings Page");
   canvas.hidden = true;
@@ -173,11 +172,11 @@ function showSettings(event)
 
   back.onclick = function()
   {
+    document.addEventListener('keyup', makeMove);
     setting_form.hidden = true;
     canvas.hidden = false;
     mainOptions.hidden = false;
     keypads.hidden = false;
-    offPage = false;
   };
 
   startNewSetting.onclick = function()
@@ -187,7 +186,7 @@ function showSettings(event)
 }
 
 function showHighscore(event){
-  offPage = true;
+  document.removeEventListener('keyup', makeMove);
   event.preventDefault();
   grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
   console.log("inside score function");
@@ -283,12 +282,6 @@ function checkHighScore(name, currentScore, date) //also player name
     console.log("returning null");
     return null;
   }
-  console.log("High Score Page");
-  mainOptions.hidden = true;
-  canvas.hidden = true;
-  score_form.hidden = false;
-  keypads.hidden = true;
-  offPage = false;
 };
 
 highScoreBack.onclick = function(){
@@ -296,7 +289,7 @@ highScoreBack.onclick = function(){
   canvas.hidden = false;
   mainOptions.hidden = false;
   keypads.hidden = false;
-  offPage = false;
+  document.addEventListener('keyup', makeMove);
 };
 
 class game2048{
@@ -964,16 +957,16 @@ function checkEnd()
   if(game.checkScoreTarget()) // if score target is reached return true
   {
     sendToServer();
+    document.removeEventListener('keyup', makeMove);
     // display image if the player ranked 1st, 2nd or 3rd
     winningImage()
-    offPage = true;
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
   }
   else if(!game.checkValidMove("all"))
   {
-    offPage = true;
+    document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
@@ -984,10 +977,10 @@ function checkEnd()
   }
 }
 
-document.onkeyup = function(event)
+
+function makeMove(event)
 {
-  if(!offPage)
-  {
+  console.log(event);
     if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
     {
       up();
@@ -1006,7 +999,6 @@ document.onkeyup = function(event)
     } 
 
     checkEnd();
-  }
 };
 
 function winningImage() {
@@ -1038,9 +1030,10 @@ function startGame() // start new game / reset game and board
   stop();
   document.querySelector("#winImage").hidden = true;
   console.log("Start game");
+  document.addEventListener('keyup', makeMove);
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
-  offPage = false;
+  //offPage = false;
   endOverlay.style.display = "none";
   document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
