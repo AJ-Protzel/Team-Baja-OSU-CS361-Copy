@@ -85,6 +85,17 @@ body
 }
 */
 
+img {
+    width: 400px;
+    height: 250px;
+    position: absolute;
+    top: 20%;
+    left: 52%;
+    font-size: 50px;
+    color: black;
+    transform: translate(-50%,-50%);
+}
+
 @media (max-width: 992px) {
     #keypads {
         width: 500px;
