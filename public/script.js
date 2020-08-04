@@ -78,14 +78,13 @@ function grabFromServer(check=false){
 };
 
 function  sendToServer(){
-  let playerName;
-  while (playerName == null){
-    playerName = prompt("New Highscore! Enter name for the leaderboard:");
+  while (game.playerName == null){
+    game.playerName = prompt("New Highscore! Enter name for the leaderboard:");
   };  
   console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
-  payload.name = playerName;
+  payload.name = game.playerName;
   payload.score = game.score;
   payload.size  = game.size;
   payload.debug  = "Send from Client -origin";
@@ -323,6 +322,7 @@ class game2048{
     this.undoes = 5; // number of undoes available
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
+    this.playerName = null;
   };
 
   createBoard()
@@ -964,6 +964,8 @@ function checkEnd()
   if(game.checkScoreTarget()) // if score target is reached return true
   {
     sendToServer();
+    // display image if the player ranked 1st, 2nd or 3rd
+    winningImage()
     offPage = true;
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
@@ -976,6 +978,8 @@ function checkEnd()
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
+    // display image if the player ranked 1st, 2nd or 3rd
+    winningImage()
     var winText = document.getElementById('winText').hidden = true;
   }
 }
@@ -1005,14 +1009,40 @@ document.onkeyup = function(event)
   }
 };
 
+function winningImage() {
+  var req = new XMLHttpRequest();
+  var payload = {};
+  payload.size = game.size;
+  req.open("POST", "/getDB",true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function(){
+    if (req.status >=200 && req.status < 400){
+      console.log('inside grab from server');
+      var response = JSON.parse(req.responseText);
+      let highScores = JSON.parse(response.topscore);
+      for (let i = 0; i < 3; i ++) {
+        if (highScores[i].name == game.playerName && highScores[i].score == game.score) {
+          let winImage = document.querySelector("#winImage");
+          winImage.hidden = false;
+        }
+      }
+    } else {
+      console.log("Error in network request: " + req.statusText);
+    }
+  })
+  req.send(JSON.stringify(payload));
+}
+
 function startGame() // start new game / reset game and board
 {
+  stop();
+  document.querySelector("#winImage").hidden = true;
   console.log("Start game");
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
   offPage = false;
   endOverlay.style.display = "none";
-  var winText = document.getElementById('winText').hidden = false;
+  document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
