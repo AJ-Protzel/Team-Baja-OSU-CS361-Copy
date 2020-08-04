@@ -86,12 +86,16 @@ body
 */
 
 img {
-    width: 400px;
-    height: 250px;
+    width: 300px;
+    height: 150px;
+}
+
+#winImage {
     position: absolute;
-    top: 20%;
-    left: 50%;
-    font-size: 50px;
+    top: 25%;
+    left: 51%;
+    text-align: center;
+    font-size: 30px;
     color: black;
     transform: translate(-50%,-50%);
 }
@@ -160,7 +164,7 @@ img {
 #winText{
     position: absolute;
     top: 45%;
-    left: 50%;
+    left: 51%;
     font-size: 50px;
     color: black;
     transform: translate(-50%,-50%);
@@ -170,7 +174,7 @@ img {
 #endText{
     position: absolute;
     top: 55%;
-    left: 50%;
+    left: 51%;
     font-size: 50px;
     color: black;
     transform: translate(-50%,-50%);
@@ -180,7 +184,7 @@ img {
 #end-start-new{
     position: absolute;
     top: 65%;
-    left: 50%;
+    left: 51%;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
     font-size: 25px;
