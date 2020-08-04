@@ -9,7 +9,6 @@ var endStartNew = document.getElementById('end-start-new'); // button
 
 var setting_button = document.getElementById('settings'); // button
 var setting_form = document.getElementById('settings_form'); // page
-//var setting_back = document.getElementById('highScoreBack'); // back button // in high score page
 
 var scoreButton = document.getElementById('highScores'); // button
 var highScoreSizeButton = document.getElementById('highScoreSize');
@@ -29,18 +28,15 @@ var width = canvas.width / boardSize - 6; // ?class?
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
-var fontSize; // ?class?
 
 var game; // creates a game board
 var offPage; // bool to show if off game page
 
-var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
-//startNew.addEventListener('click', function() {startGame(event)});
 startNew.addEventListener('click', checkInput);
 removeCellButton.addEventListener('click',  removeCell);
 
@@ -107,10 +103,10 @@ function  sendToServer(){
 }
 
 // arrows keypad event listener
-upKeypad.addEventListener("click", function(err) {up(); checkEnd();});
-downKeypad.addEventListener("click", function(err) {down(); checkEnd();});
-leftKeypad.addEventListener("click", function(err) {left(); checkEnd();});
-rightKeypad.addEventListener("click", function(err) {right(); checkEnd();});
+upKeypad.addEventListener("click", function() {up(); checkEnd();});
+downKeypad.addEventListener("click", function() {down(); checkEnd();});
+leftKeypad.addEventListener("click", function() {left(); checkEnd();});
+rightKeypad.addEventListener("click", function() {right(); checkEnd();});
 
 function removeCell()
 {
@@ -148,7 +144,7 @@ function subtractRemoveCounter(e)
     game.score -= game.board[yPos][xPos].value;
     scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
-    game.drawAllCells(canvas);
+    game.drawAllCells();
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
     game.removeSquare-=1;
     canvas.removeEventListener('click', subtractRemoveCounter);
@@ -206,10 +202,6 @@ function updateHighscore(scores)
 {
   //game.scoreAdded = true;
   console.log("updating highscore");
-  
-  //gets date for scoreboard when called
-  var today = new Date();
-  var currentDate =  (today.getMonth() + 1) + '/' + (today.getDate()) + '/' + today.getFullYear();
 
   /*
   let playerName = prompt("New Highscore! Enter name for the leaderboard:");
@@ -237,11 +229,11 @@ function updateHighscore(scores)
       //console.log(scores[i]);
       document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
       document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
-      document.getElementById('date'+ (i+1).toString()).innerHTML = scores[i].size
+      document.getElementById('size'+ (i+1).toString()).innerHTML = scores[i].size
     } else {
       document.getElementById('name'+ (i+1).toString()).innerHTML = "";
       document.getElementById('score'+ (i+1).toString()).innerHTML = "";
-      document.getElementById('date'+ (i+1).toString()).innerHTML = "";
+      document.getElementById('size'+ (i+1).toString()).innerHTML = "";
     }
   }
 };
@@ -373,21 +365,20 @@ class game2048{
     {
       this.board = this.lastMove;
       this.score = this.lastScore;
-      game.drawAllCells(canvas);
+      game.drawAllCells();
       scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
       this.undoes--;
     }
   }
 
-  drawCell(cell, canvas) // Takes in individual cell object and current canvas and draws cell onto canvas
+  drawCell(cell) // Takes in individual cell object and current canvas and draws cell onto canvas
   {
-    let ctx = canvas.getContext('2d');
     ctx.beginPath();
     ctx.rect(cell.x, cell.y, width, width);
     ctx.fillStyle =  this.cellColor(cell.value);
     ctx.fill();
     if (cell.value){
-      fontSize = width / 2.5;
+      let fontSize = width / 2.5;
       ctx.font = fontSize + 'px Arial';
       ctx.fillStyle = 'white';
       ctx.textAlign = 'center';
@@ -427,19 +418,18 @@ class game2048{
     }
   };
   
-  canvasClean(can) // Takes current canvas and cleans it up.
+  canvasClean() // Takes current canvas and cleans it up.
   {
-    let ctx = can.getContext('2d');
     ctx.clearRect(0, 0, 500, 500);
   };
 
-  drawAllCells(can)
+  drawAllCells()
   {
     for (let i = 0; i < this.size; i++)
     {
       for (let j = 0; j < this.size; j++)
       {
-        this.drawCell(this.board[i][j], can);
+        this.drawCell(this.board[i][j]);
       }
     }
   };
@@ -456,7 +446,7 @@ class game2048{
     return false;
   }
 
-  addRandomcell(can) // class function adds random cell to existing game board in an empty space
+  addRandomcell() // class function adds random cell to existing game board in an empty space
   {
     if (this.checkFull() || this.lastMove == null)  // Returns true if board is full or first turn, else false (this.validMove == true)
     {
@@ -922,8 +912,8 @@ function up() {
     game.moveUp(false);
     game.addUp(false);
     game.moveUp(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -935,8 +925,8 @@ function right() {
     game.moveRight(false);
     game.addRight(false);
     game.moveRight(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -948,8 +938,8 @@ function down() {
     game.moveDown(false);
     game.addDown(false);
     game.moveDown(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -961,8 +951,8 @@ function left() {
     game.moveLeft(false);
     game.addLeft(false);
     game.moveLeft(false);
-    game.addRandomcell(canvas);
-    game.drawAllCells(canvas);
+    game.addRandomcell();
+    game.drawAllCells();
   }
 }
 
@@ -1026,10 +1016,10 @@ function startGame() // start new game / reset game and board
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
-  currentGame.canvasClean(canvas);
-  currentGame.addRandomcell(canvas);
-  currentGame.addRandomcell(canvas);
-  currentGame.drawAllCells(canvas);
+  currentGame.canvasClean();
+  currentGame.addRandomcell();
+  currentGame.addRandomcell();
+  currentGame.drawAllCells();
   scoreLabel.innerHTML = 'Score : ' + currentGame.score;
   game = currentGame;
   
