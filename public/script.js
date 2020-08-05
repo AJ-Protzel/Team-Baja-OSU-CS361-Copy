@@ -494,38 +494,6 @@ class game2048{
     return false;
   };
 
-  addUp(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let colX = 0; colX < this.size; ++colX)
-    {
-      for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      {
-        if (this.board[rowY][colX].value != null)
-        {
-          let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
-          {
-            if (check == false)
-            {
-              this.score += this.board[cur][colX].value *2;
-              this.board[cur][colX].value *= 2;
-              this.board[cur+1][colX].value = null;  
-            } 
-            else 
-            {
-              return true;
-            }    
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   moveDown(check)
   {
     var curVal;
@@ -571,38 +539,6 @@ class game2048{
             else 
             {
               this.board[y][colX].value = null;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  };
-
-  addDown(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let colX = 0; colX < this.size; ++colX)
-    { 
-      for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      { 
-        if (this.board[rowY][colX].value != null)
-        { 
-          let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
-          {
-            if (check == false)
-            {
-              this.score += this.board[cur][colX].value *2;
-              this.board[cur][colX].value *= 2;
-              this.board[cur+1][colX].value = null;  
-            } 
-            else 
-            {
-              return true;
             }
           }
         }
@@ -663,38 +599,6 @@ class game2048{
     return false;
   };
 
-  addLeft(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */  
-    for (let rowY = 0; rowY < this.size; ++rowY)
-    {
-      for (let colX = this.size - 2; colX >= 0; --colX)
-      {
-        if (this.board[rowY][colX].value != null)
-        {
-          let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
-          {
-            if (check == false)
-            {
-              this.score  += this.board[rowY][cur + 1].value *2;
-              this.board[rowY][cur + 1].value *= 2;
-              this.board[rowY][cur].value = null;  
-            } 
-            else 
-            {
-              return true;
-            }       
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   moveRight(check)
   {
     var curVal;
@@ -746,32 +650,57 @@ class game2048{
     return false;
   };
 
-  addRight(check)
+  add(dir, check)
   {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let rowY = 0; rowY < this.size; ++rowY)
+    if(dir == "v")
     {
-      for (let colX = this.size - 2; colX >= 0; --colX)
+      for (let colX = 0; colX < this.size; ++colX)
       {
-        if (this.board[rowY][colX].value != null)
+        for (let rowY = this.size - 2; rowY >= 0; --rowY)
         {
-          let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          if (this.board[rowY][colX].value != null)
           {
-            if (check == false)
+            let cur = rowY;
+            if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
             {
-              this.score  += this.board[rowY][cur + 1].value *2;
-              this.board[rowY][cur + 1].value *= 2;
-              this.board[rowY][cur].value = null;
-            } 
-            else 
+              if (check == false)
+              {
+                this.score += this.board[cur][colX].value *2;
+                this.board[cur][colX].value *= 2;
+                this.board[cur+1][colX].value = null;  
+              } 
+              else 
+              {
+                return true;
+              }    
+            }
+          }
+        }
+      }
+    }
+    else if(dir == "h")
+    {
+      for (let rowY = 0; rowY < this.size; ++rowY)
+      {
+        for (let colX = this.size - 2; colX >= 0; --colX)
+        {
+          if (this.board[rowY][colX].value != null)
+          {
+            let cur = colX;
+            if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
             {
-              return true;
-            }          
-          } 
+              if (check == false)
+              {
+                this.score  += this.board[rowY][cur + 1].value *2;
+                this.board[rowY][cur + 1].value *= 2;
+                this.board[rowY][cur].value = null;  
+              } 
+              else 
+              {
+                return true;
+              }       
+            }
+          }
         }
       }
     }
@@ -792,7 +721,7 @@ class game2048{
     if(side == "up" || side == "all")
     {
       move = this.moveUp(true);
-      add = this.addUp(true);
+      add = this.add("v", true);
 
       if(move || add)
       {
@@ -802,7 +731,7 @@ class game2048{
     if(side == "down" || side == "all")
     {
       move = this.moveDown(true);
-      add = this.addDown(true);
+      add = this.add("v", true);
 
       if(move || add)
       {
@@ -812,7 +741,7 @@ class game2048{
     if(side == "left" || side == "all")
     {
       move = this.moveLeft(true);
-      add = this.addLeft(true);
+      add = this.add("h", true);
       
       if(move || add)
       {
@@ -822,7 +751,7 @@ class game2048{
     if(side == "right" || side == "all")
     {
       move = this.moveRight(true);
-      add = this.addRight(true);
+      add = this.add("h", true);
   
     if(move || add)
     {
@@ -880,20 +809,8 @@ function up() {
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveUp(false);
-    game.addUp(false);
+    game.add("v", false);
     game.moveUp(false);
-    game.addRandomcell();
-    game.drawAllCells();
-  }
-}
-
-function right() {
-  if(game.checkValidMove("right")) {
-    game.moveMade = true;
-    game.deepCopyBoard();
-    game.moveRight(false);
-    game.addRight(false);
-    game.moveRight(false);
     game.addRandomcell();
     game.drawAllCells();
   }
@@ -904,7 +821,7 @@ function down() {
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveDown(false);
-    game.addDown(false);
+    game.add("v", false);
     game.moveDown(false);
     game.addRandomcell();
     game.drawAllCells();
@@ -916,8 +833,20 @@ function left() {
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveLeft(false);
-    game.addLeft(false);
+    game.add("h", false);
     game.moveLeft(false);
+    game.addRandomcell();
+    game.drawAllCells();
+  }
+}
+
+function right() {
+  if(game.checkValidMove("right")) {
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveRight(false);
+    game.add("h", false);
+    game.moveRight(false);
     game.addRandomcell();
     game.drawAllCells();
   }
@@ -955,10 +884,6 @@ function makeMove(event)
     {
       up();
     }
-    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
-    { 
-      right();
-    }
     else if ((event.keyCode === 40 || event.keyCode === 83)) //down
     {
       down();
@@ -967,6 +892,10 @@ function makeMove(event)
     {
       left();
     } 
+    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
+    { 
+      right();
+    }
 
     checkEnd();
 };
