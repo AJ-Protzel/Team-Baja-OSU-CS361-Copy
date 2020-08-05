@@ -4,7 +4,6 @@ body
 {
     margin: 0;
     padding: 0;
-  
     background: #faf8ef;
     color: #776E65;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
@@ -18,15 +17,9 @@ body
 }
 
 #title
-{
-    
+{    
     margin-top: 0;
-    /*display: block;*/
-    /*float: left;*/
-
-    /*position: relative;*/
     float: left;
-
     font-size: 80px;
     font-weight: bold;
 }
@@ -38,15 +31,10 @@ body
     background: #bbada0;
     padding: 15px 25px;
     font-size: 25px;
-    /*height: 25px;*/
-
-
-    /*line-height: 25px + 22px;*/
     font-weight: bold;
     border-radius: 5px;
     color: white;
     margin-top: 15px;
-    /*margin-top: 17px;*/
 }
 
 .clear
@@ -82,7 +70,6 @@ body
     background: #776e65;
     border-radius: 6px;
     box-sizing: border-box;
-    
 }
 
 img {
@@ -193,28 +180,22 @@ img {
     text-align: center;
     width: 530px;
     height: 80px;
-
-    background: green;
 }
 
 #counters{
     text-align: center;
     width: 530px;
     height: 50px;
-
-    background: blue;
 }
 
 #mainOptions{
     text-align: center;
     width: 530px;
     height: 50px;  
-
-    background: red;
 }
 
 .button{
-    background-color: #8f7a66; /* Green */
+    background-color: #8f7a66;
     border: none;
     color: white;
     padding: 10px 15px;

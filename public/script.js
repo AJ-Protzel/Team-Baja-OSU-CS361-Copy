@@ -1,13 +1,5 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-
-var undoButton = document.getElementById('undoButton');
-var removeButton = document.getElementById('removeButton');
-
-
-
-
-
 var scoreLabel = document.getElementById('score-container'); // display
 var mainOptions = document.getElementById('mainOptions'); // box that holds buttons
 var sizeInput = document.getElementById('size'); // button // in setting page
@@ -23,9 +15,8 @@ var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
-//var removeCellButton = document.getElementById('removeCell');
-//var disableRemoveButton  = document.getElementById('disableRemove');
-//var undoButton = document.getElementById('undoMove');
+var undoButton = document.getElementById('undoButton');
+var removeButton = document.getElementById('removeButton');
 var scoreHolder = null // TODO: grab 4x4 board scores
 var debugDB = document.getElementById('debug-db');
 
@@ -45,14 +36,11 @@ var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
 startNew.addEventListener('click', checkInput);
-//removeCellButton.addEventListener('click',  removeCell);
 
 startNew.addEventListener('click', checkInput); // checks valid score target then start game
 endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
 setting_button.addEventListener('click', showSettings); // opens settings page
 scoreButton.addEventListener('click',  showHighscore); // opens high score page
-//removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
-//undoButton.addEventListener('click',  undoLastMove); // undoes move
 debugDB.addEventListener('click', grabFromServer);
 highScoreSizeButton.addEventListener('click', function(){
   grabFromServer(true);
@@ -75,7 +63,6 @@ function grabFromServer(check=false){
     if (req.status >=200 && req.status < 400){
       console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
-      //console.log(response.topscore);
       updateHighscore(JSON.parse(response.topscore));
     } else {
       console.log("Error in network request: " + req.statusText);
@@ -116,10 +103,6 @@ rightKeypad.addEventListener("click", function() {right(); checkEnd();});
 
 function removeClick()
 {
-  //if (game.removes == 0){
-  //  alert("You are out of moves!");
-  //  return
-  //}
   game.remove_check = false;
   canvas.addEventListener('click', subtractRemoveCounter);
   
@@ -157,7 +140,7 @@ function subtractRemoveCounter(e)
     canvas.removeEventListener('click', subtractRemoveCounter);
     game.moveMade = true;
 
-    removeButton.value = game.removes + " :Removes";
+    removeButton.value = game.removes + " :Remove";
 
     return;
   } 
@@ -167,7 +150,7 @@ function undoClick()
 {
   game.undoMove();
   game.moveMade = false;
-  removeButton.value = game.removes + " :Removes";
+  removeButton.value = game.removes + " :Remove";
 }
 
 function showSettings(event)
@@ -212,24 +195,6 @@ function updateHighscore(scores)
 {
   //game.scoreAdded = true;
   console.log("updating highscore");
-
-  /*
-  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
-  let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
-  if(highscorePlacement != null)
-  {
-    sendToServer(PlayerName, game.score, game.size) // current DB catches size Not date.
-   // scoreHolder = DB pull to include new entry
-  }
-
-  /*
-  if(highscoreScores.length > 10)
-  {
-    highscoreNames.pop()
-    highscoreScores.pop()
-    highscoreDates.pop()
-  }
-  */
 
   //update the board
   for(let i = 0; i < 10; i++)
@@ -374,7 +339,7 @@ class game2048{
       scoreLabel.innerHTML = 'Score: ' + game.score; // add score after move
       this.undoes--;
     }
-    undoButton.value = this.undoes + " :Undoes";
+    undoButton.value = this.undoes + " :Undo";
   }
 
   drawCell(cell) // Takes in individual cell object and current canvas and draws cell onto canvas
@@ -912,7 +877,6 @@ function canvasClean() // removes cells colors
 
 function up() {
   if(game.checkValidMove("up")) {
-    //console.log("UP Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveUp(false);
@@ -925,7 +889,6 @@ function up() {
 
 function right() {
   if(game.checkValidMove("right")) {
-    //console.log("Right Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveRight(false);
@@ -938,7 +901,6 @@ function right() {
 
 function down() {
   if(game.checkValidMove("down")) {
-    //console.log("Down Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveDown(false);
@@ -951,7 +913,6 @@ function down() {
 
 function left() {
   if(game.checkValidMove("left")) {
-    //console.log("Left Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveLeft(false);
@@ -962,8 +923,7 @@ function left() {
   }
 }
 
-// keyboard button inputs listener
-function checkEnd()
+function checkEnd() // keyboard button inputs listener
 {
   scoreLabel.innerHTML = 'Score: ' + game.score;
 
@@ -971,8 +931,7 @@ function checkEnd()
   {
     sendToServer();
     document.removeEventListener('keyup', makeMove);
-    // display image if the player ranked 1st, 2nd or 3rd
-    winningImage()
+    winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     canvas.style.opacity = '0.5';
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
@@ -984,12 +943,10 @@ function checkEnd()
     mainOptions.hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
-    // display image if the player ranked 1st, 2nd or 3rd
-    winningImage()
+    winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     var winText = document.getElementById('winText').hidden = true;
   }
 }
-
 
 function makeMove(event)
 {
@@ -1046,7 +1003,6 @@ function startGame() // start new game / reset game and board
   document.addEventListener('keyup', makeMove);
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
-  //offPage = false;
   endOverlay.style.display = "none";
   document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
@@ -1057,12 +1013,9 @@ function startGame() // start new game / reset game and board
   currentGame.addRandomcell();
   currentGame.drawAllCells();
   scoreLabel.innerHTML = 'Score: ' + currentGame.score;
-  undoButton.value = currentGame.undoes + " :Undoes";
-  removeButton.value = currentGame.removes + " :Removes";
+  undoButton.value = currentGame.undoes + " :Undo";
+  removeButton.value = currentGame.removes + " :Remove";
   game = currentGame;
-  
-  //endOverlay.style.display = "block";
-  //var winText = document.getElementById('winText').hidden = false;
 }
 
 startGame();
