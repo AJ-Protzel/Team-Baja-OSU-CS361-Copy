@@ -1033,9 +1033,15 @@ function easterEggScore()
   payload.debug  = "Send from Client -origin";
   req.open('POST', '/sendDB', true);
   req.setRequestHeader('Content-Type', 'application/json');
-  req.addEventListener('load', function(){
-    if (req.status >=200 && req.status < 400){
+  req.addEventListener('load', function()
+  {
+    if (req.status >=200 && req.status < 400)
+    {
       var response = JSON.parse(req.responseText);
+    }
+  }
+}
+
 function winningImage() {
   var req = new XMLHttpRequest();
   var payload = {};
