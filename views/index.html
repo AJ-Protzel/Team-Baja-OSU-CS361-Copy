@@ -32,9 +32,9 @@
       </div>
 
       <div id="mainOptions"> <!--box under heading-->
-        <div id="pages">
+        <div id="mainOp">
           <input type="button" class="button" value="Start New Game" onclick="startClick()"></input> 
-          <input type="button" class="button" value="Settings" onclick="showSettings()"></input> 
+          <input type="button" class="button" id="settingsButton" value="Settings" onclick="toggleSettings()"></input> 
           <!--<input type="button" class="button" value='Debug' onclick="grabFromServer()"></input>-->
         </div>
         <div id="counters">
@@ -48,11 +48,13 @@
 
         <div hidden id='settingsForm'> <!-- Holds setting options and hides when not needed.-->
           <form>
+            <!--
             <div id="settingsButtonsBlock">
               <input type="button" class="button" id="start-new-setting" value="Start New Game"></input>
 
-              <input type="button" class="button" id='settingsBack' value='back'></input>
+              <input type="button" class="button" id='settingsBack' value='back' onclick="backClick()"></input>
             </div>
+          -->
 
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
             <select id="size">

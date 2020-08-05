@@ -5,6 +5,7 @@
 //var scoreButton = document.getElementById('highScores'); // button
 
 var setting_form = document.getElementById('settingsForm'); // page
+//var back = document.getElementById('settingsBack');
 
 
 var scoreButton = document.getElementById('scoreButton'); // display
@@ -162,24 +163,29 @@ function undoClick()
   removeButton.value = game.removes + " :Remove";
 }
 
-function showSettings(event)
+function toggleSettings(event)
 {
   document.removeEventListener('keyup', makeMove);
-  //event.preventDefault();
-  console.log("Settings Page");
-  //canvas.hidden = true;
-  document.getElementById('canvas').hidden = true;
-  setting_form.hidden = false;
-  //document.getElementById('settingsForm').hidden = false;
-  //mainOptions.hidden = true;
-  document.getElementById('pages').hidden = true;
-  document.getElementById('counters').hidden = true;
+  if(document.getElementById('canvas').hidden == false)
+  {
+    document.removeEventListener('keyup', makeMove);
+    //event.preventDefault();
+    console.log("Settings Page");
+    //canvas.hidden = true;
+    document.getElementById('canvas').hidden = true;
+    setting_form.hidden = false;
+    //document.getElementById('settingsForm').hidden = false;
+    //mainOptions.hidden = true;
+    //document.getElementById('mainOp').hidden = true;
+    document.getElementById('counters').hidden = true;
 
-  keypads.hidden = true;
-  var back = document.getElementById('settingsBack');
-  startNewSetting = document.getElementById('start-new-setting'); // button
+    keypads.hidden = true;
 
-  back.onclick = function()
+    startNewSetting = document.getElementById('start-new-setting'); // button
+
+    document.getElementById('settingsButton').value = "Back";
+  }
+  else
   {
     document.addEventListener('keyup', makeMove);
     setting_form.hidden = true;
@@ -187,24 +193,57 @@ function showSettings(event)
     //canvas.hidden = false;
     document.getElementById('canvas').hidden = false;
     //mainOptions.hidden = false;
-    document.getElementById('pages').hidden = false;
+    //document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    keypads.hidden = false;
+    document.getElementById('settingsButton').value = "Settings";
+  }
+
+
+
+
+  /*
+  function backClick()
+  {
+    document.addEventListener('keyup', makeMove);
+    setting_form.hidden = true;
+    //document.getElementById('settingsForm').hidden = true;
+    //canvas.hidden = false;
+    document.getElementById('canvas').hidden = false;
+    //mainOptions.hidden = false;
+    //document.getElementById('mainOp').hidden = false;
     document.getElementById('counters').hidden = false;
     keypads.hidden = false;
   };
-
+*/
+/*
   startNewSetting.onclick = function()
   {
     checkInput();
   };
+  */
 }
-
+/*
+function backClick()
+  {
+    document.addEventListener('keyup', makeMove);
+    setting_form.hidden = true;
+    //document.getElementById('settingsForm').hidden = true;
+    //canvas.hidden = false;
+    document.getElementById('canvas').hidden = false;
+    //mainOptions.hidden = false;
+    //document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    keypads.hidden = false;
+  };
+*/
 function showHighScores(event){
   document.removeEventListener('keyup', makeMove);
   //event.preventDefault();
   grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
   console.log("HighScores Page");
   //mainOptions.hidden = true;
-  document.getElementById('pages').hidden = true;
+  //document.getElementById('mainOp').hidden = true;
   document.getElementById('counters').hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
@@ -285,7 +324,7 @@ highScoreBack.onclick = function(){
   score_form.hidden = true;
   canvas.hidden = false;
   //mainOptions.hidden = false;
-  document.getElementById('pages').hidden = false;
+  //document.getElementById('mainOp').hidden = false;
   document.getElementById('counters').hidden = false;
   keypads.hidden = false;
   document.addEventListener('keyup', makeMove);
@@ -885,7 +924,7 @@ function checkEnd() // keyboard button inputs listener
     winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     canvas.style.opacity = '0.5';
     //mainOptions.hidden = true;
-  document.getElementById('pages').hidden = true;
+  //document.getElementById('mainOp').hidden = true;
   document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
   }
@@ -894,8 +933,8 @@ function checkEnd() // keyboard button inputs listener
     document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
     //mainOptions.hidden = true;
-  document.getElementById('pages').hidden = true;
-  document.getElementById('counters').hidden = true;
+    //document.getElementById('mainOp').hidden = true;
+    document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
     winningImage(); // display image if the player ranked 1st, 2nd or 3rd
@@ -995,8 +1034,8 @@ function startClick()
 {
   checkInput();
   //mainOptions.hidden = false;
-  document.getElementById('pages').hidden = false;
-  document.getElementById('counters').hidden = false;
+  //document.getElementById('mainOp').hidden = false;
+  
   startGame();
 }
 
