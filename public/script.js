@@ -4,6 +4,8 @@
 //var setting_button = document.getElementById('settings'); // button
 //var scoreButton = document.getElementById('highScores'); // button
 
+var setting_form = document.getElementById('settingsForm'); // page
+
 
 var scoreButton = document.getElementById('scoreButton'); // display
 var undoButton = document.getElementById('undoButton');
@@ -31,7 +33,7 @@ var removeButton = document.getElementById('removeButton');
 var sizeInput = document.getElementById('size'); // button // in setting page
 var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class? // in setting page
 
-//var setting_form = document.getElementById('settings_form'); // page
+
 var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
@@ -165,9 +167,10 @@ function showSettings(event)
   document.removeEventListener('keyup', makeMove);
   //event.preventDefault();
   console.log("Settings Page");
-  canvas.hidden = true;
-  //setting_form.hidden = false;
-  document.getElementById('settingsForm').hidden = false;
+  //canvas.hidden = true;
+  document.getElementById('canvas').hidden = true;
+  setting_form.hidden = false;
+  //document.getElementById('settingsForm').hidden = false;
   //mainOptions.hidden = true;
   document.getElementById('pages').hidden = true;
   document.getElementById('counters').hidden = true;
@@ -179,9 +182,10 @@ function showSettings(event)
   back.onclick = function()
   {
     document.addEventListener('keyup', makeMove);
-    //setting_form.hidden = true;
-    document.getElementById('settingsForm').hidden = true;
-    canvas.hidden = false;
+    setting_form.hidden = true;
+    //document.getElementById('settingsForm').hidden = true;
+    //canvas.hidden = false;
+    document.getElementById('canvas').hidden = false;
     //mainOptions.hidden = false;
     document.getElementById('pages').hidden = false;
     document.getElementById('counters').hidden = false;
@@ -949,6 +953,7 @@ function winningImage() {
 function startGame() // start new game / reset game and board
 {
   stop();
+
   document.querySelector("#winImage").hidden = true;
   console.log("Start game");
   document.addEventListener('keyup', makeMove);
@@ -966,6 +971,7 @@ function startGame() // start new game / reset game and board
   scoreButton.value = 'Score: ' + currentGame.score;
   undoButton.value = currentGame.undoes + " :Undo";
   removeButton.value = currentGame.removes + " :Remove";
+
   game = currentGame;
 }
 

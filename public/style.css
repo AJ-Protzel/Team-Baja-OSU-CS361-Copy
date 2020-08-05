@@ -190,21 +190,28 @@ img
 
 #settingsForm
 {
-    display: block;
+    position: absolute;
+   
+    width: 530px;
+    height: 530px;
+
+    
+   
 }
 
-
-
-
-#size-title
+#settingsButtonsBlock
 {
-    float: left;
-    margin-top: 0px;
 
-    height: 500px;
-    width: 500px;
-    background: red;
+   
+    width: 530px;
+    height: 70px;
+
 }
+
+
+
+
+
 /*
 #size
 {
