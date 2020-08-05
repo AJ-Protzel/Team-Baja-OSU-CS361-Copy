@@ -1039,7 +1039,7 @@ function easterEggScore()
     {
       var response = JSON.parse(req.responseText);
     }
-  }
+  })
 }
 
 function winningImage() {
