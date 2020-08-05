@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 app.get('/', function(req, res) {
     res.sendFile('views/index.html', {root: __dirname })
 });
+
 app.post('/getDB', function(req, res, next){
     let context = {};
     var query = req.body;
