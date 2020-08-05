@@ -129,9 +129,9 @@ function undoClick()
 
 function toggleSettings(event)
 {
-  document.removeEventListener('keyup', makeMove);
   if(document.getElementById('canvas').hidden == false)
   {
+    document.removeEventListener('keyup', makeMove);
     console.log("Settings Page");
     document.getElementById('canvas').hidden = true;
     document.getElementById('settingsForm').hidden = false;
@@ -142,21 +142,22 @@ function toggleSettings(event)
   }
   else
   {
+    document.addEventListener('keyup', makeMove);
     document.getElementById('settingsForm').hidden = true;
     document.getElementById('canvas').hidden = false;
+    document.getElementById('mainOp').hidden = false;
     document.getElementById('counters').hidden = false;
     document.getElementById('scoreButton').hidden = false;
     keypads.hidden = false;
     document.getElementById('settingsButton').value = "Settings";
   }
+
 }
 
 function toggleHighScores(event){
-  document.removeEventListener('keyup', makeMove);
-
   if(document.getElementById('canvas').hidden == false)
   {
-    
+    document.removeEventListener('keyup', makeMove);
     grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
     console.log("HighScores Page");
     document.getElementById('mainOp').hidden = true;
@@ -838,13 +839,15 @@ function checkEnd() // keyboard button inputs listener
     document.removeEventListener('keyup', makeMove);
     winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     canvas.style.opacity = '0.5';
-  document.getElementById('counters').hidden = true;
+    document.getElementById('mainOp').hidden = true;
+    document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
   }
   else if(!game.checkValidMove("all"))
   {
     document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
+    document.getElementById('mainOp').hidden = true;
     document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
@@ -910,6 +913,8 @@ function startGame() // start new game / reset game and board
   canvas.style.opacity = '1.0'; //reset board opacity to normal
   endOverlay.style.display = "none";
   document.getElementById('winText').hidden = false;
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('coutners').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
@@ -940,7 +945,13 @@ function checkInput() {
 
 function startClick()
 {
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('counters').hidden = false;
   checkInput();
+  document.getElementById('canvas').hidden = true;
+  toggleSettings();
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('coutners').hidden = false;
   startGame();
 }
 

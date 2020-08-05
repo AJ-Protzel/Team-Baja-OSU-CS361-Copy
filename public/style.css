@@ -165,18 +165,6 @@ img
     float: left;
 }
 
-/*
-#canvasBlock {
-    margin-left: -250px;
-    padding-left: 50%;
-    margin-top: 25px;
-
-   
-
-    background: red;
-}
-*/
-
 #canvas
 { 
     position: relative;
@@ -186,48 +174,26 @@ img
     box-sizing: border-box;
 }
 
-
-
 #settingsForm
 {
     position: absolute;
-
     margin-top: 65px;
-    
-   
     width: 530px;
     height: 530px;
-
-   
 }
 
 #settingsButtonsBlock
 {
-
-   
     width: 530px;
     height: 70px;
-
 }
 
-
-
-
-
-/*
-#size
-{
-    width: 50px;
-    margin-left: 10px;
-    border-radius: 3px;
-}
-*/
 .clear
 {
     clear: both;
 }
 
-/*
+
 @media (max-width: 992px) {
 #keypads {
     width: 500px;
@@ -274,4 +240,4 @@ img
     display: none!important;
 }
 }
-*/
+
