@@ -10,10 +10,84 @@ body
     font-size: 18px;
 }
 
+#endOverlay 
+{
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    color: black;
+    font-size: 50px;
+    /*cursor: pointer;*/
+}
+
+#winImage
+{
+    position: absolute;
+    top: 25%;
+    left: 51%;
+    text-align: center;
+    font-size: 30px;
+    color: black;
+    transform: translate(-50%,-50%);
+}
+
+img 
+{
+    width: 300px;
+    height: 150px;
+}
+
+#winText
+{
+    position: absolute;
+    top: 45%;
+    left: 51%;
+    /*font-size: 50px;
+    color: black;*/
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+#endText
+{
+    position: absolute;
+    top: 55%;
+    left: 51%;
+    /*font-size: 50px;
+    color: black;*/
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+
+
+
+#endStartButton
+{
+    position: absolute;
+    top: 65%;
+    left: 51%;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    font-size: 25px;
+}
+
 #container
 {
-    width: 500px;
+    width: 530px;
     margin: 0 auto;
+}
+
+#heading
+{
+    text-align: center;
+    width: 530px;
+    height: 80px;
 }
 
 #title
@@ -24,12 +98,15 @@ body
     font-weight: bold;
 }
 
-#score-container
+#scoreButton
 {
     position: relative;
     float: right;
     background: #bbada0;
-    padding: 15px 25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 197px;
+
     font-size: 25px;
     font-weight: bold;
     border-radius: 5px;
@@ -37,34 +114,71 @@ body
     margin-top: 15px;
 }
 
-.clear
+#mainOptions
 {
-    clear: both;
+    width: 530px;
+    height: 50px;  
+    position: absolute;
+    display: flex;
 }
 
-#size-container
+#pages
 {
-    margin-top: 15px;
-    margin-left: -122px;
-    padding-left: 50%;
+    width: 265px;
+    height: 50px;  
 }
 
-#size-title
+#counters
 {
+    width: 265px;
+    height: 50px;  
+}
+
+.displayButton
+{
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    background: #bbada0;
+    height: 50px, 50px;
+    border-radius: 5px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 5px;
+    float: right;
+}
+
+.button
+{
+    background-color: #8f7a66;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-right: 5px;
     float: left;
-    margin-top: 0px;
 }
 
-#size
-{
-    width: 50px;
-    margin-left: 10px;
-    border-radius: 3px;
+/*
+#canvasBlock {
+    margin-left: -250px;
+    padding-left: 50%;
+    margin-top: 25px;
+
+   
+
+    background: red;
 }
+*/
 
 #canvas
-{
-    margin-top: 20px;
+{ 
     position: relative;
     padding: 15px;
     background: #776e65;
@@ -72,162 +186,83 @@ body
     box-sizing: border-box;
 }
 
-img {
-    width: 300px;
-    height: 150px;
+
+
+#settingsForm
+{
+    display: block;
 }
 
-#winImage {
-    position: absolute;
-    top: 25%;
-    left: 51%;
-    text-align: center;
-    font-size: 30px;
-    color: black;
-    transform: translate(-50%,-50%);
+
+
+
+#size-title
+{
+    float: left;
+    margin-top: 0px;
+
+    height: 500px;
+    width: 500px;
+    background: red;
+}
+/*
+#size
+{
+    width: 50px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
+*/
+.clear
+{
+    clear: both;
 }
 
+/*
 @media (max-width: 992px) {
-    #keypads {
-        width: 500px;
-        margin: 0 auto;
-    }
+#keypads {
+    width: 500px;
+    margin: 0 auto;
+}
 
-    #canvas-block {
-        margin-left: -250px;
-        padding-left: 50%;
-        margin-top: 25px;
-    }
+#canvasBlock {
+    margin-left: -250px;
+    padding-left: 50%;
+    margin-top: 25px;
+}
 
-    #keypad-up, #keypad-down, #keypad-left, #keypad-right {
-        position: relative;
-    }
+#keypad-up, #keypad-down, #keypad-left, #keypad-right {
+    position: relative;
+}
 
-    #keypad-up {
-        top: -580px;
-        left: 250px;
-    }
+#keypad-up {
+    top: -580px;
+    left: 250px;
+}
 
-    #keypad-down {
-        top: -10px;
-        left: 170px;
-    }
+#keypad-down {
+    top: -10px;
+    left: 170px;
+}
 
-    #keypad-left {
-        top: -295px;
-        left: -66px;
-    }
+#keypad-left {
+    top: -295px;
+    left: -66px;
+}
 
-    #keypad-right {
-        top: -295px;
-        left: 486px;
-    }
+#keypad-right {
+    top: -295px;
+    left: 486px;
+}
 
-    .fa {
-        font-size: 3rem;
-    }
+.fa {
+    font-size: 3rem;
+}
 }
 
 @media (min-width: 992px) {
-    .fa {
-        display: none!important;
-    }
+.fa {
+    display: none!important;
 }
-
-#endOverlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 200;
-    cursor: pointer;
-  }
-  
-#winText{
-    position: absolute;
-    top: 45%;
-    left: 51%;
-    font-size: 50px;
-    color: black;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
 }
-
-#endText{
-    position: absolute;
-    top: 55%;
-    left: 51%;
-    font-size: 50px;
-    color: black;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-}
-
-#end-start-new{
-    position: absolute;
-    top: 65%;
-    left: 51%;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-    font-size: 25px;
-}
-
-#heading{
-    text-align: center;
-    width: 530px;
-    height: 80px;
-}
-
-#counters{
-    text-align: center;
-    width: 530px;
-    height: 50px;
-}
-
-#mainOptions{
-    text-align: center;
-    width: 530px;
-    height: 50px;  
-}
-
-.button{
-    background-color: #8f7a66;
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-#removeButton
-{
-    background: #bbada0;
-    height: 50px, 50px;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 5px;
-    color: white;
-    position: relative;
-    float: right;
-}
-
-#undoButton
-{
-    background: #bbada0;
-    height: 50px, 50px;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 5px;
-    color: white;
-    position: relative;
-    float: right;
-    margin-left: 5px;
-}
-
+*/

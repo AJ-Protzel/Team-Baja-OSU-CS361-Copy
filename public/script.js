@@ -1,33 +1,48 @@
 /*code adapted from https://github.com/amadevBox/2048*/
 
-var scoreLabel = document.getElementById('score-container'); // display
-var mainOptions = document.getElementById('mainOptions'); // box that holds buttons
+//var startNew = document.getElementById('start-new'); // button
+//var setting_button = document.getElementById('settings'); // button
+//var scoreButton = document.getElementById('highScores'); // button
+
+
+var scoreButton = document.getElementById('scoreButton'); // display
+var undoButton = document.getElementById('undoButton');
+var removeButton = document.getElementById('removeButton');
+
+//var debugDB = document.getElementById('debug-db');
+//debugDB.addEventListener('click', grabFromServer);
+
+
+//startNew.addEventListener('click', startClick); // checks valid score target then start game
+//setting_button.addEventListener('click', showSettings); // opens settings page
+//scoreButton.addEventListener('click',  showHighScores); // opens high score page
+
+
+//var mainOptions = document.getElementsByClassName("hidden");
+//var endStartNew = document.getElementById('endStartButton');
+//endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); 
+
+
+
+
+
+
+
 var sizeInput = document.getElementById('size'); // button // in setting page
 var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class? // in setting page
-var startNew = document.getElementById('start-new'); // button
-var endStartNew = document.getElementById('end-start-new'); // button
 
-var setting_button = document.getElementById('settings'); // button
-var setting_form = document.getElementById('settings_form'); // page
-
-var scoreButton = document.getElementById('highScores'); // button
+//var setting_form = document.getElementById('settings_form'); // page
 var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
 var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
-var undoButton = document.getElementById('undoButton');
-var removeButton = document.getElementById('removeButton');
 var scoreHolder = null // TODO: grab 4x4 board scores
-var debugDB = document.getElementById('debug-db');
-
 var endOverlay = document.getElementById('endOverlay'); // page
-
 var canvas = document.getElementById('canvas');
 var width = canvas.width / boardSize - 6; // ?class?
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
-
 var game; // creates a game board
 
 var upKeypad = document.querySelector("#keypad-up");
@@ -35,19 +50,11 @@ var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
-startNew.addEventListener('click', checkInput);
+highScoreSizeButton.addEventListener('click', function(){grabFromServer(true);})
 
-startNew.addEventListener('click', checkInput); // checks valid score target then start game
-endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
-setting_button.addEventListener('click', showSettings); // opens settings page
-scoreButton.addEventListener('click',  showHighscore); // opens high score page
-debugDB.addEventListener('click', grabFromServer);
-highScoreSizeButton.addEventListener('click', function(){
-  grabFromServer(true);
-})
 
 function grabFromServer(check=false){
-  console.log("inside grab from server");
+  console.log("GrabServer Page");
   var payload = {};
   if (check == false)
   {
@@ -61,7 +68,7 @@ function grabFromServer(check=false){
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      console.log('inside grab from server');
+      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
       updateHighscore(JSON.parse(response.topscore));
     } else {
@@ -71,11 +78,11 @@ function grabFromServer(check=false){
   req.send(JSON.stringify(payload));
 };
 
-function  sendToServer(){
+function sendToServer(){
   while (game.playerName == null){
     game.playerName = prompt("New Highscore! Enter name for the leaderboard:");
   };  
-  console.log('into send server Client side');
+  //console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
   payload.name = game.playerName;
@@ -91,7 +98,7 @@ function  sendToServer(){
       console.log("Error in network request: " + req.statusText);
     }
   })
-  console.log(JSON.stringify(payload));
+  //console.log(JSON.stringify(payload));
   req.send(JSON.stringify(payload));
 }
 
@@ -132,7 +139,7 @@ function subtractRemoveCounter(e)
     }
 
     game.score -= game.board[yPos][xPos].value;
-    scoreLabel.innerHTML = 'Score: ' + game.score; // add score after removals
+    scoreButton.value = 'Score: ' + game.score; // add score after removals
     game.board[yPos][xPos].value = null;
     game.drawAllCells();
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
@@ -156,11 +163,15 @@ function undoClick()
 function showSettings(event)
 {
   document.removeEventListener('keyup', makeMove);
-  event.preventDefault();
+  //event.preventDefault();
   console.log("Settings Page");
   canvas.hidden = true;
-  setting_form.hidden = false;
-  mainOptions.hidden = true;
+  //setting_form.hidden = false;
+  document.getElementById('settingsForm').hidden = false;
+  //mainOptions.hidden = true;
+  document.getElementById('pages').hidden = true;
+  document.getElementById('counters').hidden = true;
+
   keypads.hidden = true;
   var back = document.getElementById('settingsBack');
   startNewSetting = document.getElementById('start-new-setting'); // button
@@ -168,9 +179,12 @@ function showSettings(event)
   back.onclick = function()
   {
     document.addEventListener('keyup', makeMove);
-    setting_form.hidden = true;
+    //setting_form.hidden = true;
+    document.getElementById('settingsForm').hidden = true;
     canvas.hidden = false;
-    mainOptions.hidden = false;
+    //mainOptions.hidden = false;
+    document.getElementById('pages').hidden = false;
+    document.getElementById('counters').hidden = false;
     keypads.hidden = false;
   };
 
@@ -180,12 +194,14 @@ function showSettings(event)
   };
 }
 
-function showHighscore(event){
+function showHighScores(event){
   document.removeEventListener('keyup', makeMove);
-  event.preventDefault();
+  //event.preventDefault();
   grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
-  console.log("inside score function");
-  mainOptions.hidden = true;
+  console.log("HighScores Page");
+  //mainOptions.hidden = true;
+  document.getElementById('pages').hidden = true;
+  document.getElementById('counters').hidden = true;
   canvas.hidden = true;
   score_form.hidden = false;
   keypads.hidden = true
@@ -194,7 +210,7 @@ function showHighscore(event){
 function updateHighscore(scores)
 {
   //game.scoreAdded = true;
-  console.log("updating highscore");
+  //console.log("updating highscore");
 
   //update the board
   for(let i = 0; i < 10; i++)
@@ -256,7 +272,7 @@ function checkHighScore(name, currentScore, date) //also player name
   }
   else //score is blank, shouldn't happen but just in case
   {
-    console.log("returning null");
+    //console.log("returning null");
     return null;
   }
 };
@@ -264,7 +280,9 @@ function checkHighScore(name, currentScore, date) //also player name
 highScoreBack.onclick = function(){
   score_form.hidden = true;
   canvas.hidden = false;
-  mainOptions.hidden = false;
+  //mainOptions.hidden = false;
+  document.getElementById('pages').hidden = false;
+  document.getElementById('counters').hidden = false;
   keypads.hidden = false;
   document.addEventListener('keyup', makeMove);
 };
@@ -336,7 +354,7 @@ class game2048{
       this.board = this.lastMove;
       this.score = this.lastScore;
       game.drawAllCells(canvas);
-      scoreLabel.innerHTML = 'Score: ' + game.score; // add score after move
+      scoreButton.value = 'Score: ' + game.score; // add score after move
       this.undoes--;
     }
     undoButton.value = this.undoes + " :Undo";
@@ -854,7 +872,7 @@ function right() {
 
 function checkEnd() // keyboard button inputs listener
 {
-  scoreLabel.innerHTML = 'Score: ' + game.score;
+  scoreButton.value = 'Score: ' + game.score;
 
   if(game.checkScoreTarget()) // if score target is reached return true
   {
@@ -862,14 +880,18 @@ function checkEnd() // keyboard button inputs listener
     document.removeEventListener('keyup', makeMove);
     winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     canvas.style.opacity = '0.5';
-    mainOptions.hidden = true;
+    //mainOptions.hidden = true;
+  document.getElementById('pages').hidden = true;
+  document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
   }
   else if(!game.checkValidMove("all"))
   {
     document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
-    mainOptions.hidden = true;
+    //mainOptions.hidden = true;
+  document.getElementById('pages').hidden = true;
+  document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
     winningImage(); // display image if the player ranked 1st, 2nd or 3rd
@@ -879,7 +901,7 @@ function checkEnd() // keyboard button inputs listener
 
 function makeMove(event)
 {
-  console.log(event);
+  //console.log(event);
     if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
     {
       up();
@@ -908,7 +930,7 @@ function winningImage() {
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      console.log('inside grab from server');
+      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
       let highScores = JSON.parse(response.topscore);
       for (let i = 0; i < 3; i ++) {
@@ -941,13 +963,11 @@ function startGame() // start new game / reset game and board
   currentGame.addRandomcell();
   currentGame.addRandomcell();
   currentGame.drawAllCells();
-  scoreLabel.innerHTML = 'Score: ' + currentGame.score;
+  scoreButton.value = 'Score: ' + currentGame.score;
   undoButton.value = currentGame.undoes + " :Undo";
   removeButton.value = currentGame.removes + " :Remove";
   game = currentGame;
 }
-
-startGame();
 
 function checkInput() {
   scoreTarget = targetInput.value;
@@ -962,5 +982,18 @@ function checkInput() {
     alert("Score target will be rounded to " + scoreTarget);
   }
 
+  //startGame();
+}
+
+function startClick()
+{
+  checkInput();
+  //mainOptions.hidden = false;
+  document.getElementById('pages').hidden = false;
+  document.getElementById('counters').hidden = false;
   startGame();
 }
+
+
+
+startGame();
