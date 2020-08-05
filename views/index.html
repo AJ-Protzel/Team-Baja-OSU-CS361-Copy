@@ -28,7 +28,7 @@
     <div id="container"> <!--container for body-->
       <div id="heading"> <!--top most box-->
         <h1 id="title">2048</h1>
-        <input type="button" class="displayButton" id="scoreButton" onclick="showHighScores()"></input>
+        <input type="button" class="displayButton" id="scoreButton" onclick="toggleHighScores()"></input>
       </div>
 
       <div id="mainOptions"> <!--box under heading-->
@@ -48,14 +48,6 @@
 
         <div hidden id='settingsForm'> <!-- Holds setting options and hides when not needed.-->
           <form>
-            <!--
-            <div id="settingsButtonsBlock">
-              <input type="button" class="button" id="start-new-setting" value="Start New Game"></input>
-
-              <input type="button" class="button" id='settingsBack' value='back' onclick="backClick()"></input>
-            </div>
-          -->
-
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
             <select id="size">
               <option value="3">3</option>
@@ -81,10 +73,10 @@
          </form>
         </div>
 
-        <div hidden id='highScore_form'>
+        <div hidden id='highScoreForm'>
           <form>
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
-              <select id="highScoreSize">
+              <select id="highScoreSize" onclick="grabFromServer(true)">
                 <option value="3">3</option>
                 <option value="4" selected>4</option>
                 <option value="5">5</option>
@@ -171,7 +163,8 @@
               </table>
               <div class="clear"></div>
               <div><br></div>
-              <input id='highScoreBack' type='button' value='Back'>
+              <!--<input type="button" class="button" onclick="toggleHighScore()"></input>-->
+              <!--"id='highScoreBack' type='button' value='Back'>-->
           </form>
         </div>
       </div>
