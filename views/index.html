@@ -25,13 +25,14 @@
     <div id="container"> <!--container for body-->
       <div id="heading"> <!--top most box-->
         <h1 id="title">2048</h1>
-        <input type="button" class="displayButton" id="scoreButton" onclick="toggleHighScores()"></input>
+        <div id="scoreContainer"></div>
       </div>
 
       <div id="mainOptions"> <!--box under heading-->
         <div id="mainOp">
           <input type="button" class="button" value="Start New Game" onclick="startClick()"></input> 
-          <input type="button" class="button" id="settingsButton" value="Settings" onclick="toggleSettings()"></input> 
+          <input type="button" class="button" id="settingsButton" value="Settings" onclick="togglePage('settings')"></input> 
+          <input type="button" class="button" id="scoreButton" value="Scores" onclick="togglePage('highScores')"></input> 
           <!--<input type="button" class="button" value='Debug' onclick="grabFromServer()"></input>-->
         </div>
         <div id="counters">

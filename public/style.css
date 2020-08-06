@@ -98,7 +98,7 @@ img
     font-weight: bold;
 }
 
-#scoreButton
+#scoreContainer
 {
     position: relative;
     float: right;
@@ -124,13 +124,13 @@ img
 
 #mainOp
 {
-    width: 265px;
+    width: 325px;
     height: 50px;  
 }
 
 #counters
 {
-    width: 265px;
+    width: 205px;
     height: 50px;  
 }
 

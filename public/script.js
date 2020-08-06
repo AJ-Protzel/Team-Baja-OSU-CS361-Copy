@@ -1,4 +1,4 @@
-var scoreButton = document.getElementById('scoreButton');
+//var scoreButton = document.getElementById('scoreButton');
 var undoButton = document.getElementById('undoButton');
 var removeButton = document.getElementById('removeButton');
 var highScoreSizeButton = document.getElementById('highScoreSize');
@@ -107,7 +107,7 @@ function subtractRemoveCounter(e)
     }
 
     game.score -= game.board[yPos][xPos].value;
-    scoreButton.value = 'Score: ' + game.score; // add score after removals
+    document.getElementById('scoreContainer').innerHTML = 'Score: ' + game.score;
     game.board[yPos][xPos].value = null;
     game.drawAllCells();
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
@@ -127,58 +127,101 @@ function undoClick()
   removeButton.value = game.removes + " :Remove";
 }
 
-function toggleSettings(event)
+function togglePage(page)
 {
-  if(document.getElementById('canvas').hidden == false)
+  if(page == 'settings')
   {
-    document.removeEventListener('keyup', makeMove);
-    console.log("Settings Page");
-    document.getElementById('canvas').hidden = true;
-    document.getElementById('settingsForm').hidden = false;
-    document.getElementById('counters').hidden = true;
-    document.getElementById('scoreButton').hidden = true;
-    keypads.hidden = true;
-    document.getElementById('settingsButton').value = "Back";
-  }
-  else
-  {
-    document.addEventListener('keyup', makeMove);
-    document.getElementById('settingsForm').hidden = true;
-    document.getElementById('canvas').hidden = false;
-    document.getElementById('mainOp').hidden = false;
-    document.getElementById('counters').hidden = false;
-    document.getElementById('scoreButton').hidden = false;
-    keypads.hidden = false;
-    document.getElementById('settingsButton').value = "Settings";
+    if(document.getElementById('settingsForm').hidden == true && document.getElementById('canvas').hidden == false) // main page -> settings
+    {
+      document.removeEventListener('keyup', makeMove);
+      console.log("Settings Page");
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('settingsForm').hidden = false;
+      document.getElementById('counters').hidden = true;
+      //document.getElementById('scoreButton').hidden = true;
+      keypads.hidden = true;
+      document.getElementById('settingsButton').value = "Back";
+    }
+    else if(document.getElementById('settingsForm').hidden == true && document.getElementById('canvas').hidden == true) // scores -> settings
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('highScoreForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('scoreButton').value = "Scores"; 
+      
+      document.removeEventListener('keyup', makeMove);
+      console.log("Settings Page");
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('settingsForm').hidden = false;
+      document.getElementById('counters').hidden = true;
+      //document.getElementById('scoreButton').hidden = true;
+      keypads.hidden = true;
+      document.getElementById('settingsButton').value = "Back";
+    }
+    else // closing settings
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('settingsForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      document.getElementById('scoreButton').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('settingsButton').value = "Settings";
+    }
   }
 
+  if(page == 'highScores')
+  {
+    if(document.getElementById('highScoreForm').hidden == true && document.getElementById('canvas').hidden == false) // main page -> scores
+    {
+      document.removeEventListener('keyup', makeMove);
+      grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
+      console.log("HighScores Page");
+      //document.getElementById('mainOp').hidden = true;
+      document.getElementById('counters').hidden = true;
+      keypads.hidden = true
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('highScoreForm').hidden = false;
+      document.getElementById('scoreButton').value = "Back";
+    
+    }
+    else if(document.getElementById('highScoreForm').hidden == true && document.getElementById('canvas').hidden == true) // settings -> scores
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('settingsForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      document.getElementById('scoreButton').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('settingsButton').value = "Settings";
+
+      document.removeEventListener('keyup', makeMove);
+      grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
+      console.log("HighScores Page");
+      //document.getElementById('mainOp').hidden = true;
+      document.getElementById('counters').hidden = true;
+      keypads.hidden = true
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('highScoreForm').hidden = false;
+      document.getElementById('scoreButton').value = "Back";
+    }
+    else
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('highScoreForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('scoreButton').value = "Scores";  
+    }
+  }
 }
-
-function toggleHighScores(event){
-  if(document.getElementById('canvas').hidden == false)
-  {
-    document.removeEventListener('keyup', makeMove);
-    grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
-    console.log("HighScores Page");
-    document.getElementById('mainOp').hidden = true;
-    document.getElementById('counters').hidden = true;
-    keypads.hidden = true
-    document.getElementById('canvas').hidden = true;
-    document.getElementById('highScoreForm').hidden = false;
-    document.getElementById('scoreButton').value = "Back";
-  
-  }
-  else
-  {
-    document.addEventListener('keyup', makeMove);
-    document.getElementById('highScoreForm').hidden = true;
-    document.getElementById('canvas').hidden = false;
-    document.getElementById('mainOp').hidden = false;
-    document.getElementById('counters').hidden = false;
-    keypads.hidden = false;
-    document.getElementById('scoreButton').value = "Score: " + game.score;  
-  }
-};
 
 function updateHighscore(scores)
 {
@@ -313,7 +356,7 @@ class game2048{
       this.board = this.lastMove;
       this.score = this.lastScore;
       game.drawAllCells(canvas);
-      scoreButton.value = 'Score: ' + game.score; // add score after move
+      document.getElementById('scoreContainer').innerHTML = 'Score: ' + this.score;
       this.undoes--;
     }
     undoButton.value = this.undoes + " :Undo";
@@ -831,7 +874,7 @@ function right() {
 
 function checkEnd() // keyboard button inputs listener
 {
-  scoreButton.value = 'Score: ' + game.score;
+  document.getElementById('scoreContainer').innerHTML = 'Score: ' + game.score;
 
   if(game.checkScoreTarget()) // if score target is reached return true
   {
@@ -922,7 +965,7 @@ function startGame() // start new game / reset game and board
   currentGame.addRandomcell();
   currentGame.addRandomcell();
   currentGame.drawAllCells();
-  scoreButton.value = 'Score: ' + currentGame.score;
+  document.getElementById('scoreContainer').innerHTML = 'Score: ' + currentGame.score;
   undoButton.value = currentGame.undoes + " :Undo";
   removeButton.value = currentGame.removes + " :Remove";
 
