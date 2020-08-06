@@ -129,6 +129,26 @@ function undoClick()
 
 function togglePage(page)
 {
+  if(page == 'main')
+  {
+    document.addEventListener('keyup', makeMove);
+    document.getElementById('settingsForm').hidden = true;
+    document.getElementById('canvas').hidden = false;
+    document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    document.getElementById('scoreButton').hidden = false;
+    keypads.hidden = false;
+    document.getElementById('settingsButton').value = "Settings";
+
+    document.addEventListener('keyup', makeMove);
+    document.getElementById('highScoreForm').hidden = true;
+    document.getElementById('canvas').hidden = false;
+    document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    keypads.hidden = false;
+    document.getElementById('scoreButton').value = "Scores";  
+  }
+
   if(page == 'settings')
   {
     if(document.getElementById('settingsForm').hidden == true && document.getElementById('canvas').hidden == false) // main page -> settings
@@ -991,8 +1011,7 @@ function startClick()
   //document.getElementById('mainOp').hidden = false;
   //document.getElementById('counters').hidden = false;
   checkInput();
-  document.getElementById('canvas').hidden = true;
-  toggleSettings();
+  togglePage('main');
   //document.getElementById('mainOp').hidden = false;
   //document.getElementById('coutners').hidden = false;
   startGame();
