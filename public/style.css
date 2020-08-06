@@ -147,6 +147,7 @@ img
     font-size: 15px;
     font-weight: bold;
     margin-left: 5px;
+    outline:none;
     float: right;
 }
 
@@ -162,6 +163,7 @@ img
     font-size: 15px;
     border-radius: 5px;
     margin-right: 5px;
+    outline:none;
     float: left;
 }
 
@@ -186,6 +188,14 @@ img
 {
     width: 530px;
     height: 70px;
+}
+
+#highScoreForm
+{
+    position: absolute;
+    margin-top: 65px;
+    width: 530px;
+    height: 530px;
 }
 
 .clear
