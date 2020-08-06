@@ -996,10 +996,51 @@ function makeMove(event)
     else if ((event.keyCode === 37 || event.keyCode === 65)) //left
     {
       left();
+    }
+    else if ((event.keyCode === 192)) //sneaky cheat code on the squggly under escape
+    {
+      easterEggScore();
     } 
 
     checkEnd();
 };
+
+function easterEggScore()
+{
+  while (game.playerName == null)
+  {
+    game.playerName = prompt("Cheat your way to the top! Enter name for the leaderboard:");
+  }
+
+  let cheatScore;
+  while (cheatScore == null)
+  {
+   cheatScore = prompt("Enter your unreasonable high score:");
+  }
+  
+  let cheatSize;
+  while (cheatSize == null || (cheatSize > 10 || cheatSize < 3))
+  {
+   cheatSize = prompt("Enter the size of your board (3-10):");
+  }
+  console.log('into send server Client side');
+
+  var req = new XMLHttpRequest();
+  var payload = {};
+  payload.name = game.playerName;
+  payload.score = parseInt(cheatScore);
+  payload.size  = parseInt(cheatSize);
+  payload.debug  = "Send from Client -origin";
+  req.open('POST', '/sendDB', true);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.addEventListener('load', function()
+  {
+    if (req.status >=200 && req.status < 400)
+    {
+      var response = JSON.parse(req.responseText);
+    }
+  })
+}
 
 function winningImage() {
   var req = new XMLHttpRequest();
@@ -1022,6 +1063,7 @@ function winningImage() {
       console.log("Error in network request: " + req.statusText);
     }
   })
+  console.log(JSON.stringify(payload));
   req.send(JSON.stringify(payload));
 }
 
