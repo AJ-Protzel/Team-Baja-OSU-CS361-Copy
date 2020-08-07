@@ -52,8 +52,10 @@ highScoreSizeButton.addEventListener('click', function(){
 
 var colorDict = {
   'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
-  'default1': ['#FF7F50','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
-  'bajaBlast': ['#4A7309','#4D8626','#4F8F34','#519842','#52A251','#54AB5F','#56B46D','#57BE7C','#59C78A','#5BD098','#5CDAA7','#5EE3B5','#60ECC3','#63FFE0']
+  'bajaBlast': ['#4A7309','#4D8626','#4F8F34','#519842','#52A251','#54AB5F','#56B46D','#57BE7C','#59C78A','#5BD098','#5CDAA7','#5EE3B5','#60ECC3','#63FFE0'],
+  'bubbleBee': ["#FFEA00","#EAD700","#D5C300","#BFB000","#AA9C00","#958900","#807500","#6A6200","#554E00","#403B00","#2B2700","#151400","#000000"],
+  'lemonLime': ['#FFD500','#ECCF00','#D8CA00','#C5C400','#B1BF00','#9EB900','#8BB400','#77AE00','#64A800','#50A300','#3D9D00','#299800','#169200']
+
 };
 
 document.getElementById('colorOption').addEventListener('change', changeColor);
@@ -185,6 +187,7 @@ function showSettings(event)
   document.removeEventListener('keyup', makeMove);
   event.preventDefault();
   console.log("Settings Page");
+  changeColor();
   canvas.hidden = true;
   setting_form.hidden = false;
   mainOptions.hidden = true;
