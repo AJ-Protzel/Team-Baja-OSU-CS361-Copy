@@ -51,7 +51,8 @@ highScoreSizeButton.addEventListener('click', function(){
 })
 
 var colorDict = {
-  'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
+  'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
+  'default1': ['#FF7F50','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
 };
 
 function grabFromServer(check=false){
@@ -320,7 +321,7 @@ class game2048{
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
     this.playerName = null;
-    this.color = colorDict['default'];
+    this.color = colorDict[document.getElementById('colorOption').value];
   };
 
   createBoard()
