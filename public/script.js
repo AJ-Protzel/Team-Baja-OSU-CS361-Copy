@@ -381,33 +381,34 @@ class game2048{
 
   cellColor(val)
   {
+    let color  = ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
     switch (val)
     {
-      case null : return '#A9A9A9'; break;
+      case null : return color[0]; break;
       case 2 : 
-        return '#D2691E'; 
+        return color[1]; 
       case 4 :
-        return'#FF7F50';
+        return color[2];
       case 8 : 
-        return'#ffbf00';
+        return color[3];
       case 16 : 
-        return'#bfff00';
+        return color[4];
       case 32 : 
-        return'#40ff00';
+        return color[5];
       case 64 : 
-        return'#00bfff'; 
+        return color[6]; 
       case 128 : 
-        return'#FF7F50';
+        return color[7];
       case 256 : 
-        return'#0040ff'; 
+        return color[8]; 
       case 512 : 
-        return'#ff0080';
+        return color[9];
       case 1024 : 
-        return'#D2691E';
+        return color[10];
       case 2048 : 
-        return'#FF7F50';
+        return color[11];
       case 4096 : 
-        return'#ffbf00';
+        return color[12];
     }
   };
   
