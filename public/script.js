@@ -52,7 +52,24 @@ highScoreSizeButton.addEventListener('click', function(){
 
 var colorDict = {
   'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
-  'default1': ['#FF7F50','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
+  'default1': ['#FF7F50','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
+  'bajaBlast': ['#4A7309','#4D8626','#4F8F34','#519842','#52A251','#54AB5F','#56B46D','#57BE7C','#59C78A','#5BD098','#5CDAA7','#5EE3B5','#60ECC3','#63FFE0']
+};
+
+document.getElementById('colorOption').addEventListener('change', changeColor);
+
+function changeColor(){
+  let currentPos = document.getElementById('colorShower');
+  currentPos.innerHTML = "";
+  let color = colorDict[document.getElementById('colorOption').value];
+  let currentCell;
+  for (x = 0; x < color.length; x++){
+    currentCell = document.createElement('td');
+    currentCell.style.backgroundColor = color[x];
+    console.log(currentCell);
+    console.log(currentPos);
+    currentPos.appendChild(currentCell);
+  }
 };
 
 function grabFromServer(check=false){
