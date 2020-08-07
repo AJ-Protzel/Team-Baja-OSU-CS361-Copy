@@ -50,6 +50,10 @@ highScoreSizeButton.addEventListener('click', function(){
   grabFromServer(true);
 })
 
+var colorDict = {
+  'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
+};
+
 function grabFromServer(check=false){
   console.log("inside grab from server");
   var payload = {};
@@ -316,6 +320,7 @@ class game2048{
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
     this.playerName = null;
+    this.color = colorDict['default'];
   };
 
   createBoard()
@@ -381,7 +386,7 @@ class game2048{
 
   cellColor(val)
   {
-    let color  = ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ]
+    let color  = this.color;
     switch (val)
     {
       case null : return color[0]; break;
