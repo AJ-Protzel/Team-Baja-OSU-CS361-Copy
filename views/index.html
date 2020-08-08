@@ -1,6 +1,4 @@
-﻿<!-- code adapted from https://github.com/amadevBox/2048 -->
-
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -9,7 +7,7 @@
     <link rel="stylesheet" href="/style.css"> <!--Calls CSS file-->
     <script src="https://kit.fontawesome.com/ec98087ff6.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
   </head>
-
+<!------------------------------------------------------------------------>
   <body>
     <div id="endOverlay">
       <div id="winImage">
@@ -20,32 +18,33 @@
       </div>
       <div id="winText">You Win!</div>
       <div id="endText">Game Over</div>
-      <input id="end-start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
+      <input type="button" class="button" id="endStartButton" value="Start New Game" onclick="startClick()"></input>
+
     </div>
 
     <div id="container"> <!--container for body-->
       <div id="heading"> <!--top most box-->
         <h1 id="title">2048</h1>
-        <div id="score-container"></div>
+        <div id="scoreContainer"></div>
       </div>
 
-      <div class="clear"></div> <!--adds space under heading-->
       <div id="mainOptions"> <!--box under heading-->
-        <input id="start-new" type="button" value="Start New Game"> <!--resets board, starts new game-->
-        <input id='settings' type='button' value='Settings'>
-        <input id='highScores' type='button' value='High Score'>
-        <input id='removeCell' type='button' value='Remove cell'>
-        <input id='undoMove' type='button' value='Undo'>
-        <input id='debug-db' type='button' value='debug db send'>
-        <br>
+        <div id="mainOp">
+          <input type="button" class="button" value="Start New Game" onclick="startClick()"></input> 
+          <input type="button" class="button" id="settingsButton" value="Settings" onclick="togglePage('settings')"></input> 
+          <input type="button" class="button" id="scoreButton" value="Scores" onclick="togglePage('highScores')"></input> 
+          <!--<input type="button" class="button" value='Debug' onclick="grabFromServer()"></input>-->
+        </div>
+        <div id="counters">
+          <input type="button" class="displayButton" id="undoButton" onclick="undoClick()"></input>
+          <input type="button" class="displayButton" id="removeButton" onclick="removeClick()"></input>
+        </div>
       </div>
 
-      
-
-      <div id="canvas-block"> <!--holds canvas block-->
+      <div id="canvasBlock"> <!--holds canvas block-->
         <canvas id="canvas" width="500" height="500"></canvas>
 
-        <div hidden id='settings_form'> <!-- Holds setting options and hides when not needed.-->
+        <div hidden id='settingsForm'> <!-- Holds setting options and hides when not needed.-->
           <form>
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
             <select id="size">
@@ -62,18 +61,20 @@
             <label for="target">Winning Number:</label>
             <input type="number" id="scoreTarget" value="2048" min="2">
             <div class='clear'></div>
-            <label for='removeAmount'> # to remove</label>
+            <label for='removeAmount'> # of removes</label>
             <input type='number' id='removeAmount' value='2' min ='0'>
             <div class='clear'></div>
-            <input id='settingsBack' type='button' value='back'>
-            <input id="start-new-setting" type="button" value="Start New Game"> <!--resets board, starts new game-->
-          </form> 
+            <label for='removeAmount'> # of undoes</label>
+            <input type='number' id='undoAmount' value='5' min ='0'>
+            <div class='clear'></div>
+
+         </form>
         </div>
 
-        <div hidden id='highScore_form'>
+        <div hidden id='highScoreForm'>
           <form>
             <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
-              <select id="highScoreSize">
+              <select id="highScoreSize" onclick="grabFromServer(true)">
                 <option value="3">3</option>
                 <option value="4" selected>4</option>
                 <option value="5">5</option>
@@ -160,7 +161,6 @@
               </table>
               <div class="clear"></div>
               <div><br></div>
-              <input id='highScoreBack' type='button' value='Back'>
           </form>
         </div>
       </div>
@@ -171,9 +171,7 @@
       <span id="keypad-right"><i class="fa fa-caret-right"></i></span>
       <span id="keypad-down"><i class="fa fa-caret-down"></i></span>
     </div>
-
-    
   </body>
-  
+<!------------------------------------------------------------------------>
   <script src="/script.js"></script> <!--Calls JS file-->
 </html>
