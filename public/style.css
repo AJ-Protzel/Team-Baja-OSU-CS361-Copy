@@ -4,93 +4,30 @@ body
 {
     margin: 0;
     padding: 0;
-  
     background: #faf8ef;
     color: #776E65;
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
     font-size: 18px;
 }
 
-#container
+#endOverlay 
 {
-    width: 500px;
-    margin: 0 auto;
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    color: black;
+    font-size: 50px;
+    /*cursor: pointer;*/
 }
 
-#title
+#winImage
 {
-    font-size: 80px;
-    font-weight: bold;
-    margin: 0;
-    display: block;
-    float: left;
-}
-
-#score-container
-{
-    position: relative;
-    float: right;
-    background: #bbada0;
-    padding: 15px 25px;
-    font-size: 25px;
-    height: 25px;
-    line-height: 25px + 22px;
-    font-weight: bold;
-    border-radius: 3px;
-    color: white;
-    margin-top: 17px;
-}
-
-.clear
-{
-    clear: both;
-}
-
-#size-container
-{
-    margin-top: 15px;
-    margin-left: -122px;
-    padding-left: 50%;
-}
-
-#size-title
-{
-    float: left;
-    margin-top: 0px;
-}
-
-#size
-{
-    width: 50px;
-    margin-left: 10px;
-    border-radius: 3px;
-}
-
-#canvas
-{
-    margin-top: 20px;
-    position: relative;
-    padding: 15px;
-    background: #776e65;
-    border-radius: 6px;
-    box-sizing: border-box;
-    
-}
-/*
-#canvas-block
-{
-    margin-left: -250px;
-    padding-left: 50%;
-    background: red;
-}
-*/
-
-img {
-    width: 300px;
-    height: 150px;
-}
-
-#winImage {
     position: absolute;
     top: 25%;
     left: 51%;
@@ -100,88 +37,38 @@ img {
     transform: translate(-50%,-50%);
 }
 
-@media (max-width: 992px) {
-    #keypads {
-        width: 500px;
-        margin: 0 auto;
-    }
-
-    #canvas-block {
-        margin-left: -250px;
-        padding-left: 50%;
-        margin-top: 25px;
-    }
-
-    #keypad-up, #keypad-down, #keypad-left, #keypad-right {
-        position: relative;
-    }
-
-    #keypad-up {
-        top: -580px;
-        left: 250px;
-    }
-
-    #keypad-down {
-        top: -10px;
-        left: 170px;
-    }
-
-    #keypad-left {
-        top: -295px;
-        left: -66px;
-    }
-
-    #keypad-right {
-        top: -295px;
-        left: 486px;
-    }
-
-    .fa {
-        font-size: 3rem;
-    }
+img 
+{
+    width: 300px;
+    height: 150px;
 }
 
-@media (min-width: 992px) {
-    .fa {
-        display: none!important;
-    }
-}
-
-#endOverlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /*background-color: rgba(0,0,0,0.5);*/
-    z-index: 200;
-    cursor: pointer;
-  }
-  
-#winText{
+#winText
+{
     position: absolute;
     top: 45%;
     left: 51%;
-    font-size: 50px;
-    color: black;
+    /*font-size: 50px;
+    color: black;*/
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
 
-#endText{
+#endText
+{
     position: absolute;
     top: 55%;
     left: 51%;
-    font-size: 50px;
-    color: black;
+    /*font-size: 50px;
+    color: black;*/
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
 
-#end-start-new{
+
+
+#endStartButton
+{
     position: absolute;
     top: 65%;
     left: 51%;
@@ -189,3 +76,178 @@ img {
     -ms-transform: translate(-50%,-50%);
     font-size: 25px;
 }
+
+#container
+{
+    width: 530px;
+    margin: 0 auto;
+}
+
+#heading
+{
+    text-align: center;
+    width: 530px;
+    height: 80px;
+}
+
+#title
+{    
+    margin-top: 0;
+    float: left;
+    font-size: 80px;
+    font-weight: bold;
+}
+
+#scoreContainer
+{
+    position: relative;
+    float: right;
+    background: #bbada0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 197px;
+
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: white;
+    margin-top: 15px;
+}
+
+#mainOptions
+{
+    width: 530px;
+    height: 50px;  
+    position: absolute;
+    display: flex;
+}
+
+#mainOp
+{
+    width: 325px;
+    height: 50px;  
+}
+
+#counters
+{
+    width: 205px;
+    height: 50px;  
+}
+
+.displayButton
+{
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    background: #bbada0;
+    height: 50px, 50px;
+    border-radius: 5px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 5px;
+    outline:none;
+    float: right;
+}
+
+.button
+{
+    background-color: #8f7a66;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-right: 5px;
+    outline:none;
+    float: left;
+}
+
+#canvas
+{ 
+    position: relative;
+    padding: 15px;
+    background: #776e65;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+#settingsForm
+{
+    position: absolute;
+    margin-top: 65px;
+    width: 530px;
+    height: 530px;
+}
+
+#settingsButtonsBlock
+{
+    width: 530px;
+    height: 70px;
+}
+
+#highScoreForm
+{
+    position: absolute;
+    margin-top: 65px;
+    width: 530px;
+    height: 530px;
+}
+
+.clear
+{
+    clear: both;
+}
+
+
+@media (max-width: 992px) {
+#keypads {
+    width: 500px;
+    margin: 0 auto;
+}
+
+#canvasBlock {
+    margin-left: -250px;
+    padding-left: 50%;
+    margin-top: 25px;
+}
+
+#keypad-up, #keypad-down, #keypad-left, #keypad-right {
+    position: relative;
+}
+
+#keypad-up {
+    top: -580px;
+    left: 250px;
+}
+
+#keypad-down {
+    top: -10px;
+    left: 170px;
+}
+
+#keypad-left {
+    top: -295px;
+    left: -66px;
+}
+
+#keypad-right {
+    top: -295px;
+    left: 486px;
+}
+
+.fa {
+    font-size: 3rem;
+}
+}
+
+@media (min-width: 992px) {
+.fa {
+    display: none!important;
+}
+}
+
