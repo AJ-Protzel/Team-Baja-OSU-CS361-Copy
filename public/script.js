@@ -1,34 +1,20 @@
-/*code adapted from https://github.com/amadevBox/2048*/
+//var scoreButton = document.getElementById('scoreButton');
+var undoButton = document.getElementById('undoButton');
+var removeButton = document.getElementById('removeButton');
+var highScoreSizeButton = document.getElementById('highScoreSize');
 
-var scoreLabel = document.getElementById('score-container'); // display
-var mainOptions = document.getElementById('mainOptions'); // box that holds buttons
 var sizeInput = document.getElementById('size'); // button // in setting page
 var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class? // in setting page
-var startNew = document.getElementById('start-new'); // button
-var endStartNew = document.getElementById('end-start-new'); // button
 
-var setting_button = document.getElementById('settings'); // button
-var setting_form = document.getElementById('settings_form'); // page
-
-var scoreButton = document.getElementById('highScores'); // button
-var highScoreSizeButton = document.getElementById('highScoreSize');
 var score_form = document.getElementById('highScore_form'); // page
-var highScoreBack = document.getElementById('highScoreBack'); // back button // in high score page
 var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
-var removeCellButton = document.getElementById('removeCell');
-var disableRemoveButton  = document.getElementById('disableRemove');
-var undoButton = document.getElementById('undoMove');
 var scoreHolder = null // TODO: grab 4x4 board scores
-var debugDB = document.getElementById('debug-db');
-
 var endOverlay = document.getElementById('endOverlay'); // page
-
 var canvas = document.getElementById('canvas');
 var width = canvas.width / boardSize - 6; // ?class?
 var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
 var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
 var cells = []; // 2d aray to store number values // ?class?
-
 var game; // creates a game board
 
 var upKeypad = document.querySelector("#keypad-up");
@@ -36,22 +22,8 @@ var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
-startNew.addEventListener('click', checkInput);
-removeCellButton.addEventListener('click',  removeCell);
-
-startNew.addEventListener('click', checkInput); // checks valid score target then start game
-endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
-setting_button.addEventListener('click', showSettings); // opens settings page
-scoreButton.addEventListener('click',  showHighscore); // opens high score page
-removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
-undoButton.addEventListener('click',  undoLastMove); // undoes move
-debugDB.addEventListener('click', grabFromServer);
-highScoreSizeButton.addEventListener('click', function(){
-  grabFromServer(true);
-})
-
 function grabFromServer(check=false){
-  console.log("inside grab from server");
+  console.log("GrabServer Page");
   var payload = {};
   if (check == false)
   {
@@ -65,9 +37,8 @@ function grabFromServer(check=false){
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      console.log('inside grab from server');
+      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
-      //console.log(response.topscore);
       updateHighscore(JSON.parse(response.topscore));
     } else {
       console.log("Error in network request: " + req.statusText);
@@ -76,11 +47,11 @@ function grabFromServer(check=false){
   req.send(JSON.stringify(payload));
 };
 
-function  sendToServer(){
+function sendToServer(){
   while (game.playerName == null){
     game.playerName = prompt("New Highscore! Enter name for the leaderboard:");
   };  
-  console.log('into send server Client side');
+  //console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
   payload.name = game.playerName;
@@ -96,7 +67,7 @@ function  sendToServer(){
       console.log("Error in network request: " + req.statusText);
     }
   })
-  console.log(JSON.stringify(payload));
+  //console.log(JSON.stringify(payload));
   req.send(JSON.stringify(payload));
 }
 
@@ -106,19 +77,15 @@ downKeypad.addEventListener("click", function() {down(); checkEnd();});
 leftKeypad.addEventListener("click", function() {left(); checkEnd();});
 rightKeypad.addEventListener("click", function() {right(); checkEnd();});
 
-function removeCell()
+function removeClick()
 {
-  if (game.removeSquare == 0){
-    alert("You are out of moves!");
-    return
-  }
   game.remove_check = false;
   canvas.addEventListener('click', subtractRemoveCounter);
 }
 
 function subtractRemoveCounter(e)
 {
-  if (game.removeSquare > 0) {
+  if (game.removes > 0) {
     game.deepCopyBoard(); // saves removed cell as last board
 
     let currentX = e.offsetX -20; //x position relative to canvas
@@ -140,95 +107,154 @@ function subtractRemoveCounter(e)
     }
 
     game.score -= game.board[yPos][xPos].value;
-    scoreLabel.innerHTML = 'Score : ' + game.score; // add score after removals
+    document.getElementById('scoreContainer').innerHTML = 'Score: ' + game.score;
     game.board[yPos][xPos].value = null;
     game.drawAllCells();
     game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
-    game.removeSquare-=1;
+    game.removes--;
     canvas.removeEventListener('click', subtractRemoveCounter);
     game.moveMade = true;
+    removeButton.value = game.removes + " :Remove";
 
     return;
   } 
 }
 
-function undoLastMove()
+function undoClick()
 {
   game.undoMove();
   game.moveMade = false;
+  removeButton.value = game.removes + " :Remove";
 }
 
-function showSettings(event)
+function togglePage(page)
 {
-  document.removeEventListener('keyup', makeMove);
-  event.preventDefault();
-  console.log("Settings Page");
-  canvas.hidden = true;
-  setting_form.hidden = false;
-  mainOptions.hidden = true;
-  keypads.hidden = true;
-  var back = document.getElementById('settingsBack');
-  startNewSetting = document.getElementById('start-new-setting'); // button
-
-  back.onclick = function()
+  if(page == 'main')
   {
     document.addEventListener('keyup', makeMove);
-    setting_form.hidden = true;
-    canvas.hidden = false;
-    mainOptions.hidden = false;
+    document.getElementById('settingsForm').hidden = true;
+    document.getElementById('canvas').hidden = false;
+    document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    document.getElementById('scoreButton').hidden = false;
     keypads.hidden = false;
-  };
+    document.getElementById('settingsButton').value = "Settings";
 
-  startNewSetting.onclick = function()
+    document.addEventListener('keyup', makeMove);
+    document.getElementById('highScoreForm').hidden = true;
+    document.getElementById('canvas').hidden = false;
+    document.getElementById('mainOp').hidden = false;
+    document.getElementById('counters').hidden = false;
+    keypads.hidden = false;
+    document.getElementById('scoreButton').value = "Scores";  
+  }
+
+  if(page == 'settings')
   {
-    checkInput();
-  };
-}
+    if(document.getElementById('settingsForm').hidden == true && document.getElementById('canvas').hidden == false) // main page -> settings
+    {
+      document.removeEventListener('keyup', makeMove);
+      console.log("Settings Page");
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('settingsForm').hidden = false;
+      document.getElementById('counters').hidden = true;
+      //document.getElementById('scoreButton').hidden = true;
+      keypads.hidden = true;
+      document.getElementById('settingsButton').value = "Back";
+    }
+    else if(document.getElementById('settingsForm').hidden == true && document.getElementById('canvas').hidden == true) // scores -> settings
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('highScoreForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('scoreButton').value = "Scores"; 
+      
+      document.removeEventListener('keyup', makeMove);
+      console.log("Settings Page");
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('settingsForm').hidden = false;
+      document.getElementById('counters').hidden = true;
+      //document.getElementById('scoreButton').hidden = true;
+      keypads.hidden = true;
+      document.getElementById('settingsButton').value = "Back";
+    }
+    else // closing settings
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('settingsForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      document.getElementById('scoreButton').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('settingsButton').value = "Settings";
+    }
+  }
 
-function showHighscore(event){
-  document.removeEventListener('keyup', makeMove);
-  event.preventDefault();
-  grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
-  console.log("inside score function");
-  mainOptions.hidden = true;
-  canvas.hidden = true;
-  score_form.hidden = false;
-  keypads.hidden = true
-};
+  if(page == 'highScores')
+  {
+    if(document.getElementById('highScoreForm').hidden == true && document.getElementById('canvas').hidden == false) // main page -> scores
+    {
+      document.removeEventListener('keyup', makeMove);
+      grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
+      console.log("HighScores Page");
+      //document.getElementById('mainOp').hidden = true;
+      document.getElementById('counters').hidden = true;
+      keypads.hidden = true
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('highScoreForm').hidden = false;
+      document.getElementById('scoreButton').value = "Back";
+    
+    }
+    else if(document.getElementById('highScoreForm').hidden == true && document.getElementById('canvas').hidden == true) // settings -> scores
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('settingsForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      document.getElementById('scoreButton').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('settingsButton').value = "Settings";
+
+      document.removeEventListener('keyup', makeMove);
+      grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
+      console.log("HighScores Page");
+      //document.getElementById('mainOp').hidden = true;
+      document.getElementById('counters').hidden = true;
+      keypads.hidden = true
+      document.getElementById('canvas').hidden = true;
+      document.getElementById('highScoreForm').hidden = false;
+      document.getElementById('scoreButton').value = "Back";
+    }
+    else
+    {
+      document.addEventListener('keyup', makeMove);
+      document.getElementById('highScoreForm').hidden = true;
+      document.getElementById('canvas').hidden = false;
+      document.getElementById('mainOp').hidden = false;
+      document.getElementById('counters').hidden = false;
+      keypads.hidden = false;
+      document.getElementById('scoreButton').value = "Scores";  
+    }
+  }
+}
 
 function updateHighscore(scores)
 {
-  //game.scoreAdded = true;
-  console.log("updating highscore");
-
-  /*
-  let playerName = prompt("New Highscore! Enter name for the leaderboard:");
-  let highscorePlacement = checkHighScore(playerName, game.score, currentDate);
-  if(highscorePlacement != null)
-  {
-    sendToServer(PlayerName, game.score, game.size) // current DB catches size Not date.
-   // scoreHolder = DB pull to include new entry
-  }
-
-  /*
-  if(highscoreScores.length > 10)
-  {
-    highscoreNames.pop()
-    highscoreScores.pop()
-    highscoreDates.pop()
-  }
-  */
-
-  //update the board
   for(let i = 0; i < 10; i++)
   {
     if(scores[i] != null)
     {
-      //console.log(scores[i]);
       document.getElementById('name'+ (i+1).toString()).innerHTML = scores[i].name
       document.getElementById('score'+ (i+1).toString()).innerHTML = scores[i].score
       document.getElementById('size'+ (i+1).toString()).innerHTML = scores[i].size
-    } else {
+    } 
+    else 
+    {
       document.getElementById('name'+ (i+1).toString()).innerHTML = "";
       document.getElementById('score'+ (i+1).toString()).innerHTML = "";
       document.getElementById('size'+ (i+1).toString()).innerHTML = "";
@@ -242,7 +268,6 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
   keypads.hidden = false;
   document.addEventListener('keyup', makeMove);
-};
 
 class game2048{
   /**
@@ -256,7 +281,7 @@ class game2048{
      */
     this.size = size; // size of board
     this.target = target; // score for win
-    this.removeSquare = 2; // this flag signals if the user has used their removed square option during the game
+    this.removes = 2; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
@@ -310,10 +335,11 @@ class game2048{
     {
       this.board = this.lastMove;
       this.score = this.lastScore;
-      game.drawAllCells();
-      scoreLabel.innerHTML = 'Score : ' + game.score; // add score after move
+      game.drawAllCells(canvas);
+      document.getElementById('scoreContainer').innerHTML = 'Score: ' + this.score;
       this.undoes--;
     }
+    undoButton.value = this.undoes + " :Undo";
   }
 
   drawCell(cell) // Takes in individual cell object and current canvas and draws cell onto canvas
@@ -468,38 +494,6 @@ class game2048{
     return false;
   };
 
-  addUp(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let colX = 0; colX < this.size; ++colX)
-    {
-      for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      {
-        if (this.board[rowY][colX].value != null)
-        {
-          let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
-          {
-            if (check == false)
-            {
-              this.score += this.board[cur][colX].value *2;
-              this.board[cur][colX].value *= 2;
-              this.board[cur+1][colX].value = null;  
-            } 
-            else 
-            {
-              return true;
-            }    
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   moveDown(check)
   {
     var curVal;
@@ -545,38 +539,6 @@ class game2048{
             else 
             {
               this.board[y][colX].value = null;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  };
-
-  addDown(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let colX = 0; colX < this.size; ++colX)
-    { 
-      for (let rowY = this.size - 2; rowY >= 0; --rowY)
-      { 
-        if (this.board[rowY][colX].value != null)
-        { 
-          let cur = rowY;
-          if (this.board[cur][colX].value == this.board[cur+1][colX].value)
-          {
-            if (check == false)
-            {
-              this.score += this.board[cur][colX].value *2;
-              this.board[cur][colX].value *= 2;
-              this.board[cur+1][colX].value = null;  
-            } 
-            else 
-            {
-              return true;
             }
           }
         }
@@ -637,38 +599,6 @@ class game2048{
     return false;
   };
 
-  addLeft(check) 
-  {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */  
-    for (let rowY = 0; rowY < this.size; ++rowY)
-    {
-      for (let colX = this.size - 2; colX >= 0; --colX)
-      {
-        if (this.board[rowY][colX].value != null)
-        {
-          let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
-          {
-            if (check == false)
-            {
-              this.score  += this.board[rowY][cur + 1].value *2;
-              this.board[rowY][cur + 1].value *= 2;
-              this.board[rowY][cur].value = null;  
-            } 
-            else 
-            {
-              return true;
-            }       
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   moveRight(check)
   {
     var curVal;
@@ -720,32 +650,57 @@ class game2048{
     return false;
   };
 
-  addRight(check)
+  add(dir, check)
   {
-    /**
-     * If cells in the same direction are equal and check=False, add cells and merge cells.
-     * If check=True, then do not add and do not merge.
-     */ 
-    for (let rowY = 0; rowY < this.size; ++rowY)
+    if(dir == "v")
     {
-      for (let colX = this.size - 2; colX >= 0; --colX)
+      for (let colX = 0; colX < this.size; ++colX)
       {
-        if (this.board[rowY][colX].value != null)
+        for (let rowY = this.size - 2; rowY >= 0; --rowY)
         {
-          let cur = colX;
-          if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
+          if (this.board[rowY][colX].value != null)
           {
-            if (check == false)
+            let cur = rowY;
+            if (this.board[cur][colX].value == this.board[cur+1][colX].value) 
             {
-              this.score  += this.board[rowY][cur + 1].value *2;
-              this.board[rowY][cur + 1].value *= 2;
-              this.board[rowY][cur].value = null;
-            } 
-            else 
+              if (check == false)
+              {
+                this.score += this.board[cur][colX].value *2;
+                this.board[cur][colX].value *= 2;
+                this.board[cur+1][colX].value = null;  
+              } 
+              else 
+              {
+                return true;
+              }    
+            }
+          }
+        }
+      }
+    }
+    else if(dir == "h")
+    {
+      for (let rowY = 0; rowY < this.size; ++rowY)
+      {
+        for (let colX = this.size - 2; colX >= 0; --colX)
+        {
+          if (this.board[rowY][colX].value != null)
+          {
+            let cur = colX;
+            if (this.board[rowY][cur].value == this.board[rowY][cur + 1].value)
             {
-              return true;
-            }          
-          } 
+              if (check == false)
+              {
+                this.score  += this.board[rowY][cur + 1].value *2;
+                this.board[rowY][cur + 1].value *= 2;
+                this.board[rowY][cur].value = null;  
+              } 
+              else 
+              {
+                return true;
+              }       
+            }
+          }
         }
       }
     }
@@ -766,7 +721,7 @@ class game2048{
     if(side == "up" || side == "all")
     {
       move = this.moveUp(true);
-      add = this.addUp(true);
+      add = this.add("v", true);
 
       if(move || add)
       {
@@ -776,7 +731,7 @@ class game2048{
     if(side == "down" || side == "all")
     {
       move = this.moveDown(true);
-      add = this.addDown(true);
+      add = this.add("v", true);
 
       if(move || add)
       {
@@ -786,7 +741,7 @@ class game2048{
     if(side == "left" || side == "all")
     {
       move = this.moveLeft(true);
-      add = this.addLeft(true);
+      add = this.add("h", true);
       
       if(move || add)
       {
@@ -796,7 +751,7 @@ class game2048{
     if(side == "right" || side == "all")
     {
       move = this.moveRight(true);
-      add = this.addRight(true);
+      add = this.add("h", true);
   
     if(move || add)
     {
@@ -846,25 +801,11 @@ function createCells() // adds new 0 cells to board
 
 function up() {
   if(game.checkValidMove("up")) {
-    //console.log("UP Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveUp(false);
-    game.addUp(false);
+    game.add("v", false);
     game.moveUp(false);
-    game.addRandomcell();
-    game.drawAllCells();
-  }
-}
-
-function right() {
-  if(game.checkValidMove("right")) {
-    //console.log("Right Valid");
-    game.moveMade = true;
-    game.deepCopyBoard();
-    game.moveRight(false);
-    game.addRight(false);
-    game.moveRight(false);
     game.addRandomcell();
     game.drawAllCells();
   }
@@ -872,11 +813,10 @@ function right() {
 
 function down() {
   if(game.checkValidMove("down")) {
-    //console.log("Down Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveDown(false);
-    game.addDown(false);
+    game.add("v", false);
     game.moveDown(false);
     game.addRandomcell();
     game.drawAllCells();
@@ -885,56 +825,60 @@ function down() {
 
 function left() {
   if(game.checkValidMove("left")) {
-    //console.log("Left Valid");
     game.moveMade = true;
     game.deepCopyBoard();
     game.moveLeft(false);
-    game.addLeft(false);
+    game.add("h", false);
     game.moveLeft(false);
     game.addRandomcell();
     game.drawAllCells();
   }
 }
 
-// keyboard button inputs listener
-function checkEnd()
+function right() {
+  if(game.checkValidMove("right")) {
+    game.moveMade = true;
+    game.deepCopyBoard();
+    game.moveRight(false);
+    game.add("h", false);
+    game.moveRight(false);
+    game.addRandomcell();
+    game.drawAllCells();
+  }
+}
+
+function checkEnd() // keyboard button inputs listener
 {
-  scoreLabel.innerHTML = 'Score : ' + game.score;
+  document.getElementById('scoreContainer').innerHTML = 'Score: ' + game.score;
 
   if(game.checkScoreTarget()) // if score target is reached return true
   {
     sendToServer();
     document.removeEventListener('keyup', makeMove);
-    // display image if the player ranked 1st, 2nd or 3rd
-    winningImage()
+    winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     canvas.style.opacity = '0.5';
-    mainOptions.hidden = true;
+    document.getElementById('mainOp').hidden = true;
+    document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
   }
   else if(!game.checkValidMove("all"))
   {
     document.removeEventListener('keyup', makeMove);
     canvas.style.opacity = '0.5';
-    mainOptions.hidden = true;
+    document.getElementById('mainOp').hidden = true;
+    document.getElementById('counters').hidden = true;
     endOverlay.style.display = "block";
     sendToServer();
-    // display image if the player ranked 1st, 2nd or 3rd
-    winningImage()
+    winningImage(); // display image if the player ranked 1st, 2nd or 3rd
     var winText = document.getElementById('winText').hidden = true;
   }
 }
 
-
 function makeMove(event)
 {
-  console.log(event);
     if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
     {
       up();
-    }
-    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
-    { 
-      right();
     }
     else if ((event.keyCode === 40 || event.keyCode === 83)) //down
     {
@@ -948,6 +892,10 @@ function makeMove(event)
     {
       easterEggScore();
     } 
+    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
+    { 
+      right();
+    }
 
     checkEnd();
 };
@@ -997,7 +945,7 @@ function winningImage() {
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      console.log('inside grab from server');
+      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
       let highScores = JSON.parse(response.topscore);
       for (let i = 0; i < 3; i ++) {
@@ -1017,14 +965,16 @@ function winningImage() {
 function startGame() // start new game / reset game and board
 {
   stop();
+
   document.querySelector("#winImage").hidden = true;
   console.log("Start game");
   document.addEventListener('keyup', makeMove);
   document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
   canvas.style.opacity = '1.0'; //reset board opacity to normal
-  //offPage = false;
   endOverlay.style.display = "none";
   document.getElementById('winText').hidden = false;
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('coutners').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
@@ -1032,14 +982,12 @@ function startGame() // start new game / reset game and board
   currentGame.addRandomcell();
   currentGame.addRandomcell();
   currentGame.drawAllCells();
-  scoreLabel.innerHTML = 'Score : ' + currentGame.score;
-  game = currentGame;
-  
-  //endOverlay.style.display = "block";
-  //var winText = document.getElementById('winText').hidden = false;
-}
+  document.getElementById('scoreContainer').innerHTML = 'Score: ' + currentGame.score;
+  undoButton.value = currentGame.undoes + " :Undo";
+  removeButton.value = currentGame.removes + " :Remove";
 
-startGame();
+  game = currentGame;
+}
 
 function checkInput() {
   scoreTarget = targetInput.value;
@@ -1053,6 +1001,17 @@ function checkInput() {
     scoreTarget = num;
     alert("Score target will be rounded to " + scoreTarget);
   }
+}
 
+function startClick()
+{
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('counters').hidden = false;
+  checkInput();
+  togglePage('main');
+  //document.getElementById('mainOp').hidden = false;
+  //document.getElementById('coutners').hidden = false;
   startGame();
 }
+
+startGame();
