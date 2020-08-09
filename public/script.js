@@ -299,15 +299,7 @@ function updateHighscore(scores)
     }
   }
 };
-/*
-highScoreBack.onclick = function(){
-  score_form.hidden = true;
-  canvas.hidden = false;
-  mainOptions.hidden = false;
-  keypads.hidden = false;
-  document.addEventListener('keyup', makeMove);
-}
-*/
+
 class game2048{
   /**
    * @param {*} size 
@@ -1027,6 +1019,8 @@ function startGame() // start new game / reset game and board
   undoButton.value = currentGame.undoes + " :Undo";
   removeButton.value = currentGame.removes + " :Remove";
 
+  keypads.hidden = false;
+
   game = currentGame;
 }
 
@@ -1054,5 +1048,14 @@ function startClick()
   //document.getElementById('coutners').hidden = false;
   startGame();
 }
+/*
+highScoreBack.onclick = function(){
+  //score_form.hidden = true;
+  //canvas.hidden = false;
+  //mainOptions.hidden = false;
+  //keypads.hidden = false;
+  //document.addEventListener('keyup', makeMove);
+}
+*/
 
 startGame();
