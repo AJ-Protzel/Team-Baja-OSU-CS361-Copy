@@ -262,52 +262,12 @@ function updateHighscore(scores)
   }
 };
 
-function checkHighScore(name, currentScore, date) //also player name
-{
-  let i = 0;
-  if(currentScore > 0)
-  {
-    //if there are other scores on the leaderboard
-    if(scoreHolder[0] != null)
-    {
-      for(i; i < scoreHolder.length; i++)
-      {
-        if(currentScore >= scoreHolder[i].score)
-        { 
-          if(currentScore == scoreHolder[i].score) //check to see that the same exact score from the same game not relogged
-          {
-            if(scoreHolder[i].date != date || scoreHolder[i].name != name) //any variation from the highscore is good
-            {
-              return i; //return where this should go on the board
-            }
-            else //discount entry if it is exactly the same as another on the board
-            {
-              return null;
-            }
-          }
-          else //score is greater than something else on the board, so just return i
-          {
-            return i;
-          }
-        }
-      }
-      if(i < 10) //if the score is less than that on the top, but still spaces underneath
-      {
-        return i; //add it to the next avaiable space
-      }
-      return null; //or null, if its not within the top 10 at all
-    }
-    else //the scoreboard is empty and this is first entry
-    {
-      return 0;
-    }
-  }
-  else //score is blank, shouldn't happen but just in case
-  {
-    //console.log("returning null");
-    return null;
-  }
-};
+highScoreBack.onclick = function(){
+  score_form.hidden = true;
+  canvas.hidden = false;
+  mainOptions.hidden = false;
+  keypads.hidden = false;
+  document.addEventListener('keyup', makeMove);
 
 class game2048{
   /**
@@ -837,11 +797,6 @@ function createCells() // adds new 0 cells to board
       cells[i][j] = new cell(i, j);
     }
   }
-}
-
-function canvasClean() // removes cells colors
-{
-  ctx.clearRect(0, 0, 500, 500);
 }
 
 function up() {
