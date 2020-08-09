@@ -64,6 +64,24 @@
             <label for='removeAmount'> # of removes</label>
             <input type='number' id='removeAmount' value='2' min ='0'>
             <div class='clear'></div>
+
+            
+            <label for='colorOption'>Color Palette</label>
+            <select id="colorOption">
+              <option value="default" selected>Standard Palette</option>
+              <option value='bajaBlast'> Baja Blast</option>
+              <option value='bubbleBee'> Bubble Bee</option>
+              <option value='lemonLime'> Lemon-Lime</option>
+            </select>
+            <div class='clear'></div>
+            <table width="70%" height="25">
+              <tr id="colorShower"></tr>
+            </table>
+
+            <div class='clear'></div>
+            <input id='settingsBack' type='button' value='back'>
+            <input id="start-new-setting" type="button" value="Start New Game"> <!--resets board, starts new game-->
+          </form> 
             <label for='removeAmount'> # of undoes</label>
             <input type='number' id='undoAmount' value='5' min ='0'>
             <div class='clear'></div>
