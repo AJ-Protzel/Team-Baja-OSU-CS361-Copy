@@ -268,6 +268,7 @@ highScoreBack.onclick = function(){
   mainOptions.hidden = false;
   keypads.hidden = false;
   document.addEventListener('keyup', makeMove);
+};
 
 class game2048{
   /**
