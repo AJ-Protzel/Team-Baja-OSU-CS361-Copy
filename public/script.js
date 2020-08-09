@@ -22,19 +22,19 @@ var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
-startNew.addEventListener('click', checkInput);
-removeCellButton.addEventListener('click',  removeCell);
+//startNew.addEventListener('click', checkInput);
+//removeCellButton.addEventListener('click',  removeCell);
 
-startNew.addEventListener('click', checkInput); // checks valid score target then start game
-endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
-setting_button.addEventListener('click', showSettings); // opens settings page
-scoreButton.addEventListener('click',  showHighscore); // opens high score page
-removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
-undoButton.addEventListener('click',  undoLastMove); // undoes move
-debugDB.addEventListener('click', grabFromServer);
-highScoreSizeButton.addEventListener('click', function(){
-  grabFromServer(true);
-})
+//startNew.addEventListener('click', checkInput); // checks valid score target then start game
+//endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
+//setting_button.addEventListener('click', showSettings); // opens settings page
+//scoreButton.addEventListener('click',  showHighscore); // opens high score page
+//removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
+//undoButton.addEventListener('click',  undoLastMove); // undoes move
+//debugDB.addEventListener('click', grabFromServer);
+//highScoreSizeButton.addEventListener('click', function(){
+//  grabFromServer(true);
+//})
 
 var colorDict = {
   'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
@@ -299,14 +299,15 @@ function updateHighscore(scores)
     }
   }
 };
-
+/*
 highScoreBack.onclick = function(){
   score_form.hidden = true;
   canvas.hidden = false;
   mainOptions.hidden = false;
   keypads.hidden = false;
   document.addEventListener('keyup', makeMove);
-
+}
+*/
 class game2048{
   /**
    * @param {*} size 
