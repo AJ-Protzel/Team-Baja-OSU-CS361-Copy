@@ -22,6 +22,44 @@ var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
 
+//startNew.addEventListener('click', checkInput);
+//removeCellButton.addEventListener('click',  removeCell);
+
+//startNew.addEventListener('click', checkInput); // checks valid score target then start game
+//endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
+//setting_button.addEventListener('click', showSettings); // opens settings page
+//scoreButton.addEventListener('click',  showHighscore); // opens high score page
+//removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
+//undoButton.addEventListener('click',  undoLastMove); // undoes move
+//debugDB.addEventListener('click', grabFromServer);
+//highScoreSizeButton.addEventListener('click', function(){
+//  grabFromServer(true);
+//})
+
+var colorDict = {
+  'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
+  'bajaBlast': ['#4A7309','#4D8626','#4F8F34','#519842','#52A251','#54AB5F','#56B46D','#57BE7C','#59C78A','#5BD098','#5CDAA7','#5EE3B5','#60ECC3','#63FFE0'],
+  'bubbleBee': ["#FFEA00","#EAD700","#D5C300","#BFB000","#AA9C00","#958900","#807500","#6A6200","#554E00","#403B00","#2B2700","#151400","#000000"],
+  'lemonLime': ['#FFD500','#ECCF00','#D8CA00','#C5C400','#B1BF00','#9EB900','#8BB400','#77AE00','#64A800','#50A300','#3D9D00','#299800','#169200']
+
+};
+
+document.getElementById('colorOption').addEventListener('change', changeColor);
+
+function changeColor(){
+  let currentPos = document.getElementById('colorShower');
+  currentPos.innerHTML = "";
+  let color = colorDict[document.getElementById('colorOption').value];
+  let currentCell;
+  for (x = 0; x < color.length; x++){
+    currentCell = document.createElement('td');
+    currentCell.style.backgroundColor = color[x];
+    console.log(currentCell);
+    console.log(currentPos);
+    currentPos.appendChild(currentCell);
+  }
+};
+
 function grabFromServer(check=false){
   console.log("GrabServer Page");
   var payload = {};
@@ -262,14 +300,6 @@ function updateHighscore(scores)
   }
 };
 
-highScoreBack.onclick = function(){
-  score_form.hidden = true;
-  canvas.hidden = false;
-  mainOptions.hidden = false;
-  keypads.hidden = false;
-  document.addEventListener('keyup', makeMove);
-};
-
 class game2048{
   /**
    * @param {*} size 
@@ -294,6 +324,7 @@ class game2048{
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
     this.playerName = null;
+    this.color = colorDict[document.getElementById('colorOption').value];
   };
 
   createBoard()
@@ -360,33 +391,34 @@ class game2048{
 
   cellColor(val)
   {
+    let color  = this.color;
     switch (val)
     {
-      case null : return '#A9A9A9'; break;
+      case null : return color[0]; break;
       case 2 : 
-        return '#D2691E'; 
+        return color[1]; 
       case 4 :
-        return'#FF7F50';
+        return color[2];
       case 8 : 
-        return'#ffbf00';
+        return color[3];
       case 16 : 
-        return'#bfff00';
+        return color[4];
       case 32 : 
-        return'#40ff00';
+        return color[5];
       case 64 : 
-        return'#00bfff'; 
+        return color[6]; 
       case 128 : 
-        return'#FF7F50';
+        return color[7];
       case 256 : 
-        return'#0040ff'; 
+        return color[8]; 
       case 512 : 
-        return'#ff0080';
+        return color[9];
       case 1024 : 
-        return'#D2691E';
+        return color[10];
       case 2048 : 
-        return'#FF7F50';
+        return color[11];
       case 4096 : 
-        return'#ffbf00';
+        return color[12];
     }
   };
   
@@ -987,6 +1019,8 @@ function startGame() // start new game / reset game and board
   undoButton.value = currentGame.undoes + " :Undo";
   removeButton.value = currentGame.removes + " :Remove";
 
+  keypads.hidden = false;
+
   game = currentGame;
 }
 
@@ -1014,5 +1048,14 @@ function startClick()
   //document.getElementById('coutners').hidden = false;
   startGame();
 }
+/*
+highScoreBack.onclick = function(){
+  //score_form.hidden = true;
+  //canvas.hidden = false;
+  //mainOptions.hidden = false;
+  //keypads.hidden = false;
+  //document.addEventListener('keyup', makeMove);
+}
+*/
 
 startGame();
