@@ -1,20 +1,19 @@
-//var scoreButton = document.getElementById('scoreButton');
 var undoButton = document.getElementById('undoButton');
 var removeButton = document.getElementById('removeButton');
 var highScoreSizeButton = document.getElementById('highScoreSize');
 
-var sizeInput = document.getElementById('size'); // button // in setting page
-var boardSize = sizeInput.value; // sets boardSize equal to user input board size // ?class? // in setting page
+var sizeInput = document.getElementById('size'); 
+var boardSize = sizeInput.value; 
 
-var score_form = document.getElementById('highScore_form'); // page
-var targetInput = document.getElementById('scoreTarget'); // submit button // in setting page
+var score_form = document.getElementById('highScore_form'); // highscore page
+var targetInput = document.getElementById('scoreTarget'); // 'submit' button in settings page
 var scoreHolder = null // TODO: grab 4x4 board scores
-var endOverlay = document.getElementById('endOverlay'); // page
+var endOverlay = document.getElementById('endOverlay'); 
 var canvas = document.getElementById('canvas');
-var width = canvas.width / boardSize - 6; // ?class?
-var scoreTarget = targetInput.value; // sets scoreTarget equal to user input score target // ?class?
-var ctx = canvas.getContext('2d'); // color boxes 2d array // ?class?
-var cells = []; // 2d aray to store number values // ?class?
+var width = canvas.width / boardSize - 6; //width of board cells based on size
+var scoreTarget = targetInput.value; 
+var ctx = canvas.getContext('2d'); // color boxes 2d array 
+var cells = []; // 2d aray to store number values 
 var game; // creates a game board
 
 var keypads = document.querySelector("#keypads");
@@ -22,20 +21,6 @@ var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");
 var rightKeypad = document.querySelector("#keypad-right");
-
-//startNew.addEventListener('click', checkInput);
-//removeCellButton.addEventListener('click',  removeCell);
-
-//startNew.addEventListener('click', checkInput); // checks valid score target then start game
-//endStartNew.addEventListener('click', function(){checkInput(); mainOptions.hidden = false;}); // checks valid score target then start game
-//setting_button.addEventListener('click', showSettings); // opens settings page
-//scoreButton.addEventListener('click',  showHighscore); // opens high score page
-//removeCellButton.addEventListener('click',  removeCell); // primes remove cell action
-//undoButton.addEventListener('click',  undoLastMove); // undoes move
-//debugDB.addEventListener('click', grabFromServer);
-//highScoreSizeButton.addEventListener('click', function(){
-//  grabFromServer(true);
-//})
 
 var colorDict = {
   'default': ['#A9A9A9','#D2691E', '#FF7F50','#ffbf00','#bfff00', '#40ff00', '#00bfff', '#FF7F50', '#0040ff', '#ff0080', '#D2691E', '#FF7F50', '#ffbf00' ],
@@ -76,7 +61,6 @@ function grabFromServer(check=false){
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
       updateHighscore(JSON.parse(response.topscore));
     } else {
@@ -90,7 +74,6 @@ function sendToServer(){
   while (game.playerName == null){
     game.playerName = prompt("New Highscore! Enter name for the leaderboard:");
   };  
-  //console.log('into send server Client side');
   var req = new XMLHttpRequest();
   var payload = {};
   payload.name = game.playerName;
@@ -106,11 +89,9 @@ function sendToServer(){
       console.log("Error in network request: " + req.statusText);
     }
   })
-  //console.log(JSON.stringify(payload));
   req.send(JSON.stringify(payload));
 }
 
-// arrows keypad event listener
 upKeypad.addEventListener("click", function() {up(); checkEnd();});
 downKeypad.addEventListener("click", function() {down(); checkEnd();});
 leftKeypad.addEventListener("click", function() {left(); checkEnd();});
@@ -129,10 +110,10 @@ function subtractRemoveCounter(e)
 
     let currentX = e.offsetX -20; //x position relative to canvas
     let currentY = e.offsetY-20; // y position relative to canvas
-    let xPos; //points to x position in array
-    let yPos; //points to y possition in array
-    ref = 0 // x/y coord ref
-    counter = 0; //tracks current position on the board
+    let xPos; 
+    let yPos; 
+    ref = 0 
+    counter = 0; 
     while (ref <= width * parseInt(game.size))
     {
       if (currentX > ref && currentX <= (counter+1) * width){
@@ -149,7 +130,7 @@ function subtractRemoveCounter(e)
     document.getElementById('scoreContainer').innerHTML = 'Score: ' + game.score;
     game.board[yPos][xPos].value = null;
     game.drawAllCells();
-    game.gameStatus = 'UNFINISHED'; //make sure game status is set to unfinished
+    game.gameStatus = 'UNFINISHED'; 
     game.removes--;
     canvas.removeEventListener('click', subtractRemoveCounter);
     game.moveMade = true;
@@ -197,7 +178,6 @@ function togglePage(page)
       document.getElementById('canvas').hidden = true;
       document.getElementById('settingsForm').hidden = false;
       document.getElementById('counters').hidden = true;
-      //document.getElementById('scoreButton').hidden = true;
       keypads.hidden = true;
       document.getElementById('settingsButton').value = "Back";
     }
@@ -216,7 +196,6 @@ function togglePage(page)
       document.getElementById('canvas').hidden = true;
       document.getElementById('settingsForm').hidden = false;
       document.getElementById('counters').hidden = true;
-      //document.getElementById('scoreButton').hidden = true;
       keypads.hidden = true;
       document.getElementById('settingsButton').value = "Back";
     }
@@ -240,7 +219,6 @@ function togglePage(page)
       document.removeEventListener('keyup', makeMove);
       grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
       console.log("HighScores Page");
-      //document.getElementById('mainOp').hidden = true;
       document.getElementById('counters').hidden = true;
       keypads.hidden = true
       document.getElementById('canvas').hidden = true;
@@ -262,7 +240,6 @@ function togglePage(page)
       document.removeEventListener('keyup', makeMove);
       grabFromServer(); // this grabs the score DB (by game.size) and fills the high score table 
       console.log("HighScores Page");
-      //document.getElementById('mainOp').hidden = true;
       document.getElementById('counters').hidden = true;
       keypads.hidden = true
       document.getElementById('canvas').hidden = true;
@@ -311,13 +288,13 @@ class game2048{
      * The constructor for game2048 (default params included)
      * ex game = new game2048(3, 1024) => creates a 3x3 board where 1024 is the win score
      */
-    this.size = size; // size of board
-    this.target = target; // score for win
+    this.size = size; 
+    this.target = target; // score in a block needed for win
     this.removes = 2; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
-    this.gameStatus = 'UNFINISHED'; // the game status will be used to identify win states
-    this.score = 0; // current game score.
+    this.gameStatus = 'UNFINISHED'; 
+    this.score = 0; 
     this.remove_check  = false;
     this.moveMade = false;
     this.lastScore = 0;
@@ -439,7 +416,7 @@ class game2048{
     }
   };
   
-  checkFull () // Returns false if board is full, else true
+  checkFull () 
   {  
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
@@ -461,7 +438,7 @@ class game2048{
         var coll = Math.floor(Math.random() * boardSize);
         if (this.board[row][coll].value == null)
         {        
-          if (Math.ceil(Math.random()*99 > 79)) // adds 20% chance to start with 4
+          if (Math.ceil(Math.random()*99 > 79)) 
           { 
             this.board[row][coll].value = 4;
           }
@@ -910,23 +887,23 @@ function checkEnd() // keyboard button inputs listener
 
 function makeMove(event)
 {
-    if ((event.keyCode === 38 || event.keyCode === 87)) //upward move
+    if ((event.keyCode === 38 || event.keyCode === 87)) 
     {
       up();
     }
-    else if ((event.keyCode === 40 || event.keyCode === 83)) //down
+    else if ((event.keyCode === 40 || event.keyCode === 83)) 
     {
       down();
     }
-    else if ((event.keyCode === 37 || event.keyCode === 65)) //left
+    else if ((event.keyCode === 37 || event.keyCode === 65)) 
     {
       left();
     }
-    else if ((event.keyCode === 192)) //sneaky cheat code on the squggly under escape
+    else if ((event.keyCode === 192)) //sneaky cheat code on the ` key
     {
       easterEggScore();
     } 
-    else if ((event.keyCode === 39 || event.keyCode === 68)) //right move
+    else if ((event.keyCode === 39 || event.keyCode === 68)) 
     { 
       right();
     }
@@ -952,7 +929,6 @@ function easterEggScore()
   {
    cheatSize = prompt("Enter the size of your board (3-10):");
   }
-  console.log('into send server Client side');
 
   var req = new XMLHttpRequest();
   var payload = {};
@@ -979,7 +955,6 @@ function winningImage() {
   req.setRequestHeader('Content-Type', 'application/json');
   req.addEventListener('load', function(){
     if (req.status >=200 && req.status < 400){
-      //console.log('inside grab from server');
       var response = JSON.parse(req.responseText);
       let highScores = JSON.parse(response.topscore);
       for (let i = 0; i < 3; i ++) {
@@ -996,19 +971,17 @@ function winningImage() {
   req.send(JSON.stringify(payload));
 }
 
-function startGame() // start new game / reset game and board
+function startGame() 
 {
   stop();
 
   document.querySelector("#winImage").hidden = true;
   console.log("Start game");
   document.addEventListener('keyup', makeMove);
-  document.getElementById("title").innerHTML = scoreTarget; // changes game title to score target
+  document.getElementById("title").innerHTML = scoreTarget; 
   canvas.style.opacity = '1.0'; //reset board opacity to normal
   endOverlay.style.display = "none";
   document.getElementById('winText').hidden = false;
-  //document.getElementById('mainOp').hidden = false;
-  //document.getElementById('coutners').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
   let currentGame = new game2048(boardSize, scoreTarget);
@@ -1041,12 +1014,8 @@ function checkInput() {
 
 function startClick()
 {
-  //document.getElementById('mainOp').hidden = false;
-  //document.getElementById('counters').hidden = false;
   checkInput();
   togglePage('main');
-  //document.getElementById('mainOp').hidden = false;
-  //document.getElementById('coutners').hidden = false;
   startGame();
 }
 /*
