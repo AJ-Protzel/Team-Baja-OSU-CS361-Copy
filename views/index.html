@@ -5,7 +5,6 @@
     <title>2048 Game by Team Bajas</title>
     <base href="public/">
     <link rel="stylesheet" href="/style.css"> <!--Calls CSS file-->
-    <script src="https://kit.fontawesome.com/ec98087ff6.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
   </head>
 <!------------------------------------------------------------------------>
   <body>
@@ -22,7 +21,7 @@
 
     </div>
 
-    <div id="container"> <!--container for body-->
+    <div id="container"> 
       <div id="heading"> <!--top most box-->
         <h1 id="title">2048</h1>
         <div id="scoreContainer"></div>
@@ -41,7 +40,7 @@
         </div>
       </div>
 
-      <div id="canvasBlock"> <!--holds canvas block-->
+      <div id="canvasBlock"> 
         <canvas id="canvas" width="500" height="500"></canvas>
 
         <div hidden id='settingsForm'> <!-- Holds setting options and hides when not needed.-->
@@ -85,7 +84,7 @@
 
         <div hidden id='highScoreForm'>
           <form>
-            <Label for="size-title">Size:</label> <!--board dimension options, default 4x4-->
+            <Label for="size-title">Size:</label> 
               <select id="highScoreSize" onclick="grabFromServer(true)">
                 <option value="3">3</option>
                 <option value="4" selected>4</option>
@@ -178,12 +177,12 @@
       </div>
     </div>
     <div id="keypads">
-      <span id="keypad-up"><i class="fa fa-caret-up"></i></span>
-      <span id="keypad-left"><i class="fa fa-caret-left"></i></span>
-      <span id="keypad-right"><i class="fa fa-caret-right"></i></span>
-      <span id="keypad-down"><i class="fa fa-caret-down"></i></span>
+      <span id="keypad-up">&#11165;</span>
+      <span id="keypad-left">&#11164;</span>
+      <span id="keypad-right">&#11166;</span>
+      <span id="keypad-down">&#11167;</span>
     </div>
   </body>
 <!------------------------------------------------------------------------>
-  <script src="/script.js"></script> <!--Calls JS file-->
+  <script src="/script.js"></script> 
 </html>
