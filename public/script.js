@@ -16,6 +16,7 @@ var ctx = canvas.getContext('2d'); // color boxes 2d array
 var cells = []; // 2d aray to store number values 
 var game; // creates a game board
 
+var keypads = document.querySelector("#keypads");
 var upKeypad = document.querySelector("#keypad-up");
 var downKeypad = document.querySelector("#keypad-down");
 var leftKeypad = document.querySelector("#keypad-left");

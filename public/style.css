@@ -198,51 +198,32 @@ img
     clear: both;
 }
 
-
-@media (max-width: 992px) {
 #keypads {
     width: 500px;
     margin: 0 auto;
 }
 
-#canvasBlock {
-    margin-left: -250px;
-    padding-left: 50%;
-    margin-top: 25px;
-}
-
 #keypad-up, #keypad-down, #keypad-left, #keypad-right {
     position: relative;
+    font-size: 2rem;
 }
 
 #keypad-up {
-    top: -580px;
-    left: 250px;
+    top: -570px;
+    left: 236px;
 }
 
 #keypad-down {
-    top: -10px;
-    left: 170px;
+    top: -13px;
+    left: 143px;
 }
 
 #keypad-left {
     top: -295px;
-    left: -66px;
+    left: -75px;
 }
 
 #keypad-right {
     top: -295px;
-    left: 486px;
+    left: 453px;
 }
-
-.fa {
-    font-size: 3rem;
-}
-}
-
-@media (min-width: 992px) {
-.fa {
-    display: none!important;
-}
-}
-
