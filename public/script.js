@@ -283,14 +283,14 @@ class game2048{
    * @param {*} size 
    * @param {*} target 
    */
-  constructor (size = 4, target = 2048){
+  constructor (size = 4, target = 2048, remove=2, undo=5){
     /**
      * The constructor for game2048 (default params included)
      * ex game = new game2048(3, 1024) => creates a 3x3 board where 1024 is the win score
      */
-    this.size = size; 
-    this.target = target; // score in a block needed for win
-    this.removes = 2; // this flag signals if the user has used their removed square option during the game
+    this.size = size; // size of board
+    this.target = target; // score for win
+    this.removes = remove; // this flag signals if the user has used their removed square option during the game
     this.board = this.createBoard(); // creates an empty board of cells
     this.lastMove = null; // this will tract the previous move after a move is made
     this.gameStatus = 'UNFINISHED'; 
@@ -298,7 +298,7 @@ class game2048{
     this.remove_check  = false;
     this.moveMade = false;
     this.lastScore = 0;
-    this.undoes = 5; // number of undoes available
+    this.undoes = undo; // number of undoes available
     this.validMove = false; // checks if a valid move occurs each round
     this.scoreAdded = false; //sees if score has beed added/compared to highscore board already
     this.playerName = null;
@@ -984,7 +984,7 @@ function startGame()
   document.getElementById('winText').hidden = false;
   boardSize = sizeInput.value;
   width = canvas.width / boardSize - 6;
-  let currentGame = new game2048(boardSize, scoreTarget);
+  let currentGame = new game2048(boardSize, scoreTarget, document.getElementById('removeAmount').value, document.getElementById('undoAmount').value);
   currentGame.canvasClean();
   currentGame.addRandomcell();
   currentGame.addRandomcell();
