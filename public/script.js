@@ -945,6 +945,7 @@ function easterEggScore()
       var response = JSON.parse(req.responseText);
     }
   })
+  req.send(JSON.stringify(payload));
 }
 
 function winningImage() {
