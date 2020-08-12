@@ -1027,5 +1027,5 @@ highScoreBack.onclick = function(){
   //document.addEventListener('keyup', makeMove);
 }
 */
-
 startGame();
+setTimeout(function(){alert("Use arrow keys to move the board tiles.\nTiles of the same number add together.\nAchieve a tile with the score target to win! \n \nTo remove a troublesome tile from your board, click on the 'Remove' button and then click on the tile. \n\nClick on the Undo button to undo your last move! \nGood Luck!");},50);
